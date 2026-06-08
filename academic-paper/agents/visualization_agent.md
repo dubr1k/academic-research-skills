@@ -374,7 +374,8 @@ figure_table_trace:
     source_data: {dataset_id: "...", file: "..."}
     transformation: {script: "...", hash: "..."}   # OR precise manual-derivation pointer (§/¶ + operation); never vague
     caption_claim: "[the interpretive claim the caption makes; may be compound]"
-    supported_manuscript_claims: ["[claim-id]", ...]   # each must actually cite this artifact, un-overstated
+    supported_manuscript_claims:                        # claim TEXT + optional locator, NOT a bare claim id
+      - {claim: "[manuscript claim text]", locator: "[§/¶ where it is made]"}   # each must actually cite this artifact, un-overstated
     limitations: ["[caveat]", ...]                      # empty [] → integrity gate surfaces [FIGURE-LIMITATIONS-EMPTY] advisory
 ```
 ```
@@ -440,7 +441,9 @@ Step 6.6: Figure/Table Trace (#261)
   6.6.2 If you do not know a limitation, leave limitations: [] — do NOT invent one. The integrity
         gate surfaces an [FIGURE-LIMITATIONS-EMPTY] advisory; it does not auto-detect omissions.
   6.6.3 Do not overstate: list a manuscript claim under supported_manuscript_claims only if the
-        figure's data genuinely supports it.
+        figure's data genuinely supports it. Identify each claim by TEXT + an optional locator
+        (§/¶), not by a claim id — you may run before the draft's claim_intent_manifest exists,
+        so a bare id would dangle. Add manifest_id + claim_id only if a manifest already exists.
 
 Step 7: Package Output
   7.1 Compile Figure Package for each figure

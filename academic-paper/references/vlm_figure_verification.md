@@ -98,7 +98,9 @@ figure_table_trace:
       # OR a precise manual-derivation pointer, e.g.
       # transformation: "manual derivation: see §4.2 paragraph 2 (mean over 3 seeds, SE bars)"
     caption_claim: "Accuracy improves monotonically with N up to N=256."
-    supported_manuscript_claims: ["claim-7", "claim-12"]   # claims the figure is cited to support
+    supported_manuscript_claims:                            # claims the figure is cited to support
+      - claim: "Accuracy scales with model size up to N=256."   # claim TEXT (+ optional locator below)
+        locator: "Results §4.2, ¶3"                              # where the manuscript makes it
     limitations:
       - "Only N=128, 256, 512 tested; the monotonic claim between those points is interpolation."
 ```
@@ -108,7 +110,7 @@ figure_table_trace:
 1. **`source_data`** — every claim-bearing artifact must point to a real dataset/file. A figure whose data origin is unstated is untraceable.
 2. **`transformation`** — either a `{script, hash}` pair (reproducible) **or** a precise manual-derivation pointer naming the section/paragraph and the operation. A vague value (`"computed manually"`, `"see paper"`) is **not** sufficient and is treated by the integrity gate as untraceable.
 3. **`caption_claim`** — the interpretive claim the caption makes. May be **compound** ("accuracy improves AND variance decreases"); the integrity gate decomposes it into atomic sub-claims before judging (borrowing the #213 decomposition *as prose guidance only* — no `PARTIAL` verdict, no `sub_claim_breakdown[]` schema is imported).
-4. **`supported_manuscript_claims`** — the manuscript claim(s) this artifact is cited to support. Each must actually reference the artifact and must not be overstated by it.
+4. **`supported_manuscript_claims`** — the manuscript claim(s) this artifact is cited to support, each as **claim text + an optional manuscript `locator`** (section/paragraph). It does **not** use a bare claim ID: the `visualization_agent` can run before the draft and its `claim_intent_manifest` exist (figures are produced in Stage 2, alongside the outline; the manifest is emitted by the prose agents during drafting), so a `(manifest_id, claim_id)` reference would dangle. When a manifest *does* exist (e.g. a revision-stage figure), an entry MAY additionally carry `manifest_id` + `claim_id` to join the scoped key — but the text + locator is the always-available primary. Each listed claim must actually reference the artifact in the manuscript and must not be overstated by it.
 5. **`limitations`** — caveats the scholar knows about the artifact (e.g. "N=3 trials; error bars are SE not SD"). **The agent does not auto-detect missing limitations.** An empty `limitations: []` surfaces a named advisory (`[FIGURE-LIMITATIONS-EMPTY]`), not a silent pass; a **non-empty** limitation that never appears in the manuscript is a blocking issue (the agent knew it and the manuscript dropped it).
 
 **Tables.** When a manuscript table has a `figure_table_trace[]` entry, the same checks apply. For a standalone table with no trace, the integrity gate surfaces a trace-unavailable finding rather than treating absence as a pass.
@@ -119,4 +121,4 @@ figure_table_trace:
 
 - Song, Y. et al. (2026). PaperOrchestra. *arXiv:2604.05018*. — Section 4 Step 2 (Plotting Agent with VLM critic).
 - Zhu, D. et al. (2026). PaperBanana: Automating academic illustration for AI scientists. *arXiv:2601.23265*. — Closed-loop VLM refinement system.
-- Kong, J. et al. (2026). AI for Auto-Research: A survey. *arXiv:2605.18661*. — §3.4 (figure/table fidelity failures; the motivation for the trace layer, #261).
+- Kong, L. et al. (2026). AI for Auto-Research: Roadmap & User Guide. *arXiv:2605.18661*. — §3.4 (figure/table fidelity failures; the motivation for the trace layer, #261).

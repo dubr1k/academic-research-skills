@@ -15,7 +15,8 @@ figure_table_trace:
     source_data: {dataset_id: "depth-sweep", file: "results/depth_sweep.csv"}
     transformation: {script: "scripts/plot_depth.py", hash: "9f2a4c1"}
     caption_claim: "Retrieval recall@10 increases with encoder depth from 4 to 12 layers."
-    supported_manuscript_claims: ["claim-3"]
+    supported_manuscript_claims:
+      - {claim: "Recall improves with encoder depth over the tested range.", locator: "Results §4.1, ¶2"}
     limitations:
       - "Only depths {4, 8, 12} were run; intermediate depths are not measured."
 
@@ -24,7 +25,9 @@ figure_table_trace:
     source_data: {dataset_id: "depth-sweep", file: "results/depth_sweep.csv"}
     transformation: {script: "scripts/plot_depth.py", hash: "9f2a4c1"}
     caption_claim: "Deeper encoders improve recall AND reduce variance across the three seeds."
-    supported_manuscript_claims: ["claim-4", "claim-5"]
+    supported_manuscript_claims:
+      - {claim: "Depth improves recall.", locator: "Results §4.1, ¶2"}
+      - {claim: "Depth reduces cross-seed variance.", locator: "Results §4.1, ¶3"}
     limitations:
       - "Variance is computed over 3 seeds only; the variance-reduction claim is low-powered."
 
@@ -33,7 +36,8 @@ figure_table_trace:
     source_data: {dataset_id: "latency-bench", file: "results/latency_bench.csv"}
     transformation: "manual derivation: §5.3 paragraph 1 (median over 1000 queries, warm cache)"
     caption_claim: "Inference latency is flat from depth 4 to 12."
-    supported_manuscript_claims: ["claim-9"]
+    supported_manuscript_claims:
+      - {claim: "Depth does not increase inference latency.", locator: "Results §5.3, ¶1"}
     limitations: []
 
   # Table with a trace entry — same checks apply
@@ -41,7 +45,9 @@ figure_table_trace:
     source_data: {dataset_id: "depth-sweep", file: "results/depth_sweep.csv"}
     transformation: {script: "scripts/make_table2.py", hash: "9f2a4c1"}
     caption_claim: "Per-depth recall@10 and recall@100 with 95% CIs."
-    supported_manuscript_claims: ["claim-3", "claim-4"]
+    supported_manuscript_claims:
+      - {claim: "Recall improves with encoder depth over the tested range.", locator: "Results §4.1, ¶2"}
+      - {claim: "Depth improves recall.", locator: "Results §4.1, ¶2"}
     limitations:
       - "CIs are bootstrap (n=1000); not corrected for multiple comparisons across depths."
 ```
@@ -53,7 +59,7 @@ figure_table_trace:
 ### Case 1 — `fig-1` (normal, single claim)
 - **(1) Trace completeness** — PASS. `{script, hash}` present; data file pointed to.
 - **(2) Caption-claim support** — the single claim "recall increases with depth 4→12" follows from `depth_sweep.csv` if the plotted recall is monotone across the three measured depths. Judge against the data, not the rendering.
-- **(3) Manuscript-claim linkage** — `claim-3` must actually cite Figure 1 and must not say more than "recall increases over the measured range" (asserting monotonicity at unmeasured depths would be an overstatement → FAIL).
+- **(3) Manuscript-claim linkage** — the listed claim ("Recall improves with encoder depth over the tested range", Results §4.1 ¶2) must actually cite Figure 1 and must not say more than the data shows (asserting monotonicity at unmeasured depths would be an overstatement → FAIL). The claim is identified by text + locator, not by an id, because the figure can be produced before the draft's claim manifest exists.
 - **(4) Limitation visibility** — the "{4,8,12} only" limitation must appear in caption Note / Discussion / Limitations. If it does → PASS; if the scholar listed it but the manuscript dropped it → FAIL (blocking).
 
 ### Case 2 — `fig-2` (compound claim, decomposed)
@@ -61,7 +67,7 @@ The caption_claim is compound, so Phase C3 decomposes it (borrowing #213 *as pro
 - sub-claim A: "deeper encoders improve recall"
 - sub-claim B: "deeper encoders reduce variance across the three seeds"
 
-Each is judged independently. A common failure: A holds in the data but B is asserted on 3 seeds with overlapping ranges — the caption claims B as established when the data only weakly supports it. A caption supported on A but **not** B is **not fully supported** → the unsupported half is a finding, not absorbed by the supported half (the visual partial-evidence trap). `claim-4`/`claim-5` are checked separately for linkage and overstatement.
+Each is judged independently. A common failure: A holds in the data but B is asserted on 3 seeds with overlapping ranges — the caption claims B as established when the data only weakly supports it. A caption supported on A but **not** B is **not fully supported**: the entry takes the verdict of its weakest sub-claim, so the unsupported B routes the whole entry to **FAIL** caption-claim support (not PASS WITH NOTES — partial support is not a clean pass). The two manuscript claims ("Depth improves recall" §4.1 ¶2; "Depth reduces cross-seed variance" §4.1 ¶3) are checked separately for linkage and overstatement.
 
 ### Case 3 — `fig-3` (empty limitations)
 - **(1)–(3)** judged as above; note the `transformation` here is a **precise manual-derivation pointer** (`§5.3 ¶1, median over 1000 queries, warm cache`) — acceptable. A vague `"computed manually"` would be UNTRACEABLE → FAIL for a claim-bearing artifact.
