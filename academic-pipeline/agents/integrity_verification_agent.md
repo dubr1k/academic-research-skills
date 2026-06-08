@@ -207,9 +207,12 @@ For each `figure_table_trace[]` entry (figures, and any manuscript table that ha
 
 ```
 (0) Entry well-formedness
-    - A trace entry is MALFORMED if it omits any required field: source_data,
-      transformation, caption_claim, or supported_manuscript_claims (limitations may be
-      [] — that is well-formed, see check 4). A malformed entry cannot be verified.
+    - A trace entry is MALFORMED if it omits any required key: artifact_id, source_data,
+      transformation, caption_claim, supported_manuscript_claims, or limitations. The
+      limitations key MUST be present but its value MAY be [] (an empty array is well-formed
+      and routes to the check-4 advisory; an ABSENT limitations key is malformed, so an
+      omitted key cannot silently bypass the [FIGURE-LIMITATIONS-EMPTY] advisory). A
+      malformed entry cannot be verified.
 
 (1) Trace completeness
     - source_data points to a real dataset/file, and transformation is reproducible
@@ -232,10 +235,15 @@ For each `figure_table_trace[]` entry (figures, and any manuscript table that ha
       caption supported on one sub-claim but not another is not fully supported — partial
       support routes to FAIL, never to PASS WITH NOTES).
 
-(3) Manuscript-claim linkage
-    - Each id in supported_manuscript_claims must actually reference this artifact in the
-      manuscript, and the artifact must not OVERSTATE what it supports (the manuscript
-      claim must not assert more than the figure's data shows).
+(3) Manuscript-claim linkage (both directions)
+    - Forward: each listed claim in supported_manuscript_claims (claim text + locator) must
+      actually reference this artifact in the manuscript, and the artifact must not OVERSTATE
+      what it supports (the manuscript claim must not assert more than the figure's data shows).
+    - Reverse: scan the manuscript for every place it cites this artifact (e.g. "as shown in
+      Figure N", "Table N reports …"). Each such manuscript use must be covered by a listed
+      claim and warranted by the data. A manuscript claim that leans on the artifact but is
+      NOT listed in supported_manuscript_claims is an omission (the trap is one-sided traces
+      that only declare the support the author wants seen) — surface it as a FAIL, not a pass.
 
 (4) Limitation visibility
     - Each non-empty limitation must be surfaced to the reader — in the caption Note, the
@@ -249,8 +257,9 @@ Severity — every condition maps to exactly one verdict:
   - (check 1) transformation/source_data missing or untraceable for a claim-bearing artifact;
   - (check 2) caption_claim contradicts the data, OR is unsupported/overstated/not warranted,
     OR any atomic sub-claim of a compound caption is unsupported;
-  - (check 3) a supported_manuscript_claim does not actually cite the artifact, or the
-    manuscript overstates what the artifact supports;
+  - (check 3) a listed claim does not actually cite the artifact, the manuscript overstates
+    what the artifact supports, OR a manuscript use of the artifact is not covered by any
+    listed claim (reverse-linkage omission);
   - (check 4) a non-empty limitation is absent from caption/Discussion/Limitations.
 - PASS WITH NOTES (advisory, never silent):
   - (check 4) limitations: [] → emit [FIGURE-LIMITATIONS-EMPTY];
