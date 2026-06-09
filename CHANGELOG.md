@@ -1023,7 +1023,7 @@ Reference: `feedback_codex_review_vs_resume_audit_scope.md`.
 ### Added
 
 - **Downstream-agent pattern protection layer** (`docs/design/2026-04-29-ars-v3.6.7-downstream-agent-pattern-protection-spec.md`).
-  Hardens three downstream agents against 18 hallucination/drift patterns
+  Hardens three downstream agents against 17 hallucination/drift patterns
   documented in the spec: `synthesis_agent` (A1–A5 narrative-side), the
   survey-designer mode of `research_architect_agent` (B1–B5 instrument-side),
   and the abstract-only mode of `report_compiler_agent` (C1–C3 publication-
@@ -1098,7 +1098,7 @@ Reference: `feedback_codex_review_vs_resume_audit_scope.md`.
   mutation test suite, the CI wiring, and the three agent-prompt
   protection blocks. **Step 6** (orchestrator hooks for automatic
   per-agent audit and anti-fake-audit guard wiring) and **Step 8**
-  (synthetic evaluation case demonstrating all 18 patterns triggered +
+  (synthetic evaluation case demonstrating all 17 patterns triggered +
   protected) ship in a follow-up PR. Step 6 is cross-agent runtime work
   that warrants its own design discussion and is intentionally decoupled
   from this prompt-and-lint PR.
