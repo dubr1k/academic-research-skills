@@ -366,6 +366,19 @@ Like the Kong #258 and contamination advisories: do NOT auto-correct the citatio
 
 This advisory is the default-mode complement to the `strict`-mode terminal block: detection is unconditional (C-V6(e)), only terminality is policy-gated. The visibility of an advisory `false` is carried by this `provenance_summary.md` section, NOT by a marker suffix.
 
+## Submission Package Advisories (#394 slice 4)
+
+The #394 submission-package verifier (`scripts/verify_submission_package.py`, dispatched by the orchestrator AFTER this agent produces the output package — see `pipeline_orchestrator_agent.md` Submission-Package Terminal Gate) reports per-check package findings: blind-review residue, venue limits, reference integrity. Under `terminal_policies.submission_package == advisory` (the absent-key default), those findings are NOT a refusal and nothing about the formatted artifacts changes; their deliverable-visible carrier is a **`Submission Package Advisories` section** in `provenance_summary.md` (the same advisory-carrier shape as the `Citation Existence Advisories` section above — the #333 precedent: an advisory needs a home and the marker slot is taken; here the findings are package-level, so a marker could not carry them anyway).
+
+The section is **mandatory and non-empty iff** the verification report carries any check with status `fail`, `warn`, or `not_checked` under advisory policy; absent any such finding, the section is omitted (or rendered empty — "No submission-package advisories"). `not_applicable` rows (untriggered families) are never listed. For each listed finding, surface one entry with:
+
+- the check `id` and `family` (e.g. `A2`, `blind_review_residue`)
+- `status` (`fail` / `warn` / `not_checked`) and `signal_class` (`deterministic` / `heuristic`)
+- the report's `detail` line (it names the evidence or the reason a check could not run)
+- `location` when the report carries one (the file the finding points at)
+
+NOT a refusal rule: this agent stays stamp-only (Invariant 13) — it never re-runs the verifier, never re-evaluates policy, never edits manuscript content in response to a finding (the verifier is read-only with respect to manuscripts, #134 write-scope). Report and let the scholar decide. Blocking is the orchestrator's call under the `submission_package == strict` opt-in (TERMINAL-BLOCK / VERIFICATION-INCOMPLETE stdout tokens at the orchestrator's gate), not this advisory. This section may be appended AFTER the verification report is stamped — `provenance_summary.md` is excluded from the report's `package_fingerprint` precisely so the advisory carrier cannot stale the report that feeds it.
+
 ## Output Format
 
 ```markdown

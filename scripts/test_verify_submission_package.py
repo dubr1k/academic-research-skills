@@ -1028,3 +1028,288 @@ def test_schema_rejects_unknown_status():
     bad = _minimal_report(status="skipped")
     with pytest.raises(jsonschema.ValidationError):
         jsonschema.validate(bad, load_schema())
+
+
+# --- Slice 4: terminality (--policy / --check-freshness, spec §5.2/§5.3/§8) --
+#
+# Terminal signals are STDOUT TOKENS (TERMINAL-BLOCK / VERIFICATION-INCOMPLETE
+# / STALE-REPORT), never raw exit codes — exit 1 also carries nonterminal
+# advisory/heuristic fails (gate-1 P1). The evaluator keys on STATUS
+# (fail / not_checked), never on the strict_eligible bit alone, so
+# not_applicable can never compose into a block (slice-3 schema pin).
+
+def _strict_run(fixture_name, tmp_path, capsys, extra_args=()):
+    rc, report, package_dir = run_on(
+        fixture_name, tmp_path,
+        extra_args=["--policy", "strict", *extra_args])
+    out = capsys.readouterr().out
+    return rc, report, package_dir, out
+
+
+def test_strict_eligible_fail_blocks_with_token(tmp_path, capsys):
+    # orphan_intext fails C1 on the joined marker path (deterministic class).
+    rc, report, _, out = _strict_run("orphan_intext", tmp_path, capsys)
+    assert rc == 1
+    assert "TERMINAL-BLOCK policy=submission_package" in out
+    assert report["header"]["policy_slug"] == "strict"
+
+
+def test_strict_heuristic_fail_never_promotes(tmp_path, capsys):
+    # fallback_latex fails C1 on the FALLBACK path (heuristic class). Under
+    # strict the heuristic fail must NEVER appear as a TERMINAL-BLOCK
+    # (§3.1/§6, structural exclusion). The run exits 4, not 1: the
+    # profileless Family B not_checked outranks the nonterminal fail —
+    # itself evidence of the fail-closed precedence (a heuristic fail does
+    # not short-circuit the incompleteness verdict the way a strict fail
+    # would).
+    rc, report, _, out = _strict_run("fallback_latex", tmp_path, capsys)
+    by_id = checks_by_id(report)
+    assert by_id["C1"]["status"] == "fail"
+    assert by_id["C1"]["signal_class"] == "heuristic"
+    assert "TERMINAL-BLOCK" not in out
+    assert rc == 4  # VERIFICATION-INCOMPLETE from Family B, not the C1 fail
+    assert "C1" not in next(
+        l for l in out.splitlines() if "VERIFICATION-INCOMPLETE" in l)
+
+
+def test_evaluate_policy_unit_contract():
+    # Unit pin of the evaluator's whole decision table: token + exit per
+    # policy×status×strict_eligible combination, including precedence (a
+    # strict fail outranks incomplete) and the not_applicable
+    # never-composes rule. The advisory/strict divergence lives inside the
+    # evaluator (it takes the resolved policy), so non-strict policies are
+    # part of the table.
+    from verify_submission_package import evaluate_policy
+
+    def report_of(*checks):
+        return {"checks": [
+            {"id": cid, "strict_eligible": se, "status": status}
+            for cid, se, status in checks
+        ]}
+
+    # Heuristic (strict_eligible=False) fail alone under strict: exit 1,
+    # NO token.
+    token, code = evaluate_policy(report_of(("A5", False, "fail"),
+                                            ("C2", True, "pass")), "strict")
+    assert token is None and code == 1
+    # Strict-eligible fail under strict: token + exit 1.
+    token, code = evaluate_policy(report_of(("B4", True, "fail")), "strict")
+    assert code == 1 and "TERMINAL-BLOCK policy=submission_package" in token
+    assert "B4" in token
+    # The SAME report under advisory / under no policy: never a token —
+    # the divergence is the evaluator's own contract, not a caller guard.
+    for policy in ("advisory", None):
+        token, code = evaluate_policy(report_of(("B4", True, "fail")), policy)
+        assert token is None and code == 1
+    # Strict-eligible not_checked under strict: incomplete token + exit 4.
+    token, code = evaluate_policy(
+        report_of(("B1", True, "not_checked")), "strict")
+    assert code == 4 and "VERIFICATION-INCOMPLETE" in token
+    # ... and under advisory: plain exit 3, no token.
+    token, code = evaluate_policy(
+        report_of(("B1", True, "not_checked")), "advisory")
+    assert token is None and code == 3
+    # Precedence: strict fail wins over incomplete (block now, the rerun
+    # after remediation surfaces the rest).
+    token, code = evaluate_policy(report_of(("B4", True, "fail"),
+                                            ("B1", True, "not_checked")),
+                                  "strict")
+    assert code == 1 and "TERMINAL-BLOCK" in token
+    # not_applicable never composes into anything (slice-3 schema pin),
+    # heuristic not_checked doesn't either.
+    token, code = evaluate_policy(report_of(("A1", True, "not_applicable"),
+                                            ("A5", False, "not_checked"),
+                                            ("C2", True, "pass")), "strict")
+    assert token is None and code == 3
+    # All green under strict: clean 0.
+    token, code = evaluate_policy(report_of(("C1", True, "pass")), "strict")
+    assert token is None and code == 0
+
+
+def test_strict_eligible_not_checked_is_verification_incomplete(
+        tmp_path, capsys):
+    # venue_clean without a profile: Family B is strict-eligible not_checked
+    # → fail-closed exit 4 + token (§5.2: a missing input must not silently
+    # waive the class the scholar opted into blocking on).
+    rc, report, _, out = _strict_run("venue_clean", tmp_path, capsys)
+    assert rc == 4
+    assert "VERIFICATION-INCOMPLETE" in out
+    assert "TERMINAL-BLOCK" not in out
+    assert report["header"]["policy_slug"] == "strict"
+
+
+def test_advisory_same_not_checked_stays_exit_3(tmp_path, capsys):
+    # Explicit advisory: byte-identical slice-3 behavior except the stamp.
+    rc, report, _, = run_on("venue_clean", tmp_path,
+                            extra_args=["--policy", "advisory"])
+    out = capsys.readouterr().out
+    assert rc == 3
+    assert "VERIFICATION-INCOMPLETE" not in out
+    assert "TERMINAL-BLOCK" not in out
+    assert report["header"]["policy_slug"] == "advisory"
+
+
+def test_no_policy_flag_stamps_null(tmp_path):
+    # Standalone unevaluated run: argparse default is None (never "default
+    # advisory" — gate-1 P1), the stamp stays null.
+    _, report, _ = run_on("venue_clean", tmp_path)
+    assert report["header"]["policy_slug"] is None
+
+
+def test_strict_not_applicable_never_blocks(tmp_path, capsys):
+    # clean has no anonymized variant and no blind_review declaration: Family
+    # A is not_applicable (untriggered). Under strict that must NOT read as
+    # incomplete or block — the evaluator keys on status, and not_applicable
+    # is neither fail nor not_checked. (Family B absent-profile not_checked
+    # still yields exit 4 here, proving the discrimination is per-status.)
+    rc, report, _, out = _strict_run("clean", tmp_path, capsys)
+    by_id = checks_by_id(report)
+    assert by_id["A1"]["status"] == "not_applicable"
+    assert rc == 4  # from Family B not_checked, NOT from Family A
+    assert "VERIFICATION-INCOMPLETE" in out
+    token_line = next(l for l in out.splitlines()
+                      if "VERIFICATION-INCOMPLETE" in l)
+    for aid in (f"A{i}" for i in range(1, 8)):
+        assert aid not in token_line
+
+
+def test_strict_full_profile_clean_package_exits_0(tmp_path, capsys):
+    # The strict happy path: everything checked, everything green.
+    profile = FIXTURES / "profiles" / "full.yaml"
+    rc, report, _, out = _strict_run(
+        "venue_clean", tmp_path, capsys,
+        extra_args=["--venue-profile", str(profile)])
+    assert rc == 0
+    assert "TERMINAL-BLOCK" not in out
+    assert "VERIFICATION-INCOMPLETE" not in out
+    assert report["header"]["policy_slug"] == "strict"
+
+
+# --- Slice 4: freshness guard (--check-freshness, §5.2) ----------------------
+
+def _fresh_args(policy="advisory"):
+    return ["--check-freshness", "--policy", policy]
+
+
+def test_freshness_matching_report_exits_0(tmp_path, capsys):
+    _, _, package_dir = run_on("venue_clean", tmp_path,
+                               extra_args=["--policy", "advisory"])
+    capsys.readouterr()
+    rc = run([str(package_dir), *_fresh_args()])
+    out = capsys.readouterr().out
+    assert rc == 0
+    assert "STALE-REPORT" not in out
+
+
+def test_freshness_mutated_package_is_stale(tmp_path, capsys):
+    _, _, package_dir = run_on("venue_clean", tmp_path,
+                               extra_args=["--policy", "advisory"])
+    manuscript = next(p for p in package_dir.iterdir()
+                      if p.suffix == ".md" and p.name != "provenance_summary.md")
+    manuscript.write_text(
+        manuscript.read_text(encoding="utf-8") + "\nDrifted.\n",
+        encoding="utf-8")
+    capsys.readouterr()
+    rc = run([str(package_dir), *_fresh_args()])
+    out = capsys.readouterr().out
+    assert rc == 5
+    assert "STALE-REPORT" in out
+
+
+def test_freshness_policy_mismatch_is_stale(tmp_path, capsys):
+    # Report stamped advisory, orchestrator now wants strict: stale, rerun.
+    _, _, package_dir = run_on("venue_clean", tmp_path,
+                               extra_args=["--policy", "advisory"])
+    capsys.readouterr()
+    rc = run([str(package_dir), *_fresh_args(policy="strict")])
+    out = capsys.readouterr().out
+    assert rc == 5
+    assert "STALE-REPORT" in out
+
+
+def test_freshness_null_stamped_report_never_fresh(tmp_path, capsys):
+    # A standalone (unevaluated, policy_slug=null) report never satisfies
+    # pipeline freshness — gate-1 P1 (null must not impersonate advisory).
+    # The reason token is pinned: null_policy_slug ("you handed the pipeline
+    # a standalone report") is a different remediation from policy_mismatch
+    # ("the policy changed since stamping") — without the dedicated branch
+    # the null case would collapse into the mismatch reason.
+    _, _, package_dir = run_on("venue_clean", tmp_path)  # no --policy
+    capsys.readouterr()
+    rc = run([str(package_dir), *_fresh_args()])
+    out = capsys.readouterr().out
+    assert rc == 5
+    assert "STALE-REPORT reason=null_policy_slug" in out
+
+
+def test_freshness_missing_report_is_stale(tmp_path, capsys):
+    package_dir = tmp_path / "pkg"
+    package_dir.mkdir()
+    (package_dir / "paper.md").write_text("Body.\n", encoding="utf-8")
+    rc = run([str(package_dir), *_fresh_args()])
+    out = capsys.readouterr().out
+    assert rc == 5
+    assert "STALE-REPORT" in out
+
+
+def test_freshness_requires_policy(tmp_path, capsys):
+    # --check-freshness without --policy is a usage error (exit 2): freshness
+    # is always relative to an expected policy, never free-floating.
+    _, _, package_dir = run_on("venue_clean", tmp_path,
+                               extra_args=["--policy", "advisory"])
+    capsys.readouterr()
+    rc = run([str(package_dir), "--check-freshness"])
+    err = capsys.readouterr().err
+    assert rc == 2
+    assert "policy" in err.lower()
+
+
+def test_freshness_does_not_rerun_checks(tmp_path, capsys):
+    # Freshness must not rewrite the report: mtime-stable bytes.
+    _, _, package_dir = run_on("venue_clean", tmp_path,
+                               extra_args=["--policy", "advisory"])
+    report_path = package_dir / REPORT_BASENAME
+    before = report_path.read_bytes()
+    capsys.readouterr()
+    run([str(package_dir), *_fresh_args()])
+    assert report_path.read_bytes() == before
+
+
+def test_provenance_summary_outside_fingerprint(tmp_path, capsys):
+    # gate-1 P1 self-staleness: provenance_summary.md is the pipeline's own
+    # advisory carrier (D4 appends to it AFTER the report is stamped) — it is
+    # excluded from the fingerprint, so mutating it does NOT stale the report.
+    package_dir = tmp_path / "venue_clean"
+    shutil.copytree(FIXTURES / "venue_clean", package_dir)
+    (package_dir / "provenance_summary.md").write_text(
+        "# Provenance\n", encoding="utf-8")
+    rc, _ = run_dir(package_dir, extra_args=["--policy", "advisory"])
+    (package_dir / "provenance_summary.md").write_text(
+        "# Provenance\n\n## Submission Package Advisories\n\n- B2: ...\n",
+        encoding="utf-8")
+    capsys.readouterr()
+    rc = run([str(package_dir), *_fresh_args()])
+    out = capsys.readouterr().out
+    assert rc == 0
+    assert "STALE-REPORT" not in out
+
+
+def test_advisory_run_is_byte_equivalent_for_package_files(tmp_path):
+    # §11 byte-equivalence: an explicit-advisory run mutates NOTHING in the
+    # package except adding the report file.
+    package_dir = tmp_path / "venue_clean"
+    shutil.copytree(FIXTURES / "venue_clean", package_dir)
+    before = {
+        p.relative_to(package_dir).as_posix(): p.read_bytes()
+        for p in package_dir.rglob("*") if p.is_file()
+    }
+    profile = FIXTURES / "profiles" / "full.yaml"
+    run_dir(package_dir, extra_args=["--policy", "advisory",
+                                     "--venue-profile", str(profile)])
+    after = {
+        p.relative_to(package_dir).as_posix(): p.read_bytes()
+        for p in package_dir.rglob("*") if p.is_file()
+    }
+    assert set(after) - set(before) == {REPORT_BASENAME}
+    for rel, content in before.items():
+        assert after[rel] == content, f"{rel} mutated by an advisory run"

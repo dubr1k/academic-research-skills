@@ -903,6 +903,25 @@ The per-pass resolution counts gain a `terminal_blocked[]` bucket recording each
 
 ---
 
+## Submission-Package Terminal Gate (#394 slice 4 — Stage 5, post-formatter)
+
+A **package-level** gate, explicitly NOT the ref-marker stamp path above: the v3.10/v3.11 terminality machinery is finalizer-stamped ref markers + the formatter's stamp-only rules, but this verifier runs AFTER the formatter has produced the whole output package, so that carrier cannot serve it (spec `docs/design/2026-06-10-394-submission-package-verifier-spec.md` §5 seam 2). The evaluated carrier is the verifier's report file itself (`header.package_fingerprint` + `header.policy_slug`) plus the `provenance_summary.md` `Submission Package Advisories` section (see `formatter_agent.md`). No ref-marker grammar change — markers are untouched by this gate.
+
+**Policy reading stays single-homed (§5.3).** The orchestrator is the SOLE reader of `terminal_policies.submission_package` and sole selector of the policy in force. `scripts/verify_submission_package.py` NEVER reads `terminal_policies` — the orchestrator hands the already-resolved value down via the `--policy` CLI argument, and the script applies it mechanically (deterministic evaluation tooling, not a second policy reader).
+
+### Procedure (after the formatter emits the output package)
+
+1. **Resolve the policy.** Read `terminal_policies.submission_package` from the Material Passport. Key absence — or absence of the whole `terminal_policies` object — resolves to `advisory` (the same per-key runtime convention as the existing keys). ALWAYS pass the resolved value explicitly: the CLI is never run policy-less in the pipeline (an unflagged run stamps `policy_slug: null` = a standalone unevaluated report, which can never satisfy the freshness guard below).
+2. **Run the verifier** on the package directory: `python scripts/verify_submission_package.py <package_dir> --policy <resolved>` plus `--passport` / `--venue-profile` when the run has them.
+3. **Gate on stdout tokens, NEVER on exit codes.** Exit 1 also covers nonterminal advisory/heuristic fails (a strict-mode heuristic fail exits 1 with NO terminal token and must not block — heuristic findings never promote, structurally). The terminal signals are exactly:
+   - `TERMINAL-BLOCK policy=submission_package` (a strict-eligible check FAILED under `strict`) → return the package to the formatter fix loop, **bounded: 2 fix rounds**, then surface to the scholar (mirrors the revision-loop cap philosophy). Re-run the verifier after every fix round — never carry a verdict across rounds.
+   - `VERIFICATION-INCOMPLETE` (a strict-eligible check is NOT-CHECKED under `strict`) → blocks emission **exactly like a fail**, never waived silently (fail-closed §5.2: a missing parser or input must not waive the one check class the scholar opted into blocking on). Remediation, stated plainly to the scholar: under `strict`, Family B checks without a venue profile are strict-eligible NOT-CHECKED — declare a venue profile, or strict package verification cannot emit; the third exit is flipping `submission_package` back to `advisory` and re-finalizing.
+4. **Advisory path:** findings (any fail / warn / NOT-CHECKED) land in the `provenance_summary.md` `Submission Package Advisories` section per `formatter_agent.md`; the pipeline completes. Byte-equivalence holds for non-opting users: no manuscript, ref-marker, or formatted-artifact bytes change — the report file and the advisories section are the only additions.
+5. **Report reuse REQUIRES the freshness guard.** Before ever reusing an existing report (resume, re-entry, second finalization pass), run `--check-freshness --policy <resolved>` first. `STALE-REPORT` (fingerprint mismatch, policy mismatch, null-stamped, or missing/unreadable report) → re-run the verifier; NEVER evaluate a stale report (§5.2 — the package-level analog of the `policy_hash` stamp).
+6. **Recompute each pass; nothing cached.** The gate verdict is a pure function of the CURRENT passport policy and the CURRENT package bytes — recomputed at every finalization pass and across every `resume_from_passport` re-entry (the C-V6(h) mirror). A previously-granted emission never survives a policy flip or a package edit without re-passing the gate.
+
+---
+
 ## Communication Style
 
 - Direct and precise — state decisions and rationale without filler
