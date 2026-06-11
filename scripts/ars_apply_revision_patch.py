@@ -24,14 +24,19 @@ to a temp file and atomically renamed; a post-write self-check re-parses
 the result and asserts marker uniqueness + grammar.
 
 **Structural-shape triggers** (§3.3, deterministic): heading-block ops,
-net section-count change, and `blocks_touched / blocks_total` above
-`--touched-ratio-threshold`. The threshold VALUE is a required Slice B
-ship decision — when the flag is omitted the ratio is still computed and
-recorded in every report, but no ratio trigger fires. Any raised flag
+net section-count change, and `blocks_touched / blocks_total` strictly
+above `--touched-ratio-threshold` (default 0.6 — the #424 Slice B ship
+decision; pass 1.0 to disable, since the ratio never exceeds 1.0 and the
+comparator is strict per the spec's "above a threshold"). The ratio is
+computed and recorded in every report regardless. Any raised flag
 refuses the apply unless `--acknowledge-structural` is set (the §3.6
 escalation checkpoint owns that decision; this script only enforces it).
 `blocks_touched` counts replace/delete targets; an `insert_after`
-anchor's content is not touched, so it does not count.
+anchor's content is not touched, so it does not count. Heading-anchor
+exemption (#424): an `insert_after` whose anchor is a heading raises NO
+heading flag when its segmented `new_text` contains no heading blocks —
+inserting body text after a section heading leaves every heading byte
+untouched; heading-bearing `new_text` still flags via its segments.
 
 **Pure-move check** (§3.3): an inserted segment whose normalized-text
 hash equals a same-patch deleted block's `old_hash` is recorded as a
@@ -45,7 +50,7 @@ self-check failure (bug, not user error).
 Usage:
     python scripts/ars_apply_revision_patch.py base.md patch.json \
         --output base.rev2.md [--report-out R.json] \
-        [--acknowledge-structural] [--touched-ratio-threshold 0.5]
+        [--acknowledge-structural] [--touched-ratio-threshold 0.6]
 """
 from __future__ import annotations
 
@@ -75,6 +80,10 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 PATCH_SCHEMA_PATH = REPO_ROOT / "shared" / "contracts" / "patch" / "revision_patch.schema.json"
 DOC_BODY_START = "DOC-BODY-START"
 REPORT_FORMAT_VERSION = "1.0"
+# #424 Slice B ship decision (spec §3.3 required it; recorded in the spec's
+# amendment log). Strict `>` comparator per the spec's "above a threshold":
+# 1.0 disables the trigger because touched/total never exceeds 1.0.
+DEFAULT_TOUCHED_RATIO_THRESHOLD = 0.6
 
 
 class ApplyRejection(Exception):
@@ -201,20 +210,26 @@ def validate_patch(
         segments: list[Block] | None = analysis["segments"]
         seg_headings = sum(1 for s in (segments or []) if s.kind == "heading")
         target_is_heading = target is not None and target.kind == "heading"
-        # §3.3 literal rule: ANY op whose target or segmented new_text is
-        # a heading block flags — including an insert_after whose anchor
-        # is a heading. That over-triggers on "insert body text after a
-        # section heading"; whether the anchor case deserves an exemption
-        # is a Slice B escalation-UX decision, not this script's call.
+        # §3.3 heading rule with the #424 heading-anchor exemption: an op
+        # that REWRITES or DELETES a heading block, or whose segmented
+        # new_text CONTAINS a heading, flags. An insert_after merely
+        # ANCHORED on a heading does not — the heading's bytes are
+        # untouched, and "insert body text after a section heading" is the
+        # most common legitimate insertion; flagging it daily would erode
+        # the checkpoint (alarm fatigue). Heading-bearing new_text still
+        # flags via seg_headings whatever the anchor is.
         if op["op"] == "replace_block":
             touched += 1
             headings_delta += seg_headings - (1 if target_is_heading else 0)
+            flags_heading = target_is_heading or bool(seg_headings)
         elif op["op"] == "delete_block":
             touched += 1
             headings_delta -= 1 if target_is_heading else 0
+            flags_heading = target_is_heading
         else:  # insert_after
             headings_delta += seg_headings
-        if target_is_heading or seg_headings:
+            flags_heading = bool(seg_headings)
+        if flags_heading:
             heading_op_indexes.append(analysis["op_index"])
 
     blocks_total = len(base.blocks)
@@ -592,9 +607,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--touched-ratio-threshold",
         type=float,
-        default=None,
-        help="touched-ratio trigger threshold (value is a Slice B ship decision; "
-        "omitted = ratio recorded but never triggers)",
+        default=DEFAULT_TOUCHED_RATIO_THRESHOLD,
+        help="touched-ratio trigger threshold (default %(default)s, the #424 ship "
+        "decision; fires when blocks_touched/blocks_total is strictly above it; "
+        "pass 1.0 to disable)",
     )
     args = parser.parse_args(argv)
     report_path = args.report_out or Path(str(args.output) + ".apply-report.json")

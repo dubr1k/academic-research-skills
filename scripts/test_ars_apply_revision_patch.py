@@ -23,6 +23,7 @@ from unittest import mock
 from scripts._block_parser import base_draft_hash, parse_document
 from scripts.ars_anchorize_draft import anchorize_text
 from scripts.ars_apply_revision_patch import (
+    DEFAULT_TOUCHED_RATIO_THRESHOLD,
     ApplyRejection,
     StructuralRefusal,
     main,
@@ -647,11 +648,11 @@ class TestStructuralTriggers(ApplyHarness):
         self.assertTrue(report["structural_flags"]["acknowledged"])
         self.assertIn("# Renamed Introduction", self.output_path.read_text())
 
-    def test_insert_after_heading_anchor_fires_literal_rule(self):
-        # §3.3 literal rule: an insert_after whose ANCHOR is a heading
-        # block flags, even when the inserted text contains no heading.
-        # (Whether the anchor case deserves an exemption is a recorded
-        # Slice B escalation-UX question.)
+    def test_insert_after_heading_anchor_exempt_when_no_heading_segments(self):
+        # #424 heading-anchor exemption: an insert_after ANCHORED on a
+        # heading does not flag when its new_text contains no heading —
+        # the heading's bytes are untouched and "insert body text after a
+        # section heading" is the most common legitimate insertion.
         anchored = self.anchored_fixture()
         patch = _base_patch(
             anchored,
@@ -666,10 +667,32 @@ class TestStructuralTriggers(ApplyHarness):
             ],
         )
         self._write(anchored, patch)
+        report = self._run()
+        self.assertEqual(report["structural_flags"]["heading_op_indexes"], [])
+        self.assertEqual(report["structural_flags"]["section_count_delta"], 0)
+        self.assertFalse(report["structural_flags"]["any"])
+
+    def test_insert_after_heading_anchor_with_heading_segments_still_fires(self):
+        # The exemption is anchor-only: heading-bearing new_text flags via
+        # its segments regardless of what the anchor is.
+        anchored = self.anchored_fixture()
+        patch = _base_patch(
+            anchored,
+            [
+                {
+                    "op": "insert_after",
+                    "block_id": "B0004",
+                    "old_hash": _hash_of(anchored, "B0004"),
+                    "new_text": "## Sneaky New Section\n\nBody under it.",
+                    "roadmap_item_ids": ["REV-005"],
+                }
+            ],
+        )
+        self._write(anchored, patch)
         with self.assertRaises(StructuralRefusal) as ctx:
             self._run()
         self.assertEqual(ctx.exception.flags["heading_op_indexes"], [0])
-        self.assertEqual(ctx.exception.flags["section_count_delta"], 0)
+        self.assertEqual(ctx.exception.flags["section_count_delta"], 1)
 
     def test_section_count_change_fires(self):
         anchored = self.anchored_fixture()
@@ -708,12 +731,36 @@ class TestStructuralTriggers(ApplyHarness):
         self.assertTrue(ctx.exception.flags["touched_ratio_exceeded"])
         self.assertAlmostEqual(ctx.exception.flags["touched_ratio"], 0.75)
 
-        # Without the threshold the ratio is recorded but never triggers
-        # (the value is a Slice B ship decision).
+        # API-level None: the ratio is recorded but never triggers (kept
+        # for callers that own their own escalation policy; the CLI
+        # default is DEFAULT_TOUCHED_RATIO_THRESHOLD, tested below).
         report = self._run()
         self.assertAlmostEqual(report["structural_flags"]["touched_ratio"], 0.75)
         self.assertFalse(report["structural_flags"]["touched_ratio_exceeded"])
         self.assertIsNone(report["structural_flags"]["touched_ratio_threshold"])
+
+    def test_cli_default_threshold_is_the_ship_decision(self):
+        # #424 ship decision: the CLI defaults to 0.6 and the comparator
+        # is strict — 0.75 > 0.6 fires without any flag passed.
+        self.assertEqual(DEFAULT_TOUCHED_RATIO_THRESHOLD, 0.6)
+        anchored = anchorize_text("One.\n\nTwo.\n\nThree.\n\nFour.\n")
+        ops = [
+            {
+                "op": "replace_block",
+                "block_id": bid,
+                "old_hash": _hash_of(anchored, bid),
+                "new_text": f"Rewritten {bid}.",
+                "roadmap_item_ids": ["REV-001"],
+            }
+            for bid in ("B0001", "B0002", "B0003")
+        ]
+        self._write(anchored, _base_patch(anchored, ops))
+        argv = [str(self.base_path), str(self.patch_path), "--output", str(self.output_path)]
+        self.assertEqual(main(argv), 3)
+        self.assertFalse(self.output_path.exists())
+        # Strict comparator boundary: a threshold equal to the ratio does
+        # not fire ("above a threshold", spec §3.3) — and 1.0 disables.
+        self.assertEqual(main(argv + ["--touched-ratio-threshold", "0.75"]), 0)
 
 
 class TestPureMove(ApplyHarness):

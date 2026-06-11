@@ -231,3 +231,7 @@ path = "scripts/test_ars_anchorize_draft.py"
 [[pytest]]
 id = "390-apply-revision-patch"
 path = "scripts/test_ars_apply_revision_patch.py"
+
+[[pytest]]
+id = "390-revision-patch-discipline-lint"
+path = "scripts/test_check_390_revision_patch_discipline.py"
