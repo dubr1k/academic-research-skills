@@ -762,6 +762,28 @@ class TestStructuralTriggers(ApplyHarness):
         # not fire ("above a threshold", spec §3.3) — and 1.0 disables.
         self.assertEqual(main(argv + ["--touched-ratio-threshold", "0.75"]), 0)
 
+    def test_nonfinite_and_out_of_range_threshold_rejected_at_cli(self):
+        # codex P2: NaN makes `ratio > NaN` silently False (disables the
+        # trigger off the documented 1.0 path); inf disables; negatives
+        # over-trigger. argparse must reject all of them before run().
+        anchored = anchorize_text("One.\n\nTwo.\n\nThree.\n\nFour.\n")
+        ops = [
+            {
+                "op": "replace_block",
+                "block_id": "B0001",
+                "old_hash": _hash_of(anchored, "B0001"),
+                "new_text": "Rewritten B0001.",
+                "roadmap_item_ids": ["REV-001"],
+            }
+        ]
+        self._write(anchored, _base_patch(anchored, ops))
+        argv = [str(self.base_path), str(self.patch_path), "--output", str(self.output_path)]
+        for bad in ("nan", "inf", "-0.1", "1.5"):
+            with self.assertRaises(SystemExit) as ctx:
+                main(argv + ["--touched-ratio-threshold", bad])
+            self.assertEqual(ctx.exception.code, 2)  # argparse usage error
+            self.assertFalse(self.output_path.exists())
+
 
 class TestPureMove(ApplyHarness):
     def test_byte_equal_relocation_recorded(self):

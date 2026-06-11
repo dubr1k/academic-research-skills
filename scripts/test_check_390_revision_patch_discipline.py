@@ -16,6 +16,7 @@ import pytest
 
 from check_390_revision_patch_discipline import (
     FORMATTER,
+    APPLY_SCRIPT,
     ORCHESTRATOR,
     PAPER_SKILL,
     PATCH_SCHEMA,
@@ -79,6 +80,11 @@ def spec_text():
 @pytest.fixture(scope="module")
 def patch_schema():
     return json.loads(PATCH_SCHEMA.read_text(encoding="utf-8"))
+
+
+@pytest.fixture(scope="module")
+def apply_src():
+    return APPLY_SCRIPT.read_text(encoding="utf-8")
 
 
 def _mutate(text: str, literal: str) -> str:
@@ -224,16 +230,26 @@ def test_word_count_lost_strip_rule_fails(formatter_text, word_count_text):
 
 # --- invariant 7: threshold lock ----------------------------------------------
 
-def test_threshold_lock_real_tree_passes(spec_text):
-    assert check_threshold_lock(spec_text) == []
+def test_threshold_lock_real_tree_passes(spec_text, apply_src):
+    assert check_threshold_lock(spec_text, apply_src) == []
 
-def test_threshold_lock_amendment_lost_decision_fails(spec_text):
-    errs = check_threshold_lock(_mutate(spec_text, "heading-anchor exemption"))
+def test_threshold_lock_amendment_lost_decision_fails(spec_text, apply_src):
+    errs = check_threshold_lock(
+        _mutate(spec_text, "heading-anchor exemption"), apply_src)
     assert errs and any("exemption decision" in e for e in errs)
 
 def test_threshold_constant_is_the_ship_decision():
     from ars_apply_revision_patch import DEFAULT_TOUCHED_RATIO_THRESHOLD
     assert DEFAULT_TOUCHED_RATIO_THRESHOLD == 0.6
+
+def test_cli_default_regressed_to_none_fails(spec_text, apply_src):
+    # codex P3: the lint must catch a CLI default regression even while
+    # the constant still equals 0.6. Mutate the argparse default to None.
+    regressed = apply_src.replace(
+        "default=DEFAULT_TOUCHED_RATIO_THRESHOLD,", "default=None,")
+    assert regressed != apply_src, "probe literal drifted"
+    errs = check_threshold_lock(spec_text, regressed)
+    assert errs and any("argparse default" in e for e in errs)
 
 
 # --- invariant 8: spec example validates --------------------------------------

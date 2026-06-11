@@ -28,8 +28,10 @@ Invariants:
      Stripping (all three kinds, after-gates ordering, working drafts
      keep markers) and word_count_conventions.md strip-before-count.
   7. Threshold value lock: DEFAULT_TOUCHED_RATIO_THRESHOLD == 0.6 in
-     ars_apply_revision_patch.py, and the spec §0 amendment records the
-     same decisions the prose cites.
+     ars_apply_revision_patch.py, the argparse --touched-ratio-threshold
+     default IS that constant (AST, so a regression to None/literal is
+     caught even when the constant still reads 0.6), and the spec §0
+     amendment records the same decisions the prose cites.
   8. The spec §3.2 example patch validates against
      revision_patch.schema.json (schema example validation, §8.5).
 """
@@ -58,6 +60,7 @@ FORMATTER = REPO_ROOT / "academic-paper/agents/formatter_agent.md"
 WORD_COUNT = REPO_ROOT / "shared/references/word_count_conventions.md"
 SPEC = REPO_ROOT / "docs/design/2026-06-10-390-diff-patch-revision-mode-spec.md"
 PATCH_SCHEMA = REPO_ROOT / "shared/contracts/patch/revision_patch.schema.json"
+APPLY_SCRIPT = REPO_ROOT / "scripts/ars_apply_revision_patch.py"
 
 WRITER_HEADING = "## Patch-Document Revision Emission (#390)"
 ORCH_HEADING = "## Revision-Round Patch Sequencing (#390)"
@@ -190,7 +193,29 @@ def check_marker_rules(formatter_text: str, word_count_text: str) -> list[str]:
     return fails
 
 
-def check_threshold_lock(spec_text: str) -> list[str]:
+def _cli_default_is_the_constant(apply_src: str) -> bool:
+    """True iff the apply script's --touched-ratio-threshold argparse arg
+    has `default=DEFAULT_TOUCHED_RATIO_THRESHOLD`. AST, not string match,
+    so a regression to `default=None` or a re-hardcoded literal is caught
+    even though the constant itself still equals 0.6."""
+    import ast
+    tree = ast.parse(apply_src)
+    for node in ast.walk(tree):
+        if not (isinstance(node, ast.Call)
+                and isinstance(node.func, ast.Attribute)
+                and node.func.attr == "add_argument"):
+            continue
+        if not (node.args and isinstance(node.args[0], ast.Constant)
+                and node.args[0].value == "--touched-ratio-threshold"):
+            continue
+        for kw in node.keywords:
+            if kw.arg == "default":
+                return (isinstance(kw.value, ast.Name)
+                        and kw.value.id == "DEFAULT_TOUCHED_RATIO_THRESHOLD")
+    return False
+
+
+def check_threshold_lock(spec_text: str, apply_src: str) -> list[str]:
     """Invariant 7."""
     fails: list[str] = []
     if DEFAULT_TOUCHED_RATIO_THRESHOLD != 0.6:
@@ -199,6 +224,12 @@ def check_threshold_lock(spec_text: str) -> list[str]:
             f"{DEFAULT_TOUCHED_RATIO_THRESHOLD!r}, the recorded #424 ship "
             "decision is 0.6 — changing it requires a new spec amendment "
             "AND updating every 0.6 prose citation this lint guards")
+    if not _cli_default_is_the_constant(apply_src):
+        fails.append(
+            "invariant 7: the --touched-ratio-threshold argparse default is "
+            "not `DEFAULT_TOUCHED_RATIO_THRESHOLD` — a regression to None or "
+            "a re-hardcoded literal would disable/desync the ship-decision "
+            "default while the constant still reads 0.6")
     fails.extend(check_section_literals(
         7, spec_text, AMENDMENT_HEADING, "spec amendment", {
             "threshold decision": "0.6",
@@ -244,7 +275,8 @@ def main() -> int:
         FORMATTER.read_text(encoding="utf-8"),
         WORD_COUNT.read_text(encoding="utf-8"))
     spec_text = SPEC.read_text(encoding="utf-8")
-    failures += check_threshold_lock(spec_text)
+    failures += check_threshold_lock(
+        spec_text, APPLY_SCRIPT.read_text(encoding="utf-8"))
     failures += check_spec_example(
         spec_text, json.loads(PATCH_SCHEMA.read_text(encoding="utf-8")))
 

@@ -86,6 +86,24 @@ REPORT_FORMAT_VERSION = "1.0"
 DEFAULT_TOUCHED_RATIO_THRESHOLD = 0.6
 
 
+def _ratio_threshold(raw: str) -> float:
+    """argparse type for --touched-ratio-threshold: a finite value in
+    [0.0, 1.0]. Rejects NaN (which makes `touched_ratio > NaN` silently
+    False, disabling the trigger off the documented 1.0 path), inf, and
+    out-of-range values."""
+    try:
+        value = float(raw)
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"{raw!r} is not a number")
+    import math
+    if not math.isfinite(value) or not (0.0 <= value <= 1.0):
+        raise argparse.ArgumentTypeError(
+            f"{raw!r} must be a finite ratio in [0.0, 1.0] "
+            "(1.0 disables the trigger; NaN/inf/negative are rejected)"
+        )
+    return value
+
+
 class ApplyRejection(Exception):
     """Phase 1 rejection carrying the structured failure list."""
 
@@ -583,9 +601,13 @@ def run(
         },
     }
     try:
+        # allow_nan=False: a non-finite counter would serialize as bare
+        # `NaN`/`Infinity` (invalid JSON for strict readers). The threshold
+        # is range-validated upstream, so this is belt-and-suspenders.
         atomic_write_bytes(
             report_path,
-            (json.dumps(report, ensure_ascii=False, indent=2) + "\n").encode("utf-8"),
+            (json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False)
+             + "\n").encode("utf-8"),
         )
     except BaseException:
         # The output and its apply report land as a pair: a report-write
@@ -613,11 +635,11 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument(
         "--touched-ratio-threshold",
-        type=float,
+        type=_ratio_threshold,
         default=DEFAULT_TOUCHED_RATIO_THRESHOLD,
-        help="touched-ratio trigger threshold (default %(default)s, the #424 ship "
-        "decision; fires when blocks_touched/blocks_total is strictly above it; "
-        "pass 1.0 to disable)",
+        help="touched-ratio trigger threshold, a finite ratio in [0.0, 1.0] "
+        "(default %(default)s, the #424 ship decision; fires when "
+        "blocks_touched/blocks_total is strictly above it; pass 1.0 to disable)",
     )
     args = parser.parse_args(argv)
     report_path = args.report_out or Path(str(args.output) + ".apply-report.json")
