@@ -483,7 +483,14 @@ def run(
     touched_ratio_threshold: float | None,
 ) -> dict:
     """Full two-phase apply. Raises ApplyRejection / StructuralRefusal /
-    BlockParseError; returns the success report dict."""
+    BlockParseError; returns the success report dict.
+
+    `touched_ratio_threshold`: the CLI defaults this to
+    DEFAULT_TOUCHED_RATIO_THRESHOLD (0.6, the #424 ship decision); a
+    programmatic caller may pass `None` for record-only mode — the ratio is
+    still computed and recorded in the report, but never triggers a
+    structural refusal (for callers that own their own escalation policy).
+    """
     resolved = {
         "base": base_path.resolve(),
         "output": output_path.resolve(),

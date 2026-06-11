@@ -59,7 +59,7 @@ python scripts/ars_apply_revision_patch.py draft.md patch.json \
 
 ## Marker lifecycle (one rule for all marker kinds)
 
-`<!--block:-->` markers live in **working drafts only**, exactly like `<!--ref:-->` / `<!--anchor:-->`:
+`<!--block:-->` markers live in **working drafts only**, exactly like `<!--ref:-->` / `<!--anchor:-->`. Two authoritative rules govern them — this doc indexes them rather than re-owning the wording, so the rule cannot drift out of sync with the surfaces the #390 lint guards:
 
-- **Word counts exclude markers:** strip every `<!--...-->` HTML comment before `len(body.split())` (see `shared/references/word_count_conventions.md` § HTML-comment markers). Block markers are standalone lines — counting them would inflate totals by one token per block.
-- **Phase 7 strips markers from converted final outputs** (LaTeX / DOCX / PDF and clean-markdown deliverables) AFTER the marker-dependent gates have run on the working draft (see `formatter_agent.md` § ARS Marker Stripping). Working drafts and `phase6_*/` provenance artifacts keep their markers — stripping there would destroy the anchor layer the next round needs.
+- **Word counts exclude markers** — strip every `<!--...-->` before `len(body.split())`. Authoritative: `shared/references/word_count_conventions.md` § HTML-comment markers.
+- **Phase 7 strips markers from converted final outputs**, after the marker-dependent gates run on the working draft; working drafts and `phase6_*/` artifacts keep theirs (the anchor layer the next round's manifest needs). Authoritative: `formatter_agent.md` § ARS Marker Stripping.

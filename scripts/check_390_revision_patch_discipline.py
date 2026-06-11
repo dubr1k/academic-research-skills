@@ -43,10 +43,11 @@ from pathlib import Path
 import jsonschema
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-if str(REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(REPO_ROOT))
+if str(REPO_ROOT / "scripts") not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
-from scripts.ars_apply_revision_patch import DEFAULT_TOUCHED_RATIO_THRESHOLD
+from _skill_lint import check_section_literals, h2_section_body
+from ars_apply_revision_patch import DEFAULT_TOUCHED_RATIO_THRESHOLD
 
 WRITER = REPO_ROOT / "academic-paper/agents/draft_writer_agent.md"
 ORCHESTRATOR = REPO_ROOT / "academic-pipeline/agents/pipeline_orchestrator_agent.md"
@@ -66,40 +67,9 @@ AMENDMENT_HEADING = "## §0 Slice B amendment (2026-06-11, #424)"
 ESCALATION_TAG = "[PATCH-ESCALATION-REQUIRED:"
 
 
-def _section(text: str, heading: str) -> str | None:
-    """Body of the H2 starting with `heading` (heading line excluded) up to
-    the next H2, or None when absent — check_394's line-walk, so internal
-    H3s and code fences are part of the body."""
-    body: list[str] = []
-    in_section = False
-    for line in text.splitlines():
-        if line.startswith(heading):
-            in_section = True
-            continue
-        if in_section and line.startswith("## "):
-            break
-        if in_section:
-            body.append(line)
-    return "\n".join(body) if in_section else None
-
-
-def _check_section_literals(invariant: int, text: str, heading: str,
-                            label: str,
-                            literals: dict[str, str]) -> list[str]:
-    section = _section(text, heading)
-    if section is None:
-        return [f"invariant {invariant}: {label} section '{heading}' missing"]
-    return [
-        f"invariant {invariant}: {label} section lost the "
-        f"{name} literal ({literal!r})"
-        for name, literal in literals.items()
-        if literal not in section
-    ]
-
-
 def check_writer(text: str) -> list[str]:
     """Invariant 1."""
-    return _check_section_literals(1, text, WRITER_HEADING, "writer", {
+    return check_section_literals(1, text, WRITER_HEADING, "writer", {
         "patch-not-full-draft": "NOT a re-emitted complete paper",
         "schema path": "shared/contracts/patch/revision_patch.schema.json",
         "sidecar emission path": "phase6_*/revision_patch_round<N>.json",
@@ -113,7 +83,7 @@ def check_writer(text: str) -> list[str]:
 
 def check_orchestrator(text: str) -> list[str]:
     """Invariant 2."""
-    fails = _check_section_literals(2, text, ORCH_HEADING, "orchestrator", {
+    fails = check_section_literals(2, text, ORCH_HEADING, "orchestrator", {
         "no-rewrite window": "nothing may rewrite the draft between steps 1 and 3",
         "layer-1 trigger": ESCALATION_TAG,
         "layer-2 trigger": "refused_structural",
@@ -126,7 +96,7 @@ def check_orchestrator(text: str) -> list[str]:
         "threshold value": "0.6",
         "re-anchorize generation": "new ID generation",
     })
-    section = _section(text, ORCH_HEADING)
+    section = h2_section_body(text, ORCH_HEADING)
     if section is not None:
         steps = [
             "**Anchorize (manifest refresh):**",
@@ -150,7 +120,7 @@ def check_orchestrator(text: str) -> list[str]:
 
 def check_paper_skill(text: str) -> list[str]:
     """Invariant 3."""
-    fails = _check_section_literals(3, text, SKILL_HEADING, "SKILL.md", {
+    fails = check_section_literals(3, text, SKILL_HEADING, "SKILL.md", {
         "protocol doc pointer": "references/revision_patch_protocol.md",
         "escalated provenance": "full_reemission_escalated",
         "honest boundary": "does not make the revision itself better",
@@ -170,7 +140,7 @@ def check_paper_skill(text: str) -> list[str]:
 
 def check_schema8(text: str) -> list[str]:
     """Invariant 4."""
-    return _check_section_literals(
+    return check_section_literals(
         4, text, "## Schema 8: Response to Reviewers", "Schema 8", {
             "field row": "`change_block_ids`",
             "producer split": "never by the writer",
@@ -201,7 +171,7 @@ def check_protocol_doc(text: str | None) -> list[str]:
 
 def check_marker_rules(formatter_text: str, word_count_text: str) -> list[str]:
     """Invariant 6."""
-    fails = _check_section_literals(
+    fails = check_section_literals(
         6, formatter_text, FMT_HEADING, "formatter", {
             "block marker": "<!--block:",
             "ref marker": "<!--ref:",
@@ -229,7 +199,7 @@ def check_threshold_lock(spec_text: str) -> list[str]:
             f"{DEFAULT_TOUCHED_RATIO_THRESHOLD!r}, the recorded #424 ship "
             "decision is 0.6 — changing it requires a new spec amendment "
             "AND updating every 0.6 prose citation this lint guards")
-    fails.extend(_check_section_literals(
+    fails.extend(check_section_literals(
         7, spec_text, AMENDMENT_HEADING, "spec amendment", {
             "threshold decision": "0.6",
             "exemption decision": "heading-anchor exemption",
