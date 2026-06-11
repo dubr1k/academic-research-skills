@@ -207,6 +207,25 @@ def compute_package_fingerprint(package_dir: Path,
     return sha256_hex(manifest_text.encode("utf-8"))
 
 
+def compute_inputs_fingerprint(venue_profile_path: Optional[str],
+                               join_map_path: Optional[str],
+                               passport_path: Optional[str]) -> str:
+    """SHA-256 over the external-inputs manifest (gate-2 review P1): one
+    `<name>:<sha256-of-file-bytes|absent>` line per input, sorted by name,
+    trailing newline. Family B/C verdicts depend on these inputs, so the
+    freshness guard must see them — the package fingerprint alone cannot
+    (the inputs live outside the package). An absent input hashes as the
+    literal token `absent`, so declared→absent is a visible change."""
+    lines = []
+    for name, raw in (("join_map", join_map_path),
+                      ("passport", passport_path),
+                      ("venue_profile", venue_profile_path)):
+        digest = sha256_hex(Path(raw).read_bytes()) if raw else "absent"
+        lines.append(f"{name}:{digest}")
+    manifest_text = "\n".join(sorted(lines)) + "\n"
+    return sha256_hex(manifest_text.encode("utf-8"))
+
+
 def _collect_package_texts(package_dir: Path
                            ) -> tuple[dict[str, str], dict[str, str]]:
     """One walk, one read per file: ({manuscript rel: text}, {bib rel: text})."""
@@ -1332,7 +1351,8 @@ def _report_relpath(package_dir: Path,
 def build_report(package_dir: Path, checks: list[dict[str, Any]],
                  extraction_path: str,
                  report_path: Optional[Path] = None,
-                 policy_slug: Optional[str] = None) -> dict[str, Any]:
+                 policy_slug: Optional[str] = None,
+                 inputs_fingerprint: Optional[str] = None) -> dict[str, Any]:
     emitted = {c["id"] for c in checks}
     if emitted != set(_CHECK_REGISTRY):
         # Roster guard (§1.4/#349): a runner that silently omits a registered
@@ -1348,6 +1368,12 @@ def build_report(package_dir: Path, checks: list[dict[str, Any]],
                 1 for c in checks if c["status"] == "not_checked"),
             "package_fingerprint": compute_package_fingerprint(
                 package_dir, report_relpath),
+            # Gate-2 P1: external inputs (venue profile / passport / join
+            # map) shape Family B/C verdicts; the freshness guard compares
+            # this against the reusing invocation's inputs.
+            "inputs_fingerprint": (inputs_fingerprint
+                                   or compute_inputs_fingerprint(
+                                       None, None, None)),
             # §5.2/§5.3: the value handed down by the policy evaluator via
             # --policy; None = standalone unevaluated run (the argparse
             # default is None, never "advisory" — a null-stamped report can
@@ -1424,15 +1450,24 @@ def evaluate_policy(report: dict[str, Any],
 
 
 def check_freshness(package_dir: Path, report_path: Path,
-                    expected_policy: str) -> tuple[str, int]:
+                    expected_policy: str,
+                    expected_inputs_fingerprint: str) -> tuple[str, int]:
     """Slice-4 freshness guard (§5.2): the orchestrator MUST run this before
     ever reusing a report. Does NOT re-run checks and never writes; it
     recomputes the package fingerprint with the SAME exclusion set used at
     write time (report file + provenance_summary.md) and compares
-    fingerprint + policy_slug against the expected policy. A null-stamped
-    (standalone, unevaluated) report never satisfies freshness.
+    fingerprint + inputs fingerprint + policy_slug against what the reusing
+    invocation carries. A null-stamped (standalone, unevaluated) report
+    never satisfies freshness.
 
-    Returns (message_line, exit_code): exit 0 fresh, exit 5 stale."""
+    A FRESH report re-emits its policy verdict (gate-2 review P1): freshness
+    alone means "the report is trustworthy", not "the package passed" — a
+    fresh strict report that recorded a blocking fail prints its terminal
+    token again and exits accordingly, so a verdict can never evaporate
+    across a resume/reuse.
+
+    Returns (message, exit_code): exit 5 stale; fresh returns the
+    re-evaluated verdict's exit code (0/1/3/4)."""
     if not report_path.is_file():
         return "STALE-REPORT reason=missing_report", 5
     try:
@@ -1445,16 +1480,30 @@ def check_freshness(package_dir: Path, report_path: Path,
     if stamped_slug is None:
         return "STALE-REPORT reason=null_policy_slug", 5
     if stamped_slug != expected_policy:
+        # !r: the slug comes from the report FILE (untrusted bytes under the
+        # freshness threat model) — repr collapses embedded newlines so a
+        # forged slug cannot inject a fake second token line into stdout.
         return (
-            f"STALE-REPORT reason=policy_mismatch stamped={stamped_slug} "
+            f"STALE-REPORT reason=policy_mismatch stamped={stamped_slug!r} "
             f"expected={expected_policy}",
             5,
         )
+    if header.get("inputs_fingerprint") != expected_inputs_fingerprint:
+        # Covers a changed/added/dropped venue profile, passport, or join
+        # map, AND a legacy report predating the field (gets None).
+        return "STALE-REPORT reason=inputs_mismatch", 5
     current = compute_package_fingerprint(
         package_dir, _report_relpath(package_dir, report_path))
     if current != stamped_fingerprint:
         return "STALE-REPORT reason=fingerprint_mismatch", 5
-    return f"report fresh (policy={expected_policy})", 0
+    try:
+        token, code = evaluate_policy(report, expected_policy)
+    except (KeyError, TypeError):
+        return "STALE-REPORT reason=unreadable_report", 5
+    message = f"report fresh (policy={expected_policy})"
+    if token is not None:
+        message = f"{message}\n{token}"
+    return message, code
 
 
 def run(argv: Optional[list[str]] = None) -> int:
@@ -1462,16 +1511,17 @@ def run(argv: Optional[list[str]] = None) -> int:
         prog="verify_submission_package",
         description="Deterministic submission-package verifier (#394: Family "
                     "C reference integrity + Family B venue limits).",
-        epilog="Exit codes: 0 all-checked no-fail (or fresh report under "
-               "--check-freshness); 1 at least one fail; 2 usage/IO error; "
-               "3 no fail but at least one NOT-CHECKED; 4 VERIFICATION-"
-               "INCOMPLETE (strict only: a strict-eligible check is "
-               "NOT-CHECKED — fail-closed); 5 STALE-REPORT "
-               "(--check-freshness: fingerprint or policy-slug mismatch). "
-               "Terminal signals for automation are the stdout tokens "
-               "(TERMINAL-BLOCK / VERIFICATION-INCOMPLETE / STALE-REPORT), "
-               "NEVER raw exit codes — exit 1 also covers nonterminal "
-               "heuristic fails.")
+        epilog="Exit codes: 0 all-checked no-fail; 1 at least one fail; "
+               "2 usage/IO error; 3 no fail but at least one NOT-CHECKED; "
+               "4 VERIFICATION-INCOMPLETE (strict only: a strict-eligible "
+               "check is NOT-CHECKED — fail-closed); 5 STALE-REPORT "
+               "(--check-freshness: fingerprint, inputs, or policy-slug "
+               "mismatch). A FRESH report under --check-freshness re-emits "
+               "its verdict — token + exit semantics identical to a live "
+               "run; 'fresh' alone is never a pass. Terminal signals for "
+               "automation are the stdout tokens (TERMINAL-BLOCK / "
+               "VERIFICATION-INCOMPLETE / STALE-REPORT), NEVER raw exit "
+               "codes — exit 1 also covers nonterminal heuristic fails.")
     parser.add_argument("package_dir", help="Output package directory to verify.")
     parser.add_argument(
         "--passport", default=None,
@@ -1522,7 +1572,16 @@ def run(argv: Optional[list[str]] = None) -> int:
             return 2
         report_path = (Path(args.report_out) if args.report_out
                        else package_dir / REPORT_BASENAME)
-        message, code = check_freshness(package_dir, report_path, args.policy)
+        try:
+            expected_inputs = compute_inputs_fingerprint(
+                args.venue_profile, args.join_map, args.passport)
+        except OSError as e:
+            print(f"[verify_submission_package ERROR] could not read an "
+                  f"input file for the freshness comparison: {e}",
+                  file=sys.stderr)
+            return 2
+        message, code = check_freshness(package_dir, report_path,
+                                        args.policy, expected_inputs)
         print(message)
         return code
 
@@ -1562,7 +1621,10 @@ def run(argv: Optional[list[str]] = None) -> int:
                    else package_dir / REPORT_BASENAME)
     report = build_report(package_dir, checks, extraction_path,
                           report_path=report_path,
-                          policy_slug=args.policy)
+                          policy_slug=args.policy,
+                          inputs_fingerprint=compute_inputs_fingerprint(
+                              args.venue_profile, args.join_map,
+                              args.passport))
 
     try:
         report_path.write_text(

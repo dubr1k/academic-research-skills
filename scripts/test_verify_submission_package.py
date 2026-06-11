@@ -997,6 +997,7 @@ def _minimal_report(**check_overrides):
             "extraction_path": "joined_marker",
             "not_checked_count": 0,
             "package_fingerprint": "0" * 64,
+            "inputs_fingerprint": "0" * 64,
             "policy_slug": None,
         },
         "checks": [check],
@@ -1191,16 +1192,6 @@ def _fresh_args(policy="advisory"):
     return ["--check-freshness", "--policy", policy]
 
 
-def test_freshness_matching_report_exits_0(tmp_path, capsys):
-    _, _, package_dir = run_on("venue_clean", tmp_path,
-                               extra_args=["--policy", "advisory"])
-    capsys.readouterr()
-    rc = run([str(package_dir), *_fresh_args()])
-    out = capsys.readouterr().out
-    assert rc == 0
-    assert "STALE-REPORT" not in out
-
-
 def test_freshness_mutated_package_is_stale(tmp_path, capsys):
     _, _, package_dir = run_on("venue_clean", tmp_path,
                                extra_args=["--policy", "advisory"])
@@ -1290,8 +1281,11 @@ def test_provenance_summary_outside_fingerprint(tmp_path, capsys):
     capsys.readouterr()
     rc = run([str(package_dir), *_fresh_args()])
     out = capsys.readouterr().out
-    assert rc == 0
+    # Fresh (no STALE token); the exit code is the re-emitted underlying
+    # verdict — 3 here (profileless Family B not_checked), NOT a stale 5.
+    assert rc == 3
     assert "STALE-REPORT" not in out
+    assert "report fresh" in out
 
 
 def test_advisory_run_is_byte_equivalent_for_package_files(tmp_path):
@@ -1313,3 +1307,81 @@ def test_advisory_run_is_byte_equivalent_for_package_files(tmp_path):
     assert set(after) - set(before) == {REPORT_BASENAME}
     for rel, content in before.items():
         assert after[rel] == content, f"{rel} mutated by an advisory run"
+
+
+# --- Slice 4 gate-2 review round: freshness re-emit + external inputs -------
+
+def test_freshness_fresh_strict_report_reemits_terminal_token(
+        tmp_path, capsys):
+    # Gate-2 P1: freshness alone means "the report is trustworthy", not "the
+    # package passed". A fresh strict report that recorded a blocking fail
+    # must re-emit its terminal verdict on reuse — otherwise the verdict
+    # silently evaporates on resume and the orchestrator (gating on tokens)
+    # reads the reuse as a pass.
+    _, _, package_dir = run_on("orphan_intext", tmp_path,
+                               extra_args=["--policy", "strict"])
+    capsys.readouterr()
+    rc = run([str(package_dir), "--check-freshness", "--policy", "strict"])
+    out = capsys.readouterr().out
+    assert rc == 1
+    assert "report fresh" in out
+    assert "TERMINAL-BLOCK policy=submission_package" in out
+
+
+def test_freshness_fresh_advisory_report_reemits_underlying_code(
+        tmp_path, capsys):
+    # Same contract on the advisory side: a fresh advisory report with
+    # not_checked rows re-emits exit 3, not a flat 0.
+    _, _, package_dir = run_on("venue_clean", tmp_path,
+                               extra_args=["--policy", "advisory"])
+    capsys.readouterr()
+    rc = run([str(package_dir), *_fresh_args()])
+    out = capsys.readouterr().out
+    assert rc == 3
+    assert "report fresh" in out
+    assert "STALE-REPORT" not in out
+
+
+def test_freshness_changed_venue_profile_is_stale(tmp_path, capsys):
+    # Gate-2 P1: Family B verdicts depend on the venue profile — a report
+    # produced under one profile must never read as fresh under another
+    # (a lenient-profile report would otherwise waive a stricter profile's
+    # limits without any check ever running against them).
+    full = FIXTURES / "profiles" / "full.yaml"
+    tight = FIXTURES / "profiles" / "tight.yaml"
+    _, _, package_dir = run_on(
+        "venue_clean", tmp_path,
+        extra_args=["--policy", "advisory", "--venue-profile", str(full)])
+    capsys.readouterr()
+    rc = run([str(package_dir), "--check-freshness", "--policy", "advisory",
+              "--venue-profile", str(tight)])
+    out = capsys.readouterr().out
+    assert rc == 5
+    assert "STALE-REPORT reason=inputs_mismatch" in out
+
+
+def test_freshness_same_venue_profile_stays_fresh(tmp_path, capsys):
+    full = FIXTURES / "profiles" / "full.yaml"
+    _, _, package_dir = run_on(
+        "venue_clean", tmp_path,
+        extra_args=["--policy", "advisory", "--venue-profile", str(full)])
+    capsys.readouterr()
+    rc = run([str(package_dir), "--check-freshness", "--policy", "advisory",
+              "--venue-profile", str(full)])
+    out = capsys.readouterr().out
+    assert rc == 0
+    assert "report fresh" in out
+
+
+def test_freshness_dropped_input_is_stale(tmp_path, capsys):
+    # Running with a profile, then checking freshness WITHOUT one, is an
+    # inputs change (declared → absent) and must be stale.
+    full = FIXTURES / "profiles" / "full.yaml"
+    _, _, package_dir = run_on(
+        "venue_clean", tmp_path,
+        extra_args=["--policy", "advisory", "--venue-profile", str(full)])
+    capsys.readouterr()
+    rc = run([str(package_dir), *_fresh_args()])
+    out = capsys.readouterr().out
+    assert rc == 5
+    assert "STALE-REPORT reason=inputs_mismatch" in out
