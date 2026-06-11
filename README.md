@@ -1,258 +1,331 @@
-# Русские академические skills для Claude Code и Opencode
+# Русские академические навыки для Claude Code и Opencode
 
-[![Upstream](https://img.shields.io/badge/upstream-Imbad0202%2Facademic--research--skills-blue)](https://github.com/Imbad0202/academic-research-skills)
-[![Snapshot](https://img.shields.io/badge/snapshot-v3.12.0%20%2F%20175f79b-lightgrey)](https://github.com/Imbad0202/academic-research-skills/commit/175f79bcca4467949fa94e410c25823bd574f687)
-[![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
+[![Исходный проект](https://img.shields.io/badge/upstream-Imbad0202%2Facademic--research--skills-blue)](https://github.com/Imbad0202/academic-research-skills)
+[![Снимок](https://img.shields.io/badge/snapshot-v3.12.0%20%2F%20175f79b-lightgrey)](https://github.com/Imbad0202/academic-research-skills/commit/175f79bcca4467949fa94e410c25823bd574f687)
+[![Лицензия: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
 
-Русскоязычная адаптация идей из [`Imbad0202/academic-research-skills`](https://github.com/Imbad0202/academic-research-skills) для научной работы в Claude Code и Opencode.
+Русскоязычная адаптация идей из проекта [`Imbad0202/academic-research-skills`](https://github.com/Imbad0202/academic-research-skills) для научной работы в Claude Code и Opencode.
 
-Этот fork сохраняет upstream-проект и добавляет отдельный пакет [`russian-academic-skills/`](russian-academic-skills/) с четырьмя skills:
+Это ответвление сохраняет исходный проект и добавляет каталог [`russian-academic-skills/`](russian-academic-skills/) с четырьмя русскими навыками:
 
-| Skill | Назначение | Типичный результат |
-|---|---|---|
-| `akademicheskoe-issledovanie` | Research, поиск источников, обзор литературы, fact-check, systematic review | Research brief, матрица источников, claim-check таблица, PRISMA-style протокол |
-| `akademicheskaya-statya` | План, структура, черновик, аннотация, оформление и revision научной статьи | Paper blueprint, outline, draft, revision roadmap, disclosure |
-| `akademicheskii-retsenzent` | Независимая рецензия, peer review, methodology check, re-review | Review report, editorial decision, major/minor issues, roadmap правок |
-| `akademicheskii-konveer` | Полный цикл research -> paper -> review -> revision -> finalization | Стадийный pipeline с checkpoint-ами и integrity gates |
+- `akademicheskoe-issledovanie` — исследование, поиск источников, обзор литературы, проверка фактов и систематический обзор.
+- `akademicheskaya-statya` — план статьи, структура, черновик, аннотация, оформление и доработка рукописи.
+- `akademicheskii-retsenzent` — независимая рецензия, проверка методологии и повторная рецензия после правок.
+- `akademicheskii-konveer` — полный путь от темы исследования до финального публикационного пакета.
 
-Оригинальная upstream-документация доступна в исходном репозитории: [`Imbad0202/academic-research-skills`](https://github.com/Imbad0202/academic-research-skills).
+Исходная документация доступна в репозитории автора: [`Imbad0202/academic-research-skills`](https://github.com/Imbad0202/academic-research-skills).
 
-> Это не официальный перевод upstream. Это русскоязычная адаптация для Claude Code / Opencode workflows. Автор upstream: Cheng-I Wu. Лицензия источника: CC BY-NC 4.0.
+> Это не официальный перевод исходного проекта, а русскоязычная адаптация для Claude Code и Opencode. Автор исходного проекта: Cheng-I Wu. Лицензия: CC BY-NC 4.0.
 
 ---
 
 ## Зачем это нужно
 
-Обычные LLM-подсказки для академической работы часто ломаются одинаково: модель выдумывает источники, делает обзор литературы без search strategy, пишет статью до проверки claims, дает слишком мягкую рецензию или превращает русский научный текст в набор канцелярских AI-клише.
+Обычные подсказки для языковых моделей часто ломаются в академических задачах одинаково:
 
-Эти skills задают агенту более строгий workflow:
+- появляются вымышленные источники, журналы или DOI;
+- обзор литературы превращается в пересказ без стратегии поиска;
+- статья пишется раньше, чем проверены тезисы и библиография;
+- рецензия получается мягкой, общей и без привязки к тексту;
+- ответы рецензентам механически принимают все замечания;
+- русский научный текст скатывается в канцелярские фразы вроде «данная тема является актуальной».
 
-- отделять research, writing, review и full pipeline;
+Эти навыки задают агенту более строгий порядок работы:
+
+- отделять исследование, письмо, рецензирование и полный конвейер;
 - проверять источники до синтеза;
 - явно маркировать подтвержденное, спорное и непроверенное;
-- не выдумывать DOI, журналы и библиографические записи;
-- использовать ГОСТ/APA/IEEE/Vancouver/Chicago по запросу;
-- учитывать ВАК, РИНЦ, eLIBRARY, CyberLeninka и русскоязычные требования;
-- проводить рецензию через severity, location, why it matters и required fix;
-- не скрывать limitations, funding, COI и AI disclosure.
+- не выдумывать DOI и библиографические записи;
+- оформлять источники по ГОСТ, APA, IEEE, Vancouver или Chicago по запросу;
+- учитывать ВАК, РИНЦ, eLIBRARY, CyberLeninka и требования русскоязычных журналов;
+- описывать замечания рецензента через серьезность, место в тексте, причину и нужную правку;
+- не скрывать ограничения исследования, финансирование, конфликт интересов и использование ИИ.
 
-Главный принцип inherited from upstream: AI is your copilot, not the pilot.
+Главный принцип унаследован из исходного проекта: ИИ помогает исследователю, но не заменяет его.
 
 ---
 
-## Быстрая установка для Claude Code
+## Что входит в пакет
+
+### `akademicheskoe-issledovanie`
+
+Используйте для поиска источников, обзора литературы, проверки фактов, формулировки исследовательского вопроса и систематического обзора.
+
+Ожидаемые результаты:
+
+- краткая исследовательская справка;
+- матрица источников;
+- таблица «тезис -> источник -> вердикт»;
+- протокол систематического обзора;
+- список ограничений доказательств.
+
+### `akademicheskaya-statya`
+
+Используйте для планирования и написания научной статьи, аннотации, раздела обзора литературы, ответа рецензентам и оформления.
+
+Ожидаемые результаты:
+
+- план статьи;
+- подробная структура;
+- карта тезисов и доказательств;
+- черновик или доработанные разделы;
+- план ответа рецензентам;
+- заявление об использовании ИИ, конфликте интересов и финансировании.
+
+### `akademicheskii-retsenzent`
+
+Используйте для независимой оценки рукописи перед отправкой, проверки методологии, моделирования научного рецензирования и повторной проверки после правок.
+
+Ожидаемые результаты:
+
+- редакционное решение;
+- сильные стороны рукописи;
+- критические, крупные и мелкие замечания;
+- проверка методологии и источников;
+- дорожная карта правок.
+
+### `akademicheskii-konveer`
+
+Используйте, когда нужен полный цикл: от темы и источников до статьи, рецензии, доработки и финальной проверки.
+
+Ожидаемые результаты:
+
+- определение текущей стадии работы;
+- переходы между исследованием, письмом и рецензированием;
+- контрольные точки перед сменой стадии;
+- итоговый публикационный пакет.
+
+---
+
+## Установка для Claude Code
 
 ```bash
-git clone https://github.com/<your-github>/academic-research-skills.git
+git clone https://github.com/dubr1k/academic-research-skills.git
 cd academic-research-skills
 mkdir -p ~/.claude/skills
 cp -R russian-academic-skills/* ~/.claude/skills/
 ```
 
-Добавьте routing в `~/.claude/CLAUDE.md`:
+Добавьте правила выбора навыков в `~/.claude/CLAUDE.md`:
 
 ```markdown
-## Русские академические skills
+## Русские академические навыки
 
-Перед ответом на академические запросы в русском или английском языке загружай matching skill.
+Перед ответом на академические запросы в русском или английском языке загружай подходящий навык.
 
-| Intent | Skill |
-|---|---|
-| Поиск источников, research, literature review, fact-check | `akademicheskoe-issledovanie` |
-| Написание статьи, план, структура, черновик, abstract, оформление | `akademicheskaya-statya` |
-| Рецензия, peer review, methodology check, pre-submission review | `akademicheskii-retsenzent` |
-| Полный цикл или 2+ academic intents сразу | `akademicheskii-konveer` |
+- Поиск источников, исследование, обзор литературы, проверка фактов: `akademicheskoe-issledovanie`.
+- Написание статьи, план, структура, черновик, аннотация, оформление: `akademicheskaya-statya`.
+- Рецензия, проверка методологии, оценка статьи перед отправкой: `akademicheskii-retsenzent`.
+- Полный цикл или несколько академических намерений сразу: `akademicheskii-konveer`.
 
-Если skill registry в текущей сессии не видит новые skills, прочитай `~/.claude/skills/<skill>/SKILL.md` напрямую и следуй ему.
+Если текущая сессия не видит новые навыки из-за кэша, прочитай `~/.claude/skills/<skill>/SKILL.md` напрямую и следуй ему.
 ```
 
-Перезапустите Claude Code или начните новую сессию, чтобы registry увидел новые skills.
+После установки перезапустите Claude Code или начните новую сессию.
 
 ---
 
-## Быстрая установка для Opencode
+## Установка для Opencode
 
 ```bash
-git clone https://github.com/<your-github>/academic-research-skills.git
+git clone https://github.com/dubr1k/academic-research-skills.git
 cd academic-research-skills
 mkdir -p ~/.config/opencode/skills
 cp -R russian-academic-skills/* ~/.config/opencode/skills/
 ```
 
-Добавьте routing в `~/.config/opencode/AGENTS.md` или project-level `AGENTS.md`:
+Добавьте правила выбора навыков в `~/.config/opencode/AGENTS.md` или в проектный `AGENTS.md`:
 
 ```markdown
-## Русские академические skills
+## Русские академические навыки
 
-Перед ответом, планированием, поиском, письмом или делегацией проверяй текущий запрос пользователя на academic intent.
+Перед ответом, планированием, поиском, письмом или делегацией проверяй текущий запрос пользователя на академическое намерение.
 
-| Intent | Skill | Триггеры |
-|---|---|---|
-| Source search, research, literature review, fact-check | `akademicheskoe-issledovanie` | `исследование`, `найди источники`, `обзор литературы`, `fact-check`, `systematic review` |
-| Academic writing, paper plan, draft, abstract, formatting | `akademicheskaya-statya` | `напиши статью`, `научная статья`, `план статьи`, `аннотация`, `оформи по ГОСТ` |
-| Review, peer review, methodology check | `akademicheskii-retsenzent` | `рецензия`, `отрецензируй`, `проверь статью`, `peer review`, `methodology check` |
-| Full pipeline or multiple academic intents | `akademicheskii-konveer` | `полный цикл`, `от темы до статьи`, `research to paper`, `full pipeline` |
+- Поиск источников, исследование, обзор литературы, проверка фактов: `akademicheskoe-issledovanie`.
+- Написание статьи, план, структура, черновик, аннотация, оформление: `akademicheskaya-statya`.
+- Рецензия, проверка методологии, оценка статьи перед отправкой: `akademicheskii-retsenzent`.
+- Полный цикл или несколько академических намерений сразу: `akademicheskii-konveer`.
 
-Правила выбора: один intent -> соответствующий skill; 2+ intents -> `akademicheskii-konveer`; узкий one-step запрос не превращай в полный конвейер. Если registry кэширован и не видит новый skill, прочитай `~/.config/opencode/skills/<skill>/SKILL.md` напрямую.
+Правила выбора: один явный запрос -> один подходящий навык; несколько академических намерений -> `akademicheskii-konveer`; узкую задачу не превращай в полный конвейер. Если реестр навыков кэширован и не видит новый навык, прочитай `~/.config/opencode/skills/<skill>/SKILL.md` напрямую.
 ```
+
+После установки перезапустите Opencode или откройте новую сессию.
 
 ---
 
-## Как выбирать skill
+## Как выбирать навык
 
-### 1. Исследование и источники
+### Исследование и источники
 
-Загружайте `akademicheskoe-issledovanie`, если пользователь пишет:
+Загружайте `akademicheskoe-issledovanie`, если пользователь просит:
 
 ```text
 Найди источники по теме X.
 Сделай обзор литературы.
-Проверь эти claims и DOI.
-Собери systematic review protocol.
+Проверь эти утверждения и DOI.
+Собери протокол систематического обзора.
 Помоги сузить исследовательский вопрос.
 ```
 
-Режимы: `socratic`, `quick`, `full`, `lit-review`, `fact-check`, `systematic-review`, `review`.
+Основные режимы:
 
-### 2. Написание статьи
+- `socratic` — тема неясна, нужно помочь сформулировать вопрос;
+- `quick` — нужна короткая справка;
+- `full` — нужен полный исследовательский отчет;
+- `lit-review` — нужен обзор литературы;
+- `fact-check` — нужна проверка утверждений;
+- `systematic-review` — нужен систематический обзор;
+- `review` — нужна оценка качества статьи или источника.
 
-Загружайте `akademicheskaya-statya`, если пользователь пишет:
+### Написание статьи
+
+Загружайте `akademicheskaya-statya`, если пользователь просит:
 
 ```text
 Напиши план статьи.
 Собери структуру IMRaD.
-Напиши аннотацию и keywords.
+Напиши аннотацию и ключевые слова.
 Переработай черновик по замечаниям.
 Оформи список литературы по ГОСТ.
 ```
 
-Skill не должен выдумывать источники. Если корпуса литературы нет, сначала нужен research step.
+Навык не должен выдумывать источники. Если корпуса литературы нет, сначала нужен исследовательский этап.
 
-### 3. Рецензирование
+### Рецензирование
 
-Загружайте `akademicheskii-retsenzent`, если пользователь пишет:
+Загружайте `akademicheskii-retsenzent`, если пользователь просит:
 
 ```text
 Отрецензируй статью перед отправкой.
 Проверь методологию и статистику.
-Смоделируй peer review.
-Проверь, закрыты ли замечания после revision.
+Смоделируй научное рецензирование.
+Проверь, закрыты ли замечания после правок.
 ```
 
-Рецензент read-only по отношению к рукописи: он выдает critique и roadmap, но не переписывает статью, пока пользователь явно не просит revision mode.
+Рецензент работает в режиме только чтения: он дает критику и план правок, но не переписывает статью, пока пользователь явно не попросит доработать текст.
 
-### 4. Полный конвейер
+### Полный конвейер
 
-Загружайте `akademicheskii-konveer`, если пользователь пишет:
+Загружайте `akademicheskii-konveer`, если пользователь просит:
 
 ```text
 Проведи полный цикл от темы до статьи.
-Сделай research to paper.
+Сделай путь от исследования до рукописи.
 Подготовь публикацию с нуля.
-Есть черновик и замечания, доведи до финальной версии.
+Есть черновик и замечания: доведи до финальной версии.
 ```
 
-Конвейер определяет entry point и ведет по стадиям: Research -> Write -> Integrity -> Review -> Revise -> Re-review -> Final Integrity -> Finalize -> Process Summary.
+Конвейер определяет точку входа и ведет по стадиям:
+
+1. Исследование.
+2. Написание.
+3. Проверка утверждений и источников.
+4. Рецензирование.
+5. Доработка.
+6. Повторная рецензия.
+7. Финальная проверка.
+8. Оформление и раскрытие использования ИИ.
+9. Итоговое резюме процесса.
 
 ---
 
 ## Примеры запросов
 
 ```text
-Сделай быстрый обзор литературы по применению LLM в оценивании студенческих работ. Нужны 8-12 надежных источников и ограничения доказательств.
+Сделай быстрый обзор литературы по применению языковых моделей в оценивании студенческих работ. Нужны 8-12 надежных источников и ограничения доказательств.
 ```
 
-Ожидаемый routing: `akademicheskoe-issledovanie`, режим `lit-review` или `quick`.
+Ожидаемый навык: `akademicheskoe-issledovanie`.
 
 ```text
 Я хочу писать про ИИ в образовании, но тема слишком широкая. Помоги сузить исследовательский вопрос.
 ```
 
-Ожидаемый routing: `akademicheskoe-issledovanie`, режим `socratic`.
+Ожидаемый навык: `akademicheskoe-issledovanie`.
 
 ```text
-На основе research brief сделай структуру статьи для журнала ВАК.
+На основе исследовательской справки сделай структуру статьи для журнала ВАК.
 ```
 
-Ожидаемый routing: `akademicheskaya-statya`, режим `plan` или `outline-only`.
+Ожидаемый навык: `akademicheskaya-statya`.
 
 ```text
-Отрецензируй рукопись как строгий reviewer: найди major issues, methodology risks и desk-reject signals.
+Отрецензируй рукопись как строгий рецензент: найди крупные проблемы, методологические риски и причины возможного отказа.
 ```
 
-Ожидаемый routing: `akademicheskii-retsenzent`, режим `full`.
+Ожидаемый навык: `akademicheskii-retsenzent`.
 
 ```text
 У меня есть тема и список источников. Проведи полный цикл до публикационного пакета.
 ```
 
-Ожидаемый routing: `akademicheskii-konveer`.
+Ожидаемый навык: `akademicheskii-konveer`.
 
 ---
 
-## Отличия от upstream
+## Чем эта адаптация отличается от исходного проекта
 
-Upstream `academic-research-skills` — большой Claude Code plugin/suite с командами `/ars-*`, агентами, схемами, lint-скриптами и многоязычной документацией.
+Исходный `academic-research-skills` — большой набор для Claude Code с командами `/ars-*`, агентами, схемами, проверочными скриптами и многоязычной документацией.
 
-Этот fork добавляет компактный русскоязычный слой:
+Это ответвление добавляет компактный русскоязычный слой:
 
-- русские trigger phrases;
-- routing для Claude Code и Opencode;
-- Opencode-style orchestration через `task()` вместо Claude-style agent references;
-- ГОСТ/ВАК/РИНЦ/eLIBRARY/CyberLeninka considerations;
-- русский anti-AI-cliche check;
-- отдельный full-pipeline skill для выбора стадии и передачи материалов между research, writing и review.
+- русские фразы-триггеры;
+- правила выбора навыков для Claude Code и Opencode;
+- оркестрацию Opencode через `task()`;
+- учет ГОСТ, ВАК, РИНЦ, eLIBRARY и CyberLeninka;
+- проверку русских канцелярских ИИ-клише;
+- отдельный навык полного конвейера для перехода между исследованием, письмом и рецензией.
 
 ---
 
-## Обновление от upstream
+## Обновление от исходного проекта
 
-Адаптация зафиксирована на snapshot:
+Адаптация основана на снимке:
 
 ```text
 175f79bcca4467949fa94e410c25823bd574f687
 v3.12.0, 2026-06-08
 ```
 
-Если upstream обновился:
+Если исходный проект обновился:
 
-1. подтяните upstream changes;
-2. проверьте изменения в `deep-research`, `academic-paper`, `academic-paper-reviewer`, `academic-pipeline`;
-3. вручную перенесите релевантные идеи в `russian-academic-skills/*/SKILL.md`;
-4. обновите строку `Upstream snapshot` в каждом русском skill;
-5. проверьте routing examples в этом README.
+1. подтяните изменения из исходного репозитория;
+2. проверьте каталоги `deep-research`, `academic-paper`, `academic-paper-reviewer`, `academic-pipeline`;
+3. вручную перенесите важные идеи в `russian-academic-skills/*/SKILL.md`;
+4. обновите строку со снимком исходного проекта в каждом русском навыке;
+5. проверьте примеры выбора навыков в этом файле.
 
 ---
 
-## Лицензия и attribution
+## Лицензия и указание авторства
 
 Оригинальный проект:
 
 ```text
 Academic Research Skills
-Author: Cheng-I Wu
-Repository: https://github.com/Imbad0202/academic-research-skills
-License: Creative Commons Attribution-NonCommercial 4.0 International
+Автор: Cheng-I Wu
+Репозиторий: https://github.com/Imbad0202/academic-research-skills
+Лицензия: Creative Commons Attribution-NonCommercial 4.0 International
 Copyright (c) 2026 Cheng-I Wu
 ```
 
-Эта адаптация распространяется на условиях, совместимых с upstream license: **CC BY-NC 4.0**. Некоммерческое использование, распространение и адаптация разрешены при сохранении attribution и указании изменений.
+Эта адаптация распространяется на условиях, совместимых с лицензией исходного проекта: **CC BY-NC 4.0**. Некоммерческое использование, распространение и адаптация разрешены при сохранении указания авторства и описания изменений.
 
-Attribution format:
+Формат указания авторства:
 
 ```text
-Based on Academic Research Skills by Cheng-I Wu
+На основе Academic Research Skills, автор Cheng-I Wu
 https://github.com/Imbad0202/academic-research-skills
-Russian Claude Code / Opencode adaptation: this fork
+Русская адаптация для Claude Code и Opencode: это ответвление
 ```
 
-Не используйте этот fork для коммерческих целей без отдельного разрешения правообладателя upstream.
+Не используйте это ответвление для коммерческих целей без отдельного разрешения правообладателя исходного проекта.
 
 ---
 
 ## Проверка после установки
 
-После копирования skills и routing rules попробуйте четыре запроса:
+После копирования навыков и правил выбора попробуйте четыре запроса:
 
 ```text
 Найди источники для обзора литературы по теме X.
@@ -261,4 +334,4 @@ Russian Claude Code / Opencode adaptation: this fork
 Проведи полный цикл от темы до статьи.
 ```
 
-Ожидаемое поведение: агент должен загрузить соответствующий skill или, если registry кэширован, прочитать `SKILL.md` напрямую и следовать его протоколу.
+Ожидаемое поведение: агент должен загрузить подходящий навык или, если реестр навыков кэширован, прочитать `SKILL.md` напрямую и следовать его протоколу.
