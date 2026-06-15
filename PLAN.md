@@ -20,6 +20,78 @@
 - Добавить `docs/upstream-sync.md`.
 - Обновить `.claude-plugin/*`, если bilingual bundle должен устанавливаться как plugin.
 
+## Что делаем дальше
+
+Ближайший рабочий срез: **P1 — формализовать русские entrypoints и metadata**.
+
+### Цель среза
+
+Сделать так, чтобы русская часть была не только описана в документации, но и имела стабильные точки входа, проверяемые метаданные и понятный процесс обновления от upstream.
+
+### Задачи по порядку
+
+1. Унифицировать frontmatter во всех русских skills:
+   - `russian-academic-skills/akademicheskoe-issledovanie/SKILL.md`;
+   - `russian-academic-skills/akademicheskaya-statya/SKILL.md`;
+   - `russian-academic-skills/akademicheskii-retsenzent/SKILL.md`;
+   - `russian-academic-skills/akademicheskii-konveer/SKILL.md`.
+2. Добавить обязательные поля:
+   - `name`;
+   - `description`;
+   - `version`;
+   - `last_updated`;
+   - `depends_on`, если skill зависит от других skills;
+   - `status`;
+   - `data_access_level`;
+   - `task_type`;
+   - `upstream_snapshot`.
+3. Добавить русские slash-command entrypoints в `commands/`:
+   - `ars-ru-research.md`;
+   - `ars-ru-paper.md`;
+   - `ars-ru-reviewer.md`;
+   - `ars-ru-pipeline.md`.
+4. В каждом `/ars-ru-*` entrypoint явно указать:
+   - какой русский skill использовать;
+   - когда не использовать этот entrypoint;
+   - как обрабатывать EN/RU/mixed запросы;
+   - ссылку на `docs/bilingual-routing.md`.
+5. Добавить `docs/upstream-sync.md`:
+   - remote layout: `origin` и `upstream`;
+   - порядок fetch/diff/merge;
+   - как обновлять snapshot hash в русских skills;
+   - какие тесты запускать после sync.
+6. Проверить `.claude-plugin/plugin.json` и `.claude-plugin/marketplace.json`:
+   - решить, оставляем ли один bilingual plugin;
+   - или документируем Russian layer как manual install до отдельного plugin-среза.
+7. Расширить тесты:
+   - frontmatter русских skills содержит обязательные поля;
+   - `/ars-ru-*` команды существуют;
+   - команды ссылаются на правильные русские skills;
+   - `docs/upstream-sync.md` упоминает `origin`, `upstream`, snapshot update и тесты.
+
+### Критерии готовности
+
+- Все 4 русских `SKILL.md` имеют одинаковую metadata-схему.
+- Все 4 `/ars-ru-*` команды добавлены и документируют правильный skill routing.
+- `docs/upstream-sync.md` описывает воспроизводимый процесс синхронизации.
+- Новый тестовый файл покрывает frontmatter, команды и sync doc.
+- Полный `pytest` проходит.
+- После успешного теста `PLAN.md` обновлен с отметкой о выполнении P1-среза.
+
+### Коммит
+
+Ожидаемый commit scope:
+
+```text
+feat(russian): add ru command entrypoints and metadata checks
+```
+
+Если изменения будут только документационными и тестовыми, использовать:
+
+```text
+docs(russian): formalize ru entrypoints and sync workflow
+```
+
 ## Цель
 
 Сделать форк, который одновременно и предсказуемо поддерживает два рабочих контекста:
