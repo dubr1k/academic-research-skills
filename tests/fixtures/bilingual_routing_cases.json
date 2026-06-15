@@ -1,0 +1,62 @@
+[
+  {
+    "request": "Find recent papers on AI feedback in universities.",
+    "expected_skill": "deep-research",
+    "case_type": "english_research"
+  },
+  {
+    "request": "Write an APA article outline about doctoral supervision.",
+    "expected_skill": "academic-paper",
+    "case_type": "english_paper"
+  },
+  {
+    "request": "Peer review this manuscript for a higher education journal.",
+    "expected_skill": "academic-paper-reviewer",
+    "case_type": "english_review"
+  },
+  {
+    "request": "Run the full paper workflow for an IEEE conference.",
+    "expected_skill": "academic-pipeline",
+    "case_type": "english_pipeline"
+  },
+  {
+    "request": "Сделай обзор литературы по ИИ в высшем образовании.",
+    "expected_skill": "akademicheskoe-issledovanie",
+    "case_type": "russian_research"
+  },
+  {
+    "request": "Оформи статью по ГОСТ для журнала ВАК.",
+    "expected_skill": "akademicheskaya-statya",
+    "case_type": "russian_paper"
+  },
+  {
+    "request": "Отрецензируй статью перед отправкой в РИНЦ.",
+    "expected_skill": "akademicheskii-retsenzent",
+    "case_type": "russian_review"
+  },
+  {
+    "request": "Проведи полный цикл от темы до публикации.",
+    "expected_skill": "akademicheskii-konveer",
+    "case_type": "russian_pipeline"
+  },
+  {
+    "request": "На русском подготовь Scopus paper outline in APA style.",
+    "expected_skill": "akademicheskaya-statya",
+    "case_type": "russian_request_international_output"
+  },
+  {
+    "request": "Review this for a VAK journal and check GOST references.",
+    "expected_skill": "akademicheskii-retsenzent",
+    "case_type": "english_request_russian_venue"
+  },
+  {
+    "request": "Сравни CyberLeninka and Scopus sources for an English article.",
+    "expected_skill": "akademicheskoe-issledovanie",
+    "case_type": "mixed_corpus"
+  },
+  {
+    "request": "Prepare bilingual RU/EN abstracts for a Russian journal.",
+    "expected_skill": "akademicheskaya-statya",
+    "case_type": "bilingual_abstract"
+  }
+]
