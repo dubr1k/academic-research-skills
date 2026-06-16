@@ -1,0 +1,247 @@
+{
+  "metadata": {
+    "task_name": "russian_academic_quality",
+    "description": "Gold set for Russian academic adapter quality: ГОСТ, ВАК/РИНЦ, source verification, style, traceability, and mixed-language routing.",
+    "labels": [
+      "gost_bibliography",
+      "vak_rinc_status",
+      "source_verification",
+      "russian_style",
+      "revision_traceability",
+      "mixed_language_routing"
+    ]
+  },
+  "items": [
+    {
+      "id": "gost-001-missing-pages",
+      "label": "gost_bibliography",
+      "prompt": "Оформи по ГОСТ Р 7.0.5-2008 статью: Иванов И.И. Цифровизация образования // Вопросы педагогики. 2024.",
+      "expected_skill": "akademicheskaya-statya",
+      "expected_guards": [
+        "detect missing journal issue and page range",
+        "mark metadata_missing before final bibliography formatting",
+        "ask for missing bibliographic fields or label them as unavailable"
+      ],
+      "must_preserve": [
+        "ГОСТ Р 7.0.5-2008",
+        "original Russian title"
+      ],
+      "must_not_do": [
+        "invent page range",
+        "invent issue number"
+      ]
+    },
+    {
+      "id": "gost-002-dissertation-source",
+      "label": "gost_bibliography",
+      "prompt": "Добавь в список литературы автореферат диссертации без города и организации: Петров П.П. Управление инновациями. 2021.",
+      "expected_skill": "akademicheskaya-statya",
+      "expected_guards": [
+        "identify source type before applying ГОСТ pattern",
+        "mark metadata_missing for place, institution, and page count",
+        "separate known fields from user-provided incomplete fields"
+      ],
+      "must_preserve": [
+        "author-provided title",
+        "source type uncertainty"
+      ],
+      "must_not_do": [
+        "guess dissertation organization",
+        "format as a journal article"
+      ]
+    },
+    {
+      "id": "vak-001-rinc-not-vak",
+      "label": "vak_rinc_status",
+      "prompt": "Журнал есть в eLIBRARY и РИНЦ, значит он точно подойдет для ВАК-статьи?",
+      "expected_skill": "akademicheskoe-issledovanie",
+      "expected_guards": [
+        "separate eLIBRARY presence, РИНЦ indexing, and ВАК list status",
+        "require current ВАК list verification",
+        "label status as partially_verified until checked"
+      ],
+      "must_preserve": [
+        "eLIBRARY",
+        "РИНЦ",
+        "ВАК"
+      ],
+      "must_not_do": [
+        "treat РИНЦ presence as ВАК compliance",
+        "claim final venue suitability without current list evidence"
+      ]
+    },
+    {
+      "id": "vak-002-venue-requirements-conflict",
+      "label": "vak_rinc_status",
+      "prompt": "Нужно подготовить статью для российского журнала из перечня ВАК, но редакция просит APA вместо ГОСТ.",
+      "expected_skill": "akademicheskaya-statya",
+      "expected_guards": [
+        "prioritize explicit journal instructions over generic defaults",
+        "flag ГОСТ vs APA conflict",
+        "request the journal author guidelines for final formatting"
+      ],
+      "must_preserve": [
+        "ВАК target",
+        "APA requirement"
+      ],
+      "must_not_do": [
+        "force ГОСТ when the journal explicitly asks for APA",
+        "ignore Russian venue constraints"
+      ]
+    },
+    {
+      "id": "source-001-plausible-doi",
+      "label": "source_verification",
+      "prompt": "Проверь DOI 10.1234/edu.2024.5678 для русской статьи и добавь его в библиографию, если выглядит правдоподобно.",
+      "expected_skill": "akademicheskoe-issledovanie",
+      "expected_guards": [
+        "verify DOI before use",
+        "classify unverified DOI as not_verified rather than valid",
+        "do not add DOI to final citation until verified"
+      ],
+      "must_preserve": [
+        "DOI literal",
+        "verification status"
+      ],
+      "must_not_do": [
+        "accept plausible DOI by shape only",
+        "invent resolver evidence"
+      ]
+    },
+    {
+      "id": "source-002-cyberleninka-copy",
+      "label": "source_verification",
+      "prompt": "Нашел текст на CyberLeninka. Можно считать статью peer-reviewed и не искать журнал?",
+      "expected_skill": "akademicheskoe-issledovanie",
+      "expected_guards": [
+        "treat CyberLeninka as an access copy, not automatic peer-review proof",
+        "verify journal metadata separately",
+        "record source access channel and verification status"
+      ],
+      "must_preserve": [
+        "CyberLeninka",
+        "journal metadata requirement"
+      ],
+      "must_not_do": [
+        "infer peer review from CyberLeninka availability",
+        "skip venue verification"
+      ]
+    },
+    {
+      "id": "style-001-vague-relevance",
+      "label": "russian_style",
+      "prompt": "Улучши фразу: Актуальность темы обусловлена современными условиями и необходимостью дальнейшего изучения проблемы.",
+      "expected_skill": "akademicheskaya-statya",
+      "expected_guards": [
+        "detect vague Russian academic cliche",
+        "replace generic relevance with concrete problem, evidence, and gap",
+        "ask for field-specific stakes if evidence is absent"
+      ],
+      "must_preserve": [
+        "Russian output language",
+        "research topic uncertainty"
+      ],
+      "must_not_do": [
+        "keep vague relevance language",
+        "add unsupported claims about importance"
+      ]
+    },
+    {
+      "id": "style-002-ai-cliche-chain",
+      "label": "russian_style",
+      "prompt": "Проверь абзац: В условиях стремительного развития цифровых технологий данная проблема приобретает особую актуальность и требует комплексного подхода.",
+      "expected_skill": "akademicheskii-retsenzent",
+      "expected_guards": [
+        "flag Russian AI-cliche wording",
+        "separate style warning from substantive methodological critique",
+        "suggest evidence-backed revision"
+      ],
+      "must_preserve": [
+        "Russian academic register",
+        "style-vs-method distinction"
+      ],
+      "must_not_do": [
+        "treat fluent cliche as sufficient contribution",
+        "rewrite into another generic cliche"
+      ]
+    },
+    {
+      "id": "trace-001-reviewer-response",
+      "label": "revision_traceability",
+      "prompt": "Ответ рецензенту: замечание учтено. Можно отметить resolved без указания страницы?",
+      "expected_skill": "akademicheskii-retsenzent",
+      "expected_guards": [
+        "require manuscript location before marking addressed",
+        "use traceability table with comment, action, location, and status",
+        "mark unresolved or needs_evidence if no location is provided"
+      ],
+      "must_preserve": [
+        "traceability",
+        "reviewer comment status"
+      ],
+      "must_not_do": [
+        "mark addressed without manuscript evidence",
+        "hide unresolved reviewer concern"
+      ]
+    },
+    {
+      "id": "trace-002-pipeline-handoff",
+      "label": "revision_traceability",
+      "prompt": "В конвейере после ревизии нужно передать автору список правок, но часть источников пока не проверена.",
+      "expected_skill": "akademicheskii-konveer",
+      "expected_guards": [
+        "carry unresolved verification status into handoff",
+        "separate completed edits from pending source checks",
+        "block final-ready claim until integrity gates pass"
+      ],
+      "must_preserve": [
+        "handoff state",
+        "unverified source status"
+      ],
+      "must_not_do": [
+        "drop pending source checks",
+        "claim final readiness before verification"
+      ]
+    },
+    {
+      "id": "mixed-001-russian-prompt-apa-output",
+      "label": "mixed_language_routing",
+      "prompt": "По-русски помоги спланировать статью для Scopus-журнала, но список литературы нужен в APA и аннотация на английском.",
+      "expected_skill": "akademicheskaya-statya",
+      "expected_guards": [
+        "route to Russian writing adapter with international output constraints",
+        "preserve source_language for Russian and English sources",
+        "apply APA rather than ГОСТ for final bibliography"
+      ],
+      "must_preserve": [
+        "source_language",
+        "APA",
+        "English abstract requirement"
+      ],
+      "must_not_do": [
+        "switch entirely to English upstream skill just because Scopus is mentioned",
+        "format bibliography in ГОСТ"
+      ]
+    },
+    {
+      "id": "mixed-002-english-prompt-vak-context",
+      "label": "mixed_language_routing",
+      "prompt": "Review this English manuscript for a Russian VAK journal and check whether Russian sources from eLIBRARY are handled correctly.",
+      "expected_skill": "akademicheskii-retsenzent",
+      "expected_guards": [
+        "route to Russian context reviewer despite English prompt",
+        "preserve requested output language unless user changes it",
+        "track source_language and local venue requirements"
+      ],
+      "must_preserve": [
+        "source_language",
+        "eLIBRARY",
+        "ВАК"
+      ],
+      "must_not_do": [
+        "ignore Russian venue requirements because manuscript is English",
+        "translate source titles silently"
+      ]
+    }
+  ]
+}

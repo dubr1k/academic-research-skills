@@ -63,6 +63,14 @@
 - Pipeline agent покрывает bilingual state, handoffs и mandatory integrity gates.
 - Добавлен `tests/test_russian_agents.py`.
 
+### Выполнено в P2e — deep evals качества русского академического слоя
+
+- Добавлен `evals/gold/russian_academic_quality/` как advisory-calibration gold set.
+- Gold set покрывает ГОСТ bibliography, ВАК/РИНЦ status separation, eLIBRARY/CyberLeninka/DOI verification, русские academic cliches, revision traceability и mixed-language routing.
+- Добавлены `manifest.yaml`, `gold_set.json` и README для нового eval-набора.
+- Добавлен `tests/test_russian_academic_evals.py`.
+- `scripts.run_evals --task russian_academic_quality` обнаруживает срез как pending, пока runtime measurer не подключен.
+
 ### Цель среза
 
 Сделать так, чтобы русская часть была не только описана в документации, но и имела стабильные точки входа, проверяемые метаданные и понятный процесс обновления от upstream.

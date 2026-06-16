@@ -15,6 +15,7 @@ evals/
 │   │   │   └── NNN-{kind-slug}-{discriminator}.json
 │   │   └── expected_outcomes.json
 │   ├── rq_framing_patterns/           # #257 Socratic wording advisory calibration
+│   ├── russian_academic_quality/      # Russian ГОСТ/ВАК/РИНЦ advisory calibration
 │   ├── status_classification/         # Phase 2 (lands post-#183)
 │   └── summarization_adequacy/        # Phase 2 (lands post-#183)
 ```
@@ -43,4 +44,5 @@ Run `python -m scripts.check_evals_gold_set evals/gold/<task>` to validate any g
 
 - Phase 1a (citation-extraction gold set) + Phase 1b (`run_evals.py` harness + lift gate): v3.10 #184, spec `docs/design/2026-05-21-v3.10-184-extend-eval-harness-spec.md`
 - RQ framing patterns: Kong #257 idea-diversity advisory, spec `docs/design/2026-05-28-kong-257-idea-diversity-coverage-gap-advisory.md`
+- Russian academic quality: bilingual fork P2e advisory calibration for ГОСТ, ВАК/РИНЦ, eLIBRARY/CyberLeninka source verification, Russian style, revision traceability, and mixed-language routing.
 - Phase 2 (status + summarization): scheduled post-#183 ship

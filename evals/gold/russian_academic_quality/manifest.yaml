@@ -1,0 +1,41 @@
+task_name: russian_academic_quality
+manifest_version: "1.0.0"
+ars_min_version: "3.12.0"
+task_type: advisory-calibration
+description: |
+  Gold set for the Russian academic adapter layer. It calibrates advisory
+  behavior for ГОСТ bibliography checks, ВАК/РИНЦ status separation,
+  Russian source verification, Russian academic style, revision
+  traceability, and mixed-language routing.
+target:
+  entrypoint: docs.russian-academic-context
+  predicted_field: expected_guards
+  gold_set_path: gold_set.json
+sample_n: 12
+labels:
+  - gost_bibliography
+  - vak_rinc_status
+  - source_verification
+  - russian_style
+  - revision_traceability
+  - mixed_language_routing
+thresholds:
+  advisory_recall:
+    comparison: ">="
+    threshold_value: 0.90
+  forbidden_action_rate:
+    comparison: "=="
+    threshold_value: 0.00
+tuple_distribution:
+  - label: gost_bibliography
+    n: 2
+  - label: vak_rinc_status
+    n: 2
+  - label: source_verification
+    n: 2
+  - label: russian_style
+    n: 2
+  - label: revision_traceability
+    n: 2
+  - label: mixed_language_routing
+    n: 2
