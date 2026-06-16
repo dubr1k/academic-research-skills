@@ -46,8 +46,8 @@ The Russian adapters add context-specific behavior rather than translating every
 | Routing | No executable router; rules live in docs, commands, examples, and tests. | P2 |
 | Commands | `/ars-ru-*` slash commands exist for the 4 Russian adapters. | Done |
 | Frontmatter | Russian skills share a required metadata schema. | Done |
-| References | Russian skills do not yet have expanded `references/` folders. | P2 |
-| Templates | No dedicated Russian templates for ГОСТ bibliography, VAK review, response letter. | P2 |
+| References | Each Russian skill has a first local `references/` asset for source verification, ГОСТ, ВАК/РИНЦ review, or bilingual handoffs. | P2 |
+| Templates | Each Russian skill has a first local `templates/` asset for literature matrix, ВАК article package, review traceability, or pipeline dashboard. | P2 |
 | Evals | Lightweight Russian context fixtures exist; deep quality evals are still pending. | P2 |
 | Plugin metadata | One bilingual plugin bundle exposes both English and Russian skills through `skills/`. | Done |
 | Upstream sync | Dedicated sync workflow exists in `docs/upstream-sync.md`. | Done |

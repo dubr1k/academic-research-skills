@@ -25,7 +25,7 @@
 
 ### Следующий срез
 
-- Расширить русскую локализацию beyond compact adapters: `agents/`, `references/`, `templates/`.
+- Расширить русскую локализацию beyond compact adapters: `agents/` и дополнительные `references/`/`templates/`.
 - Добавить deep evals качества русских ГОСТ/ВАК/РИНЦ сценариев.
 
 ## Что делаем дальше
@@ -46,6 +46,13 @@
 - `.claude-plugin/plugin.json` и `.claude-plugin/marketplace.json` обновлены под bilingual bundle.
 - Добавлен `.codex-plugin/plugin.json` для Codex-compatible metadata.
 - Добавлен `tests/test_bilingual_plugin_packaging.py`.
+
+### Выполнено в P2c — русские references/templates
+
+- В каждый русский skill добавлен первый локальный `references/` asset.
+- В каждый русский skill добавлен первый локальный `templates/` asset.
+- `SKILL.md` каждого русского adapter теперь ссылается на свои локальные материалы.
+- Добавлен `tests/test_russian_reference_templates.py`.
 
 ### Цель среза
 

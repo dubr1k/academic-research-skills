@@ -23,6 +23,11 @@ upstream_date: "2026-06-08"
 Upstream snapshot: `175f79bcca4467949fa94e410c25823bd574f687` (`v3.12.0`, 2026-06-08).
 Лицензия источника: Creative Commons Attribution-NonCommercial 4.0 International, Copyright (c) 2026 Cheng-I Wu.
 
+Локальные материалы:
+
+- `references/bilingual-handoff-contracts.md` - language state и handoff contracts между стадиями.
+- `templates/pipeline-dashboard.md` - dashboard полного русского/bilingual academic pipeline.
+
 ## Когда использовать
 
 Используйте skill, если пользователь хочет полный или частичный путь:

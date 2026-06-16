@@ -20,6 +20,11 @@ upstream_date: "2026-06-08"
 Upstream snapshot: `175f79bcca4467949fa94e410c25823bd574f687` (`v3.12.0`, 2026-06-08).
 Лицензия источника: Creative Commons Attribution-NonCommercial 4.0 International, Copyright (c) 2026 Cheng-I Wu.
 
+Локальные материалы:
+
+- `references/vak-rinc-review-criteria.md` - критерии ВАК/РИНЦ review и venue caveats.
+- `templates/review-report-traceability.md` - шаблон рецензии и re-review traceability table.
+
 ## Когда использовать
 
 Используйте skill, если пользователь просит:

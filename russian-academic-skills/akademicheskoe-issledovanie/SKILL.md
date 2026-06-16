@@ -20,6 +20,11 @@ upstream_date: "2026-06-08"
 Upstream snapshot: `175f79bcca4467949fa94e410c25823bd574f687` (`v3.12.0`, 2026-06-08).
 Лицензия источника: Creative Commons Attribution-NonCommercial 4.0 International, Copyright (c) 2026 Cheng-I Wu.
 
+Локальные материалы:
+
+- `references/russian-source-verification.md` - правила проверки eLIBRARY, РИНЦ, CyberLeninka и mixed RU/EN источников.
+- `templates/literature-matrix-gost.md` - матрица литературы с source language/system и ГОСТ draft entry.
+
 ## Когда использовать
 
 Используйте skill, если пользователь просит:
