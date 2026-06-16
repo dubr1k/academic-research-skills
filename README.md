@@ -1,85 +1,84 @@
-# Academic Research Skills Bilingual Fork
+# Двуязычный форк Academic Research Skills
 
 [![Upstream](https://img.shields.io/badge/upstream-Imbad0202%2Facademic--research--skills-blue)](https://github.com/Imbad0202/academic-research-skills)
 [![Snapshot](https://img.shields.io/badge/snapshot-v3.12.0%20%2F%20175f79b-lightgrey)](https://github.com/Imbad0202/academic-research-skills/commit/175f79bcca4467949fa94e410c25823bd574f687)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
 
-This fork keeps the original English Academic Research Skills package and adds a Russian academic context layer.
+Этот форк сохраняет исходное англоязычное ядро Academic Research Skills и добавляет русскоязычный академический слой для ГОСТ, ВАК, РИНЦ/eLIBRARY, CyberLeninka и смешанных RU/EN рабочих сценариев.
 
-Этот форк сохраняет исходный англоязычный пакет Academic Research Skills и добавляет русскоязычный академический слой.
+## Выбор языка
 
-## Choose Language
-
-- English users: start with [README.en.md](README.en.md).
 - Русскоязычные пользователи: начните с [README.ru.md](README.ru.md).
-- Mixed RU/EN workflows: use [docs/bilingual-routing.md](docs/bilingual-routing.md).
+- English users: use [README.en.md](README.en.md).
+- Смешанные RU/EN задачи: используйте [docs/bilingual-routing.md](docs/bilingual-routing.md).
 
-## Skill Sets
+## Наборы навыков
 
-English upstream skills:
+Англоязычное upstream-ядро:
 
 - `deep-research`
 - `academic-paper`
 - `academic-paper-reviewer`
 - `academic-pipeline`
 
-Russian context skills:
+Русскоязычные адаптеры контекста:
 
 - `akademicheskoe-issledovanie`
 - `akademicheskaya-statya`
 - `akademicheskii-retsenzent`
 - `akademicheskii-konveer`
 
-The plugin bundle now exposes both sets through [skills](skills/): the 4 upstream English skills and the 4 Russian adapters. Use `/ars-*` commands for English/international workflows and `/ars-ru-*` commands for Russian-context workflows.
+Пакет плагина публикует оба набора через [skills](skills/): четыре upstream English skills и четыре русских adapter skills. Для English/international workflows используйте `/ars-*`, для русского академического контекста используйте `/ars-ru-*`.
 
-## Routing Rule
+## Правило маршрутизации
 
-Use the language and academic venue context together:
+Выбор навыка зависит не только от языка запроса, но и от академического контекста:
 
 - English request + international venue -> upstream English skills.
-- Russian request + Russian venue, ГОСТ, ВАК, РИНЦ/eLIBRARY or CyberLeninka -> Russian skills.
-- Russian request + international venue -> Russian skill for planning/context, but preserve requested international format such as APA, IEEE, Vancouver or Chicago.
-- English request + Russian venue/GOST/VAK/RINC -> Russian context skill, with output language decided by the user request.
-- Mixed-language corpus -> keep source language metadata and do not translate titles or quotations unless asked.
+- Русский запрос + российский журнал, ГОСТ, ВАК, РИНЦ/eLIBRARY или CyberLeninka -> русские skills.
+- Русский запрос + international venue -> русский skill для планирования и контекста, но итоговый формат сохраняет APA, IEEE, Vancouver, Chicago или другое требование журнала.
+- English request + Russian venue/GOST/VAK/RINC -> русский context skill, а язык ответа определяется запросом пользователя.
+- Mixed-language corpus -> сохранять `source_language`, не переводить названия источников и прямые цитаты без явной просьбы.
 
-Detailed rules and fixtures are in [docs/bilingual-routing.md](docs/bilingual-routing.md).
+Подробные правила и fixtures находятся в [docs/bilingual-routing.md](docs/bilingual-routing.md).
 
-## Current Russian Adaptation
+## Текущее состояние русской адаптации
 
-The Russian layer currently includes compact `SKILL.md` adapters under [russian-academic-skills](russian-academic-skills/). They adapt the upstream ideas for:
+Русский слой находится в [russian-academic-skills](russian-academic-skills/) и адаптирует upstream workflow под:
 
-- ГОСТ Р 7.0.5-2008 bibliography expectations;
-- ВАК/РИНЦ and Russian journal review context;
-- eLIBRARY and CyberLeninka source handling;
-- Russian academic style and AI-cliche checks;
-- Opencode `task()` orchestration.
+- ГОСТ Р 7.0.5-2008 и библиографические проверки;
+- ВАК/РИНЦ и российский журнальный контекст;
+- eLIBRARY и CyberLeninka source handling;
+- русскую академическую стилистику и AI-cliche checks;
+- Opencode `task()` orchestration;
+- traceability для reviewer response и bilingual handoffs.
 
-The parity map is tracked in [docs/skill-parity-matrix.md](docs/skill-parity-matrix.md).
+Матрица соответствия upstream skills и русских adapters ведется в [docs/skill-parity-matrix.md](docs/skill-parity-matrix.md).
 
-Russian academic conventions are tracked in [docs/russian-academic-context.md](docs/russian-academic-context.md), with prompt examples in [examples/ru](examples/ru/) and [examples/bilingual](examples/bilingual/).
+Российские академические правила описаны в [docs/russian-academic-context.md](docs/russian-academic-context.md), примеры запросов лежат в [examples/ru](examples/ru/) и [examples/bilingual](examples/bilingual/).
 
-Each Russian adapter also ships local `agents/`, `references/`, and `templates/` assets for ГОСТ bibliography, source verification, ВАК/РИНЦ review, traceability, and bilingual pipeline handoffs.
+Каждый русский adapter уже содержит локальные `agents/`, `references/` и `templates/` для ГОСТ bibliography, source verification, ВАК/РИНЦ review, traceability и bilingual pipeline handoffs.
 
-## Plugin Packaging
+## Упаковка плагина
 
-This fork ships as one bilingual bundle. Legacy Claude plugin metadata lives in [.claude-plugin](.claude-plugin/), and Codex-compatible metadata lives in [.codex-plugin](.codex-plugin/).
+Форк распространяется как единый bilingual bundle. Legacy metadata для Claude Code находится в [.claude-plugin](.claude-plugin/), Codex-compatible metadata находится в [.codex-plugin](.codex-plugin/).
 
-## Maintenance
+## Поддержка и развитие
 
-The English upstream core should stay close to `Imbad0202/academic-research-skills`. Russian skills are maintained as an adapter layer and updated after upstream syncs.
+Англоязычное upstream-ядро должно оставаться близким к `Imbad0202/academic-research-skills`. Русские skills поддерживаются как adapter layer и обновляются после upstream sync.
 
-Context-sensitive coverage and remaining adaptation gaps are tracked in [docs/context-adaptation-audit.md](docs/context-adaptation-audit.md).
+Покрытие разных академических контекстов и оставшиеся gaps отслеживаются в [docs/context-adaptation-audit.md](docs/context-adaptation-audit.md).
 
-The active implementation plan is [PLAN.md](PLAN.md).
+Активный план работ находится в [PLAN.md](PLAN.md).
 
-## Upstream Integrity Notes
+## Целостность upstream
 
-The fork keeps upstream integrity controls active. Stage 1 still records `experiment_intake_declaration` for experiment-backed or literature-only runs, and the opt-in Socratic reading-check probe is still controlled by `ARS_SOCRATIC_READING_PROBE=1`.
+Форк сохраняет upstream integrity controls. Stage 1 по-прежнему записывает `experiment_intake_declaration` для experiment-backed и literature-only runs, а opt-in Socratic reading-check probe управляется через `ARS_SOCRATIC_READING_PROBE=1`.
 
-## License And Attribution
+## Лицензия и атрибуция
 
-Original project: [Academic Research Skills](https://github.com/Imbad0202/academic-research-skills) by Cheng-I Wu.
+Исходный проект: [Academic Research Skills](https://github.com/Imbad0202/academic-research-skills), автор Cheng-I Wu.
 
-License: Creative Commons Attribution-NonCommercial 4.0 International.
+Лицензия: Creative Commons Attribution-NonCommercial 4.0 International.
 
-This fork is an adaptation distributed under compatible CC BY-NC 4.0 terms with attribution retained.
+Этот форк является адаптацией и распространяется на совместимых условиях CC BY-NC 4.0 с сохранением атрибуции.

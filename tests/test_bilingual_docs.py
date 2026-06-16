@@ -12,6 +12,12 @@ def read_text(path: str) -> str:
 def test_root_readme_links_bilingual_entrypoints():
     readme = read_text("README.md")
 
+    assert readme.startswith("# Двуязычный форк Academic Research Skills")
+    assert "## Выбор языка" in readme
+    assert "## Наборы навыков" in readme
+    assert "## Правило маршрутизации" in readme
+    assert "# Academic Research Skills Bilingual Fork" not in readme
+    assert "This fork keeps the original English Academic Research Skills package" not in readme
     assert "README.en.md" in readme
     assert "README.ru.md" in readme
     assert "docs/bilingual-routing.md" in readme
