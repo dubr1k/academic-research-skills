@@ -128,6 +128,67 @@
       ]
     },
     {
+      "id": "source-003-elibrary-rinc-vak",
+      "label": "source_verification",
+      "prompt": "В карточке eLIBRARY журнал отмечен как РИНЦ. Проверь, можно ли писать, что источник подходит для ВАК-журнала.",
+      "expected_skill": "akademicheskoe-issledovanie",
+      "expected_guards": [
+        "verify eLIBRARY record separately from РИНЦ and current ВАК list status as source verification evidence",
+        "classify venue status as partially_verified until verified_current evidence is available",
+        "record source_system and current status evidence instead of inferring venue suitability"
+      ],
+      "must_preserve": [
+        "eLIBRARY",
+        "РИНЦ",
+        "ВАК",
+        "verified_current"
+      ],
+      "must_not_do": [
+        "treat eLIBRARY or РИНЦ presence as ВАК proof",
+        "claim current ВАК suitability without list evidence"
+      ]
+    },
+    {
+      "id": "source-004-incomplete-russian-record",
+      "label": "source_verification",
+      "prompt": "Есть русская статья: Сидоров С.С. Инклюзивное образование // Педагогика. 2022. DOI не указан, номера выпуска и страниц нет.",
+      "expected_skill": "akademicheskoe-issledovanie",
+      "expected_guards": [
+        "verify bibliographic record before using it as evidence",
+        "mark missing issue, pages, and DOI as metadata_missing",
+        "classify unresolved identifiers as not_verified rather than filling plausible fields"
+      ],
+      "must_preserve": [
+        "original Russian title",
+        "metadata_missing",
+        "not_verified"
+      ],
+      "must_not_do": [
+        "invent issue or page range",
+        "add a plausible DOI without verification"
+      ]
+    },
+    {
+      "id": "source-005-mixed-source-language",
+      "label": "source_verification",
+      "prompt": "Собери матрицу по двум русским статьям из CyberLeninka и трем англоязычным Scopus articles; итоговый synthesis будет на английском.",
+      "expected_skill": "akademicheskoe-issledovanie",
+      "expected_guards": [
+        "verify each source system separately before synthesis and keep source verification labels",
+        "preserve source_language for every Russian and English source",
+        "treat CyberLeninka as access channel and Scopus as index signal, not equal claim support"
+      ],
+      "must_preserve": [
+        "source_language",
+        "source_system",
+        "access channel"
+      ],
+      "must_not_do": [
+        "translate Russian titles silently",
+        "collapse Russian and English sources into one undifferentiated corpus"
+      ]
+    },
+    {
       "id": "style-001-vague-relevance",
       "label": "russian_style",
       "prompt": "Улучши фразу: Актуальность темы обусловлена современными условиями и необходимостью дальнейшего изучения проблемы.",

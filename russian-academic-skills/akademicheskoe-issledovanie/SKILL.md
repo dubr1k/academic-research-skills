@@ -143,6 +143,14 @@ Upstream snapshot: `175f79bcca4467949fa94e410c25823bd574f687` (`v3.12.0`, 2026-0
 - не искажен ли числовой, причинный или трендовый claim;
 - нет ли конфликта интересов.
 
+Для русских и mixed RU/EN источников используйте `references/russian-source-verification.md` и сохраняйте:
+
+- `source_language` и `source_system`;
+- текущий статус доказательства: `verified_current`, `partially_verified`, `not_verified`, `inaccessible`;
+- distinction between access channel and index/status evidence;
+- `metadata_missing` для страниц, выпуска, DOI, города, издательства или статуса журнала;
+- что еще нужно проверить до финального синтеза или списка литературы.
+
 Вердикты для claim-check:
 
 | Verdict | Значение |

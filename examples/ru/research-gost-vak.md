@@ -17,6 +17,8 @@ Routing:
 Expected checks:
 
 - classify sources as `peer_reviewed_verified`, `partially_verified`, `non_peer_reviewed`, `inaccessible`, or `unverified`;
+- use `verified_current` only when the current source/status evidence is actually checked;
+- keep unresolved DOI, issue, pages, and journal status as `not_verified` or `metadata_missing`;
 - distinguish eLIBRARY record presence from ВАК or peer-review status;
 - do not invent DOI, issue, pages, or publisher;
 - return a literature matrix with `source_language` and `source_system`.

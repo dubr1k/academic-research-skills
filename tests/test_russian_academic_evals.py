@@ -20,7 +20,7 @@ def test_russian_academic_quality_eval_manifest_declares_scope():
     assert manifest["task_name"] == "russian_academic_quality"
     assert manifest["task_type"] == "advisory-calibration"
     assert manifest["target"]["gold_set_path"] == "gold_set.json"
-    assert manifest["sample_n"] >= 12
+    assert manifest["sample_n"] >= 15
 
     labels = set(manifest["labels"])
     assert labels == {
@@ -36,6 +36,7 @@ def test_russian_academic_quality_eval_manifest_declares_scope():
     assert set(distribution) == labels
     assert sum(distribution.values()) == manifest["sample_n"]
     assert all(count >= 2 for count in distribution.values())
+    assert distribution["source_verification"] >= 5
 
 
 def test_russian_academic_quality_gold_set_covers_local_risks():
@@ -44,7 +45,7 @@ def test_russian_academic_quality_gold_set_covers_local_risks():
 
     gold = json.loads(read_text(gold_path))
     items = gold["items"]
-    assert len(items) >= 12
+    assert len(items) >= 15
     assert len({item["id"] for item in items}) == len(items)
 
     required_fields = {
@@ -62,6 +63,13 @@ def test_russian_academic_quality_gold_set_covers_local_risks():
         assert item["must_not_do"]
 
     serialized = json.dumps(gold, ensure_ascii=False)
+    ids = {item["id"] for item in items}
+    assert {
+        "source-003-elibrary-rinc-vak",
+        "source-004-incomplete-russian-record",
+        "source-005-mixed-source-language",
+    } <= ids
+
     for required_term in (
         "ГОСТ Р 7.0.5-2008",
         "ВАК",
@@ -70,6 +78,8 @@ def test_russian_academic_quality_gold_set_covers_local_risks():
         "CyberLeninka",
         "DOI",
         "metadata_missing",
+        "verified_current",
+        "not_verified",
         "traceability",
         "source_language",
     ):

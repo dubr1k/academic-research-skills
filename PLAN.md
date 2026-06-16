@@ -25,8 +25,8 @@
 
 ### Следующий срез
 
-- Расширить русскую локализацию beyond compact adapters: дополнительные `agents/`, `references/` и `templates/`.
-- Добавить deep evals качества русских ГОСТ/ВАК/РИНЦ сценариев.
+- P3c: углубить ГОСТ bibliography и journal override writing assets.
+- Затем P3d: углубить ВАК/РИНЦ review и re-review traceability.
 
 ## Что делаем дальше
 
@@ -86,6 +86,15 @@
 - Зафиксированы поверхности, где уже есть адаптация: README, routing docs, Russian context docs, commands, plugin metadata, examples, evals и русские adapters.
 - Зафиксирован backlog адаптации: Russian source verification, ГОСТ bibliography, ВАК/РИНЦ review, bilingual pipeline handoff, auto/router entrypoint и global shared agents.
 - Добавлен `tests/test_context_adaptation_audit.py`.
+
+### Выполнено в P3b — Russian source verification depth
+
+- Углублен `russian_source_verifier_agent.md`: добавлена verification ladder и статусы `verified_current`, `partially_verified`, `not_verified`, `inaccessible`, `rejected`.
+- Расширен `references/russian-source-verification.md` правилами current status evidence, access-channel vs index/status distinction и handoff requirements.
+- Расширен `templates/literature-matrix-gost.md` колонкой current status evidence и правилами сохранения `metadata_missing` / `not_verified`.
+- Добавлены примеры `examples/ru/research-source-verification-depth.md` и `examples/bilingual/mixed-source-verification-handoff.md`.
+- `russian_academic_quality` gold set расширен с 12 до 15 кейсов; source verification теперь покрывает eLIBRARY/РИНЦ/ВАК, неполные русские записи и mixed `source_language`.
+- `docs/context-adaptation-audit.md` обновлен: P3b отмечен как covered in the first depth pass, следующий рекомендованный срез — P3c.
 
 ### Цель среза
 

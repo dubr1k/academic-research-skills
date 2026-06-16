@@ -76,3 +76,16 @@ def test_context_adaptation_audit_records_prioritized_backlog():
         "global shared agents",
     ):
         assert backlog_item in text
+
+
+def test_context_adaptation_audit_marks_p3b_depth_pass_covered():
+    text = read_text(AUDIT_DOC)
+
+    for required in (
+        "Status: covered in the first depth pass.",
+        "examples/ru/research-source-verification-depth.md",
+        "examples/bilingual/mixed-source-verification-handoff.md",
+        "verified_current",
+        "not_verified",
+    ):
+        assert required in text

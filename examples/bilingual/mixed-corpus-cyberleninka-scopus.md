@@ -17,5 +17,7 @@ Expected checks:
 
 - preserve `source_language` and `source_system`;
 - treat CyberLeninka as access context, not automatic peer-review proof;
+- keep access channel, index status, and claim support as separate fields;
+- carry `metadata_missing` and `not_verified` source fields into the English synthesis handoff;
 - use international output constraints for the final article;
 - do not translate titles or quotations unless requested.

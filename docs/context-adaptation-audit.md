@@ -27,7 +27,7 @@ Every bilingual change should be checked against these axes:
 | `docs/upstream-sync.md` | Explains origin/upstream sync and snapshot updates. | Covers maintenance context; should explicitly trigger this audit after future upstream releases. |
 | `commands/` | Upstream `/ars-*` plus four `/ars-ru-*` commands. | Explicit Russian commands exist; missing an auto/router entrypoint that exposes context selection without forcing users to choose. |
 | `skills/` | Bilingual plugin-facing bundle with EN and RU skills. | Packaged, but should be checked whenever Russian adapters gain new local assets. |
-| `russian-academic-skills/` | Four Russian adapter skills with first local `agents/`, `references/`, and `templates/`. | Functional adapter layer; not yet as deep as upstream English skill folders. |
+| `russian-academic-skills/` | Four Russian adapter skills with local `agents/`, `references/`, and `templates`; research adapter now has deeper Russian source-verification status handling. | Functional adapter layer; remaining depth work is concentrated in writing, reviewer, pipeline, and shared-agent surfaces. |
 | `agents/` | Shared upstream English/global agents. | Not yet context-aware; global shared agents can silently assume English/international norms. |
 | `academic-paper/agents/` | English paper-writing agents, including bilingual abstract support. | Strong upstream coverage; Russian context should stay in adapters unless a shared bilingual handoff is required. |
 | `deep-research/agents/` | English research agents with source verification. | Good international-source layer; Russian source verification remains adapter-specific. |
@@ -48,15 +48,18 @@ Primary surfaces: `docs/context-adaptation-audit.md`, `PLAN.md`, `tests/test_con
 
 ### P3b: Russian Source Verification Depth
 
-The research adapter has a first source-verification agent and reference, but Russian source handling still needs deeper examples and checklists for:
+Status: covered in the first depth pass.
+
+The research adapter now has deeper examples and checklists for:
 
 - eLIBRARY metadata that does not prove РИНЦ or ВАК status;
 - CyberLeninka as an access channel, not peer-review proof;
 - DOI values that are shape-valid but unverified;
 - incomplete Russian bibliographic records that require `metadata_missing`;
-- mixed corpus tracking where `source_language` must survive synthesis.
+- mixed corpus tracking where `source_language` must survive synthesis;
+- `verified_current`, `partially_verified`, `not_verified`, `inaccessible`, and rejected-source status handling.
 
-Primary surfaces: `russian-academic-skills/akademicheskoe-issledovanie/`, `examples/ru/`, `examples/bilingual/`, `evals/gold/russian_academic_quality/`.
+Primary surfaces: `russian-academic-skills/akademicheskoe-issledovanie/`, `examples/ru/research-source-verification-depth.md`, `examples/bilingual/mixed-source-verification-handoff.md`, `evals/gold/russian_academic_quality/`.
 
 ### P3c: ГОСТ Bibliography and Journal Override Depth
 
@@ -108,10 +111,9 @@ Primary surfaces: `commands/`, `docs/bilingual-routing.md`, `tests/fixtures/bili
 
 ## Recommended Order
 
-1. P3b: deepen Russian source verification assets and examples.
-2. P3c: deepen ГОСТ bibliography and journal override writing assets.
-3. P3d: deepen ВАК/РИНЦ review and re-review traceability assets.
-4. P3e: adapt bilingual pipeline handoff and inspect global shared agents.
-5. P3f: add an auto/router entrypoint only after the four domain adapters have enough depth to route into.
+1. P3c: deepen ГОСТ bibliography and journal override writing assets.
+2. P3d: deepen ВАК/РИНЦ review and re-review traceability assets.
+3. P3e: adapt bilingual pipeline handoff and inspect global shared agents.
+4. P3f: add an auto/router entrypoint only after the four domain adapters have enough depth to route into.
 
 This order keeps the adapter layer useful before adding more routing surface. A router that points to shallow downstream assets would create confidence without enough behavior behind it.

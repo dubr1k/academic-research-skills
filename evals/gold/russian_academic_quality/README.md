@@ -6,7 +6,7 @@ This gold set captures Russian academic quality risks that the bilingual adapter
 
 - ГОСТ bibliography checks, including ГОСТ Р 7.0.5-2008 metadata gaps.
 - ВАК/РИНЦ separation, including eLIBRARY presence that does not prove ВАК status.
-- Source verification for DOI, eLIBRARY, CyberLeninka, and user-provided bibliographic claims.
+- Source verification for DOI, eLIBRARY, РИНЦ/ВАК status claims, CyberLeninka access copies, incomplete Russian records, and mixed RU/EN corpora.
 - Russian academic style checks for vague relevance statements and AI-like cliches.
 - Revision-response traceability for reviewer replies and manuscript locations.
 - Mixed-language routing where source_language and output-language requirements must be preserved.
@@ -15,7 +15,7 @@ This gold set captures Russian academic quality risks that the bilingual adapter
 
 - `gost_bibliography`: bibliography metadata and ГОСТ formatting risks.
 - `vak_rinc_status`: ВАК/РИНЦ/eLIBRARY status classification risks.
-- `source_verification`: DOI and source-existence verification risks.
+- `source_verification`: DOI, current status evidence, metadata gaps, access-channel, and source-language verification risks.
 - `russian_style`: Russian academic style and cliche risks.
 - `revision_traceability`: reviewer-response traceability risks.
 - `mixed_language_routing`: RU/EN routing and source-language preservation risks.

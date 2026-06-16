@@ -35,6 +35,15 @@ LABEL_GUARD_TERMS: dict[str, tuple[str, ...]] = {
     "mixed_language_routing": ("source_language",),
 }
 
+EXPECTED_LABEL_SUPPORT: dict[str, int] = {
+    "gost_bibliography": 2,
+    "vak_rinc_status": 2,
+    "source_verification": 5,
+    "russian_style": 2,
+    "revision_traceability": 2,
+    "mixed_language_routing": 2,
+}
+
 
 def _norm(text: str) -> str:
     return re.sub(r"\s+", " ", text.casefold()).strip()
@@ -143,16 +152,18 @@ def evaluate_items(items: list[dict[str, Any]]) -> dict[str, Any]:
     for label, counts in per_label_counts.items():
         support = counts["support"]
         coverage = counts["covered"] / support if support else 0.0
-        if support != 2:
-            errors.append(f"{label}: expected support 2, got {support}")
+        expected_support = EXPECTED_LABEL_SUPPORT[label]
+        if support != expected_support:
+            errors.append(f"{label}: expected support {expected_support}, got {support}")
         per_label.append({
             "label": label,
             "support": support,
             "guard_coverage": coverage,
         })
 
-    if total != 12:
-        errors.append(f"sample_n must be 12, got {total}")
+    expected_total = sum(EXPECTED_LABEL_SUPPORT.values())
+    if total != expected_total:
+        errors.append(f"sample_n must be {expected_total}, got {total}")
 
     return {
         "metrics": {
