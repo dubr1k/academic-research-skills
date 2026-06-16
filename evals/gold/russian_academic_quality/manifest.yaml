@@ -8,7 +8,7 @@ description: |
   Russian source verification, Russian academic style, revision
   traceability, and mixed-language routing.
 target:
-  entrypoint: docs.russian-academic-context
+  entrypoint: scripts.check_russian_academic_quality
   predicted_field: expected_guards
   gold_set_path: gold_set.json
 sample_n: 12

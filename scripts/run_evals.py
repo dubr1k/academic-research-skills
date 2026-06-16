@@ -15,6 +15,9 @@ Per-task measurement dispatch:
 * ``rq_framing_patterns`` (advisory-calibration) — dispatches to the existing
   ``scripts.check_rq_framing_patterns`` runner and adapts its FNR / FPR /
   balanced-accuracy output into the per-task lift-report shape.
+* ``russian_academic_quality`` (advisory-calibration) — dispatches to the
+  Russian adapter structural checker and adapts advisory-recall /
+  forbidden-action-rate output into the per-task lift-report shape.
 
 CLI::
 
@@ -292,6 +295,100 @@ def measure_rq_framing_patterns(task_dir: Path, manifest: dict[str, Any]) -> dic
 
 
 # ---------------------------------------------------------------------------
+# russian_academic_quality measurement (dispatch to structural checker)
+# ---------------------------------------------------------------------------
+def _threshold_passed(value: float, comparison: str, threshold: float) -> bool:
+    if comparison == "<":
+        return value < threshold
+    if comparison == "<=":
+        return value <= threshold
+    if comparison == "==":
+        return value == threshold
+    if comparison == ">":
+        return value > threshold
+    return value >= threshold
+
+
+def measure_russian_academic_quality(task_dir: Path, manifest: dict[str, Any]) -> dict[str, Any]:
+    """Dispatch to scripts.check_russian_academic_quality and adapt metrics."""
+    from scripts import check_russian_academic_quality as ru_quality
+
+    target = manifest.get("target", {})
+    gold_path = task_dir / target.get("gold_set_path", "gold_set.json")
+    evaluation = ru_quality.validate_gold_set(gold_path)
+    if evaluation["errors"]:
+        raise ValueError("; ".join(evaluation["errors"]))
+
+    metrics = evaluation["metrics"]
+    thresholds = manifest.get("thresholds", {})
+
+    recall_thr = thresholds.get("advisory_recall", {})
+    recall_comparison = recall_thr.get("comparison", ">=")
+    recall_metric = {
+        "metric": "advisory_recall",
+        "value": metrics["advisory_recall"],
+        "direction": "higher_is_better",
+    }
+    if "threshold_value" in recall_thr:
+        recall_metric["threshold_value"] = recall_thr["threshold_value"]
+        recall_metric["comparison"] = recall_comparison
+        recall_metric["passed"] = _threshold_passed(
+            metrics["advisory_recall"],
+            recall_comparison,
+            recall_thr["threshold_value"],
+        )
+
+    forbidden_thr = thresholds.get("forbidden_action_rate", {})
+    forbidden_comparison = forbidden_thr.get("comparison", "==")
+    forbidden_metric = {
+        "class_name": "forbidden_action_rate",
+        "metric": "forbidden_action_rate",
+        "value": metrics["forbidden_action_rate"],
+        "direction": "lower_is_better",
+    }
+    if "threshold_value" in forbidden_thr:
+        forbidden_metric["threshold_value"] = forbidden_thr["threshold_value"]
+        forbidden_metric["comparison"] = forbidden_comparison
+        forbidden_metric["passed"] = _threshold_passed(
+            metrics["forbidden_action_rate"],
+            forbidden_comparison,
+            forbidden_thr["threshold_value"],
+        )
+
+    per_class: list[dict[str, Any]] = [
+        {
+            "class_name": "advisory_recall",
+            "metric": "advisory_recall",
+            "value": metrics["advisory_recall"],
+            "direction": "higher_is_better",
+            **{
+                key: value
+                for key, value in recall_metric.items()
+                if key in {"threshold_value", "comparison", "passed"}
+            },
+        },
+        forbidden_metric,
+    ]
+    for entry in evaluation["per_label"]:
+        per_class.append({
+            "class_name": entry["label"],
+            "metric": "guard_coverage",
+            "value": entry["guard_coverage"],
+            "direction": "higher_is_better",
+            "support": entry["support"],
+        })
+
+    return {
+        "task_name": manifest.get("task_name", task_dir.name),
+        "manifest_version": str(manifest.get("manifest_version", "0.0.0")),
+        "status": "measured",
+        "sample_n": len(evaluation["item_results"]),
+        "aggregate_metric": recall_metric,
+        "per_class": per_class,
+    }
+
+
+# ---------------------------------------------------------------------------
 # Task dispatch
 # ---------------------------------------------------------------------------
 def _pending_result(task_dir: Path, manifest: dict[str, Any], notice: str) -> dict[str, Any]:
@@ -314,6 +411,7 @@ def _pending_result(task_dir: Path, manifest: dict[str, Any], notice: str) -> di
 _NATIVE_MEASURERS = {
     "citation_extraction": measure_citation_extraction,
     "rq_framing_patterns": measure_rq_framing_patterns,
+    "russian_academic_quality": measure_russian_academic_quality,
 }
 
 

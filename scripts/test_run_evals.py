@@ -245,6 +245,27 @@ def test_rq_framing_dispatch_shape(validator):
     assert by_metric["balanced_accuracy"]["direction"] == "higher_is_better"
 
 
+def test_russian_academic_quality_dispatch_shape(validator):
+    result = run_evals.run_task("russian_academic_quality")
+    assert result["status"] == "measured"
+    assert result["aggregate_metric"]["metric"] == "advisory_recall"
+    assert result["aggregate_metric"]["passed"] is True
+
+    by_metric = {pc["metric"]: pc for pc in result["per_class"]}
+    assert by_metric["forbidden_action_rate"]["direction"] == "lower_is_better"
+    assert by_metric["advisory_recall"]["direction"] == "higher_is_better"
+    assert {pc["class_name"] for pc in result["per_class"]} >= {
+        "gost_bibliography",
+        "vak_rinc_status",
+        "source_verification",
+        "russian_style",
+        "revision_traceability",
+        "mixed_language_routing",
+    }
+    report = run_evals.build_report(["russian_academic_quality"])
+    assert sorted(validator.iter_errors(report), key=lambda e: e.path) == []
+
+
 # ---------------------------------------------------------------------------
 # Baseline / compare populates lift_pre / lift_post
 # ---------------------------------------------------------------------------

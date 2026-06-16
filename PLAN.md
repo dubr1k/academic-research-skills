@@ -69,7 +69,15 @@
 - Gold set покрывает ГОСТ bibliography, ВАК/РИНЦ status separation, eLIBRARY/CyberLeninka/DOI verification, русские academic cliches, revision traceability и mixed-language routing.
 - Добавлены `manifest.yaml`, `gold_set.json` и README для нового eval-набора.
 - Добавлен `tests/test_russian_academic_evals.py`.
-- `scripts.run_evals --task russian_academic_quality` обнаруживает срез как pending, пока runtime measurer не подключен.
+
+### Выполнено в P2f — runtime measurer для русского academic quality eval
+
+- Добавлен `scripts/check_russian_academic_quality.py`.
+- `scripts/run_evals.py` теперь измеряет `russian_academic_quality` как native advisory-calibration task.
+- Метрики: `advisory_recall`, `forbidden_action_rate` и label-level `guard_coverage`.
+- Manifest `russian_academic_quality` указывает на `scripts.check_russian_academic_quality`.
+- Добавлен `scripts/test_check_russian_academic_quality.py`.
+- `scripts.run_evals --task russian_academic_quality` возвращает `status: measured`.
 
 ### Цель среза
 

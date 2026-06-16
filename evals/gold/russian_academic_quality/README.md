@@ -27,5 +27,7 @@ The expected guards describe what a Russian skill or bilingual router must surfa
 Run the structural tests with:
 
 ```bash
-pytest tests/test_russian_academic_evals.py
+python -m scripts.check_russian_academic_quality
+python -m scripts.run_evals --task russian_academic_quality
+pytest tests/test_russian_academic_evals.py scripts/test_check_russian_academic_quality.py
 ```
