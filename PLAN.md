@@ -25,7 +25,6 @@
 
 ### Следующий срез
 
-- Решить plugin packaging: один bilingual plugin или отдельный Russian plugin.
 - Расширить русскую локализацию beyond compact adapters: `agents/`, `references/`, `templates/`.
 - Добавить deep evals качества русских ГОСТ/ВАК/РИНЦ сценариев.
 
@@ -39,6 +38,14 @@
 - Добавлены примеры `examples/ru/` и `examples/bilingual/` для research, paper, reviewer, pipeline и mixed Scopus/CyberLeninka workflows.
 - Добавлен `tests/fixtures/russian_quality_cases.json` с lightweight quality fixtures.
 - Добавлен `tests/test_russian_academic_context.py`.
+
+### Выполнено в P2b — bilingual plugin packaging
+
+- Принято решение: один bilingual plugin bundle вместо отдельного Russian plugin.
+- В `skills/` добавлены 4 русских adapter entrypoints рядом с 4 upstream English skills.
+- `.claude-plugin/plugin.json` и `.claude-plugin/marketplace.json` обновлены под bilingual bundle.
+- Добавлен `.codex-plugin/plugin.json` для Codex-compatible metadata.
+- Добавлен `tests/test_bilingual_plugin_packaging.py`.
 
 ### Цель среза
 

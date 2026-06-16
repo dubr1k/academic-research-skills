@@ -49,7 +49,7 @@ The Russian adapters add context-specific behavior rather than translating every
 | References | Russian skills do not yet have expanded `references/` folders. | P2 |
 | Templates | No dedicated Russian templates for ГОСТ bibliography, VAK review, response letter. | P2 |
 | Evals | Lightweight Russian context fixtures exist; deep quality evals are still pending. | P2 |
-| Plugin metadata | Plugin metadata still primarily describes upstream package. | P2 |
+| Plugin metadata | One bilingual plugin bundle exposes both English and Russian skills through `skills/`. | Done |
 | Upstream sync | Dedicated sync workflow exists in `docs/upstream-sync.md`. | Done |
 
 ## Do Not Blindly Port

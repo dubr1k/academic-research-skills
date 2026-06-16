@@ -58,7 +58,12 @@ Do not copy upstream features into Russian skills mechanically. Adapt only the p
 
 ## Plugin Packaging
 
-For this P1 slice, `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` remain upstream-oriented. The Russian layer is documented as a manual adapter install until a separate bilingual plugin packaging slice decides whether to publish one combined plugin or a separate Russian plugin.
+This fork uses one bilingual plugin bundle rather than a separate Russian plugin. The bundle exposes both upstream English skills and Russian adapters through `skills/`.
+
+- `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` describe the legacy Claude plugin package.
+- `.codex-plugin/plugin.json` describes the Codex-compatible plugin package.
+- Keep both metadata surfaces aligned on name, version, repository, license, and bilingual scope.
+- After adding or removing a skill, update `skills/`, command docs, and plugin packaging tests together.
 
 ## Required Tests
 
@@ -66,6 +71,7 @@ Run targeted bilingual checks first:
 
 ```bash
 pytest tests/test_bilingual_docs.py tests/test_russian_entrypoints.py
+pytest tests/test_bilingual_plugin_packaging.py
 ```
 
 Then run the full suite:
