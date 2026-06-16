@@ -68,6 +68,8 @@ This fork ships as one bilingual bundle. Legacy Claude plugin metadata lives in 
 
 The English upstream core should stay close to `Imbad0202/academic-research-skills`. Russian skills are maintained as an adapter layer and updated after upstream syncs.
 
+Context-sensitive coverage and remaining adaptation gaps are tracked in [docs/context-adaptation-audit.md](docs/context-adaptation-audit.md).
+
 The active implementation plan is [PLAN.md](PLAN.md).
 
 ## Upstream Integrity Notes

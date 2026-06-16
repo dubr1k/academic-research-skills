@@ -79,6 +79,14 @@
 - Добавлен `scripts/test_check_russian_academic_quality.py`.
 - `scripts.run_evals --task russian_academic_quality` возвращает `status: measured`.
 
+### Выполнено в P3a — audit контекстной адаптации репозитория
+
+- Добавлен `docs/context-adaptation-audit.md`.
+- Аудит связывает контекстные оси: EN/RU/mixed, venue, output language, citation style, `source_language`, verification и traceability.
+- Зафиксированы поверхности, где уже есть адаптация: README, routing docs, Russian context docs, commands, plugin metadata, examples, evals и русские adapters.
+- Зафиксирован backlog адаптации: Russian source verification, ГОСТ bibliography, ВАК/РИНЦ review, bilingual pipeline handoff, auto/router entrypoint и global shared agents.
+- Добавлен `tests/test_context_adaptation_audit.py`.
+
 ### Цель среза
 
 Сделать так, чтобы русская часть была не только описана в документации, но и имела стабильные точки входа, проверяемые метаданные и понятный процесс обновления от upstream.

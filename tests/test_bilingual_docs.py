@@ -16,6 +16,7 @@ def test_root_readme_links_bilingual_entrypoints():
     assert "README.ru.md" in readme
     assert "docs/bilingual-routing.md" in readme
     assert "docs/skill-parity-matrix.md" in readme
+    assert "docs/context-adaptation-audit.md" in readme
 
 
 def test_language_specific_readmes_exist():
