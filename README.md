@@ -58,7 +58,7 @@ The parity map is tracked in [docs/skill-parity-matrix.md](docs/skill-parity-mat
 
 Russian academic conventions are tracked in [docs/russian-academic-context.md](docs/russian-academic-context.md), with prompt examples in [examples/ru](examples/ru/) and [examples/bilingual](examples/bilingual/).
 
-Each Russian adapter also ships local `references/` and `templates/` assets for ГОСТ bibliography, source verification, ВАК/РИНЦ review, traceability, and bilingual pipeline handoffs.
+Each Russian adapter also ships local `agents/`, `references/`, and `templates/` assets for ГОСТ bibliography, source verification, ВАК/РИНЦ review, traceability, and bilingual pipeline handoffs.
 
 ## Plugin Packaging
 

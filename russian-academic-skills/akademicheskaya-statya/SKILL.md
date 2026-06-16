@@ -23,6 +23,7 @@ Upstream snapshot: `175f79bcca4467949fa94e410c25823bd574f687` (`v3.12.0`, 2026-0
 
 Локальные материалы:
 
+- `agents/gost_citation_agent.md` - агент проверки ГОСТ bibliography, citation consistency и пакета ВАК-статьи.
 - `references/gost-bibliography-guide.md` - ГОСТ bibliography guide для статей и книг.
 - `templates/vak-article-package.md` - шаблон пакета ВАК-статьи: аннотация, структура, checks.
 

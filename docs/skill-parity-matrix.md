@@ -48,6 +48,7 @@ The Russian adapters add context-specific behavior rather than translating every
 | Frontmatter | Russian skills share a required metadata schema. | Done |
 | References | Each Russian skill has a first local `references/` asset for source verification, ГОСТ, ВАК/РИНЦ review, or bilingual handoffs. | P2 |
 | Templates | Each Russian skill has a first local `templates/` asset for literature matrix, ВАК article package, review traceability, or pipeline dashboard. | P2 |
+| Agents | Each Russian skill has a first local `agents/` prompt for source verification, ГОСТ citations, ВАК/РИНЦ review, or pipeline state. | P2 |
 | Evals | Lightweight Russian context fixtures exist; deep quality evals are still pending. | P2 |
 | Plugin metadata | One bilingual plugin bundle exposes both English and Russian skills through `skills/`. | Done |
 | Upstream sync | Dedicated sync workflow exists in `docs/upstream-sync.md`. | Done |

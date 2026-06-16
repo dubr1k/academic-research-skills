@@ -25,7 +25,7 @@
 
 ### Следующий срез
 
-- Расширить русскую локализацию beyond compact adapters: `agents/` и дополнительные `references/`/`templates/`.
+- Расширить русскую локализацию beyond compact adapters: дополнительные `agents/`, `references/` и `templates/`.
 - Добавить deep evals качества русских ГОСТ/ВАК/РИНЦ сценариев.
 
 ## Что делаем дальше
@@ -53,6 +53,15 @@
 - В каждый русский skill добавлен первый локальный `templates/` asset.
 - `SKILL.md` каждого русского adapter теперь ссылается на свои локальные материалы.
 - Добавлен `tests/test_russian_reference_templates.py`.
+
+### Выполнено в P2d — русские agent prompts
+
+- В каждый русский skill добавлен первый локальный `agents/` prompt.
+- Research agent покрывает eLIBRARY/РИНЦ/CyberLeninka source verification.
+- Writing agent покрывает ГОСТ citations и ВАК article package readiness.
+- Reviewer agent покрывает ВАК/РИНЦ peer-review criteria.
+- Pipeline agent покрывает bilingual state, handoffs и mandatory integrity gates.
+- Добавлен `tests/test_russian_agents.py`.
 
 ### Цель среза
 

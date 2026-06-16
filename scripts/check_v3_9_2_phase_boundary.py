@@ -9,7 +9,7 @@ Enforces three invariants:
 1. **Bucket A coverage** — all 23 single-phase agents MUST carry a
    `## Phase Boundary (v3.9.2)` or `## Phase Boundary (v3.9.4)` H2 block.
 
-2. **Bucket B/C/D exclusion** — all 16 multi-phase / phase-orthogonal /
+2. **Bucket B/C/D exclusion** — all 20 multi-phase / phase-orthogonal /
    cross-phase-meta agents MUST NOT carry the block. Adding a fence to
    these agents would either falsely block legitimate cross-phase work
    (Bucket B/C) or defeat orchestration (Bucket D).
@@ -72,8 +72,8 @@ BUCKET_A_AGENTS = [
     "academic-paper-reviewer/agents/editorial_synthesizer_agent.md",
 ]
 
-# Buckets B/C/D — 16 agents that MUST NOT have the block.
-# B (4): multi-phase; C (8): phase-orthogonal; D (4): cross-phase-meta.
+# Buckets B/C/D — 20 agents that MUST NOT have the block.
+# B (4): multi-phase; C (12): phase-orthogonal; D (4): cross-phase-meta.
 BUCKET_BCD_AGENTS = [
     # Bucket B — multi-phase (4)
     "deep-research/agents/devils_advocate_agent.md",          # P1, 3, 5 + Socratic L2, 4
@@ -94,6 +94,11 @@ BUCKET_BCD_AGENTS = [
     "academic-pipeline/agents/pipeline_orchestrator_agent.md",  # orchestrator
     "academic-pipeline/agents/state_tracker_agent.md",        # meta state
     "academic-paper-reviewer/agents/field_analyst_agent.md",  # Phase 0 configures panel
+    # Russian adapter agents — phase-orthogonal/read-only prompts without phase-directory write contracts.
+    "russian-academic-skills/akademicheskoe-issledovanie/agents/russian_source_verifier_agent.md",
+    "russian-academic-skills/akademicheskaya-statya/agents/gost_citation_agent.md",
+    "russian-academic-skills/akademicheskii-retsenzent/agents/vak_rinc_reviewer_agent.md",
+    "russian-academic-skills/akademicheskii-konveer/agents/russian_pipeline_state_agent.md",
 ]
 
 # v3.9.4: widened to accept either v3.9.2 or v3.9.4 phase boundary markers.
@@ -198,10 +203,10 @@ def main() -> int:
             f"BUCKET_A_AGENTS has {len(BUCKET_A_AGENTS)} entries but "
             f"classification doc requires 23 (v3.9.4 added timeline_extraction_agent)"
         )
-    if len(BUCKET_BCD_AGENTS) != 16:
+    if len(BUCKET_BCD_AGENTS) != 20:
         errors.append(
             f"BUCKET_BCD_AGENTS has {len(BUCKET_BCD_AGENTS)} entries but "
-            f"classification doc requires 16"
+            f"classification doc plus Russian adapter prompts requires 20"
         )
 
     if errors:

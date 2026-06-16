@@ -9,12 +9,12 @@ equals the agent's frontmatter `name`. If the manifest key, the classification-t
 Bucket A roster, and the on-disk frontmatter `name` ever drift apart (a rename, a
 manifest typo, a table edit), the hook silently FAILS OPEN for that agent — it would
 treat the agent as "not in the manifest" and allow every write. This lint catches that
-drift before it can happen, mirroring check_v3_9_2_phase_boundary.py's 23/16 split.
+drift before it can happen, mirroring check_v3_9_2_phase_boundary.py's 23/20 split.
 
 Three invariants:
 
-  I1 — Roster size. The Bucket A roster is exactly 23 agents (16 B/C/D exempt = 39
-       records / 38 unique names per the classification table; the manifest covers the
+  I1 — Roster size. The Bucket A roster is exactly 23 agents (20 B/C/D exempt = 43
+       records / 42 unique names per the classification table plus Russian adapters; the manifest covers the
        23 Bucket A names only).
 
   I2 — Three-way name set equality. The set of:
@@ -24,7 +24,7 @@ Three invariants:
          (c) on-disk frontmatter `name` fields read from each (a) file,
        must be IDENTICAL. Any element in one but not the others is a fail-open risk.
 
-  I3 — Bucket B/C/D exclusion. None of the 16 exempt agents' frontmatter `name` may
+  I3 — Bucket B/C/D exclusion. None of the 20 exempt agents' frontmatter `name` may
        appear as a manifest key (a Bucket B/C/D agent in the manifest would impose a
        single-phase fence on a legitimately multi-phase agent).
 
@@ -75,7 +75,7 @@ BUCKET_A_AGENT_FILES = [
     "academic-paper-reviewer/agents/editorial_synthesizer_agent.md",
 ]
 
-# The 16 Bucket B/C/D agents that MUST NOT appear in the manifest.
+# The 20 Bucket B/C/D agents that MUST NOT appear in the manifest.
 BUCKET_BCD_AGENT_FILES = [
     "deep-research/agents/devils_advocate_agent.md",
     "deep-research/agents/report_compiler_agent.md",
@@ -93,6 +93,11 @@ BUCKET_BCD_AGENT_FILES = [
     "academic-pipeline/agents/pipeline_orchestrator_agent.md",
     "academic-pipeline/agents/state_tracker_agent.md",
     "academic-paper-reviewer/agents/field_analyst_agent.md",
+    # Russian adapter agents — phase-orthogonal/read-only prompts without phase-directory write contracts.
+    "russian-academic-skills/akademicheskoe-issledovanie/agents/russian_source_verifier_agent.md",
+    "russian-academic-skills/akademicheskaya-statya/agents/gost_citation_agent.md",
+    "russian-academic-skills/akademicheskii-retsenzent/agents/vak_rinc_reviewer_agent.md",
+    "russian-academic-skills/akademicheskii-konveer/agents/russian_pipeline_state_agent.md",
 ]
 
 _NAME_RE = re.compile(r"^name:\s*(.+?)\s*$", re.MULTILINE)
@@ -143,9 +148,9 @@ def run_checks() -> list[str]:
             f"I1: BUCKET_A_AGENT_FILES has {len(BUCKET_A_AGENT_FILES)} entries, expected 23 "
             "(classification doc: A=23). Update in lockstep with check_v3_9_2_phase_boundary.py."
         )
-    if len(BUCKET_BCD_AGENT_FILES) != 16:
+    if len(BUCKET_BCD_AGENT_FILES) != 20:
         errors.append(
-            f"I1: BUCKET_BCD_AGENT_FILES has {len(BUCKET_BCD_AGENT_FILES)} entries, expected 16."
+            f"I1: BUCKET_BCD_AGENT_FILES has {len(BUCKET_BCD_AGENT_FILES)} entries, expected 20."
         )
 
     # I5 — roster exhaustiveness (NON-VACUOUS guard). Glob the actual filesystem for every

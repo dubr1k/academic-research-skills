@@ -25,6 +25,7 @@ Upstream snapshot: `175f79bcca4467949fa94e410c25823bd574f687` (`v3.12.0`, 2026-0
 
 Локальные материалы:
 
+- `agents/russian_pipeline_state_agent.md` - агент состояния русского/bilingual pipeline и checkpoint handoffs.
 - `references/bilingual-handoff-contracts.md` - language state и handoff contracts между стадиями.
 - `templates/pipeline-dashboard.md` - dashboard полного русского/bilingual academic pipeline.
 

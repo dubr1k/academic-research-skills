@@ -22,6 +22,7 @@ Upstream snapshot: `175f79bcca4467949fa94e410c25823bd574f687` (`v3.12.0`, 2026-0
 
 Локальные материалы:
 
+- `agents/russian_source_verifier_agent.md` - gatekeeper для eLIBRARY, РИНЦ, CyberLeninka, DOI и mixed RU/EN source verification.
 - `references/russian-source-verification.md` - правила проверки eLIBRARY, РИНЦ, CyberLeninka и mixed RU/EN источников.
 - `templates/literature-matrix-gost.md` - матрица литературы с source language/system и ГОСТ draft entry.
 
