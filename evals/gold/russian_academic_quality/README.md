@@ -4,7 +4,7 @@ This gold set captures Russian academic quality risks that the bilingual adapter
 
 ## Scope
 
-- ГОСТ bibliography checks, including ГОСТ Р 7.0.5-2008 metadata gaps.
+- ГОСТ bibliography checks, including ГОСТ Р 7.0.5-2008 metadata gaps, source-type patterns, and journal override handling.
 - ВАК/РИНЦ separation, including eLIBRARY presence that does not prove ВАК status.
 - Source verification for DOI, eLIBRARY, РИНЦ/ВАК status claims, CyberLeninka access copies, incomplete Russian records, and mixed RU/EN corpora.
 - Russian academic style checks for vague relevance statements and AI-like cliches.
@@ -13,7 +13,7 @@ This gold set captures Russian academic quality risks that the bilingual adapter
 
 ## Labels
 
-- `gost_bibliography`: bibliography metadata and ГОСТ formatting risks.
+- `gost_bibliography`: bibliography metadata, source-type classification, journal override, and ГОСТ formatting risks.
 - `vak_rinc_status`: ВАК/РИНЦ/eLIBRARY status classification risks.
 - `source_verification`: DOI, current status evidence, metadata gaps, access-channel, and source-language verification risks.
 - `russian_style`: Russian academic style and cliche risks.
@@ -22,7 +22,7 @@ This gold set captures Russian academic quality risks that the bilingual adapter
 
 ## Expected Use
 
-The expected guards describe what a Russian skill or bilingual router must surface. The `must_not_do` field records forbidden behavior, especially guessing missing metadata, treating РИНЦ as ВАК, fabricating DOI values, silently translating source titles, or marking reviewer comments addressed without manuscript evidence.
+The expected guards describe what a Russian skill or bilingual router must surface. The `must_not_do` field records forbidden behavior, especially guessing missing metadata, forcing ГОСТ when a journal override requires APA/IEEE/Vancouver/Chicago, treating РИНЦ as ВАК, fabricating DOI values, silently translating source titles, or marking reviewer comments addressed without manuscript evidence.
 
 Run the structural tests with:
 

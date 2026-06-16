@@ -51,6 +51,67 @@
       ]
     },
     {
+      "id": "gost-003-journal-article-source-type",
+      "label": "gost_bibliography",
+      "prompt": "Оформи по ГОСТ журнальную статью и монографию в одном списке литературы, но у книги не указан город и издательство.",
+      "expected_skill": "akademicheskaya-statya",
+      "expected_guards": [
+        "identify source type before applying ГОСТ pattern",
+        "format journal article and monograph with different bibliography templates",
+        "mark metadata_missing for missing city and publisher"
+      ],
+      "must_preserve": [
+        "journal article",
+        "monograph",
+        "metadata_missing"
+      ],
+      "must_not_do": [
+        "format monograph as journal article",
+        "invent city or publisher"
+      ]
+    },
+    {
+      "id": "gost-004-web-source-missing-access-date",
+      "label": "gost_bibliography",
+      "prompt": "Добавь веб-источник в ГОСТ-список: сайт министерства, URL есть, даты обращения нет.",
+      "expected_skill": "akademicheskaya-statya",
+      "expected_guards": [
+        "identify web source before applying ГОСТ pattern",
+        "mark access date as metadata_missing",
+        "ask for access date or label it unavailable before final formatting"
+      ],
+      "must_preserve": [
+        "web source",
+        "URL",
+        "metadata_missing"
+      ],
+      "must_not_do": [
+        "invent access date",
+        "omit missing access-date caveat"
+      ]
+    },
+    {
+      "id": "gost-005-russian-journal-apa-override",
+      "label": "gost_bibliography",
+      "prompt": "Российский журнал ВАК просит APA вместо ГОСТ. Нужно оформить список литературы и не потерять требования журнала.",
+      "expected_skill": "akademicheskaya-statya",
+      "expected_guards": [
+        "record journal override before final bibliography formatting",
+        "apply APA rather than ГОСТ when author guidelines require it",
+        "separate Russian venue requirements from citation-style requirements",
+        "preserve metadata_missing for incomplete bibliography fields under APA"
+      ],
+      "must_preserve": [
+        "journal override",
+        "APA",
+        "ВАК"
+      ],
+      "must_not_do": [
+        "force ГОСТ despite explicit APA instructions",
+        "ignore Russian venue requirements"
+      ]
+    },
+    {
       "id": "vak-001-rinc-not-vak",
       "label": "vak_rinc_status",
       "prompt": "Журнал есть в eLIBRARY и РИНЦ, значит он точно подойдет для ВАК-статьи?",

@@ -27,7 +27,7 @@ Every bilingual change should be checked against these axes:
 | `docs/upstream-sync.md` | Explains origin/upstream sync and snapshot updates. | Covers maintenance context; should explicitly trigger this audit after future upstream releases. |
 | `commands/` | Upstream `/ars-*` plus four `/ars-ru-*` commands. | Explicit Russian commands exist; missing an auto/router entrypoint that exposes context selection without forcing users to choose. |
 | `skills/` | Bilingual plugin-facing bundle with EN and RU skills. | Packaged, but should be checked whenever Russian adapters gain new local assets. |
-| `russian-academic-skills/` | Four Russian adapter skills with local `agents/`, `references/`, and `templates`; research adapter now has deeper Russian source-verification status handling. | Functional adapter layer; remaining depth work is concentrated in writing, reviewer, pipeline, and shared-agent surfaces. |
+| `russian-academic-skills/` | Four Russian adapter skills with local `agents/`, `references/`, and `templates`; research and writing adapters now have deeper Russian source/status and citation-style handling. | Functional adapter layer; remaining depth work is concentrated in reviewer, pipeline, and shared-agent surfaces. |
 | `agents/` | Shared upstream English/global agents. | Not yet context-aware; global shared agents can silently assume English/international norms. |
 | `academic-paper/agents/` | English paper-writing agents, including bilingual abstract support. | Strong upstream coverage; Russian context should stay in adapters unless a shared bilingual handoff is required. |
 | `deep-research/agents/` | English research agents with source verification. | Good international-source layer; Russian source verification remains adapter-specific. |
@@ -63,14 +63,16 @@ Primary surfaces: `russian-academic-skills/akademicheskoe-issledovanie/`, `examp
 
 ### P3c: ГОСТ Bibliography and Journal Override Depth
 
-The writing adapter has a first ГОСТ bibliography guide and ВАК package template. It still needs deeper assets for:
+Status: covered in the first depth pass.
+
+The writing adapter now has deeper assets for:
 
 - ГОСТ bibliography variants by source type: journal article, monograph, dissertation abstract, conference paper, web source;
 - conflict rules where a Russian journal asks for APA, IEEE, Vancouver, or Chicago instead of ГОСТ;
 - bilingual abstract handoff: Russian manuscript with English abstract, English manuscript for Russian venue;
 - explicit no-guessing rules for pages, issue number, publisher, city, and DOI.
 
-Primary surfaces: `russian-academic-skills/akademicheskaya-statya/`, `academic-paper/templates/`, `examples/ru/paper-abstract-gost.md`, `commands/ars-ru-paper.md`.
+Primary surfaces: `russian-academic-skills/akademicheskaya-statya/`, `examples/ru/paper-gost-source-types.md`, `examples/bilingual/russian-journal-apa-override.md`, `evals/gold/russian_academic_quality/`.
 
 ### P3d: ВАК/РИНЦ Review and Re-review Traceability
 
@@ -111,9 +113,8 @@ Primary surfaces: `commands/`, `docs/bilingual-routing.md`, `tests/fixtures/bili
 
 ## Recommended Order
 
-1. P3c: deepen ГОСТ bibliography and journal override writing assets.
-2. P3d: deepen ВАК/РИНЦ review and re-review traceability assets.
-3. P3e: adapt bilingual pipeline handoff and inspect global shared agents.
-4. P3f: add an auto/router entrypoint only after the four domain adapters have enough depth to route into.
+1. P3d: deepen ВАК/РИНЦ review and re-review traceability assets.
+2. P3e: adapt bilingual pipeline handoff and inspect global shared agents.
+3. P3f: add an auto/router entrypoint only after the four domain adapters have enough depth to route into.
 
 This order keeps the adapter layer useful before adding more routing surface. A router that points to shallow downstream assets would create confidence without enough behavior behind it.

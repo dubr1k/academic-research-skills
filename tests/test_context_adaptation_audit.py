@@ -89,3 +89,16 @@ def test_context_adaptation_audit_marks_p3b_depth_pass_covered():
         "not_verified",
     ):
         assert required in text
+
+
+def test_context_adaptation_audit_marks_p3c_depth_pass_covered():
+    text = read_text(AUDIT_DOC)
+
+    for required in (
+        "P3c: ГОСТ Bibliography and Journal Override Depth",
+        "examples/ru/paper-gost-source-types.md",
+        "examples/bilingual/russian-journal-apa-override.md",
+        "journal article, monograph, dissertation abstract, conference paper, web source",
+        "APA, IEEE, Vancouver, or Chicago",
+    ):
+        assert required in text

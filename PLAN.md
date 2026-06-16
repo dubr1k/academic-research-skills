@@ -25,8 +25,8 @@
 
 ### Следующий срез
 
-- P3c: углубить ГОСТ bibliography и journal override writing assets.
-- Затем P3d: углубить ВАК/РИНЦ review и re-review traceability.
+- P3d: углубить ВАК/РИНЦ review и re-review traceability.
+- Затем P3e: bilingual pipeline handoff и global shared agents.
 
 ## Что делаем дальше
 
@@ -95,6 +95,15 @@
 - Добавлены примеры `examples/ru/research-source-verification-depth.md` и `examples/bilingual/mixed-source-verification-handoff.md`.
 - `russian_academic_quality` gold set расширен с 12 до 15 кейсов; source verification теперь покрывает eLIBRARY/РИНЦ/ВАК, неполные русские записи и mixed `source_language`.
 - `docs/context-adaptation-audit.md` обновлен: P3b отмечен как covered in the first depth pass, следующий рекомендованный срез — P3c.
+
+### Выполнено в P3c — ГОСТ bibliography и journal override depth
+
+- `gost-bibliography-guide.md` расширен source-type patterns: journal article, monograph, dissertation abstract, conference paper и web source.
+- Добавлены journal override rules: APA, IEEE, Vancouver, Chicago, локальный ГОСТ-вариант или style sheet журнала имеют приоритет над default ГОСТ.
+- `gost_citation_agent.md` теперь фиксирует source type и Citation Style Decision: default style, override, final style и evidence.
+- `vak-article-package.md` получил Citation Style Decision и journal override checks.
+- Добавлены примеры `examples/ru/paper-gost-source-types.md` и `examples/bilingual/russian-journal-apa-override.md`.
+- `russian_academic_quality` gold set расширен с 15 до 18 кейсов; `gost_bibliography` теперь покрывает разные типы источников, missing access date и российский APA override.
 
 ### Цель среза
 

@@ -28,7 +28,13 @@
 
 ## Submission Checks
 
+- Citation Style Decision:
+  - Default style:
+  - Journal override:
+  - Final style:
+  - Evidence: author guidelines / editor letter / user-provided requirement.
 - ГОСТ bibliography checked.
+- Journal override checked when APA, IEEE, Vancouver, Chicago, or a local style is required.
 - ВАК/РИНЦ venue requirements checked.
 - Funding/COI/ethics/disclosure statements included when relevant.
 - Russian AI-cliche pass completed.
