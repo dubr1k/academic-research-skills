@@ -43,14 +43,14 @@ The Russian adapters add context-specific behavior rather than translating every
 
 | Area | Gap | Priority |
 |---|---|---|
-| Routing | No executable router; rules live in docs and tests. | P1 |
-| Commands | No `/ars-ru-*` slash commands yet. | P1 |
-| Frontmatter | Russian skills use inconsistent `desc`/`description` metadata. | P1 |
+| Routing | No executable router; rules live in docs, commands, examples, and tests. | P2 |
+| Commands | `/ars-ru-*` slash commands exist for the 4 Russian adapters. | Done |
+| Frontmatter | Russian skills share a required metadata schema. | Done |
 | References | Russian skills do not yet have expanded `references/` folders. | P2 |
 | Templates | No dedicated Russian templates for ГОСТ bibliography, VAK review, response letter. | P2 |
-| Evals | No deep quality evals for Russian academic outputs yet. | P2 |
-| Plugin metadata | Plugin metadata still primarily describes upstream package. | P1 |
-| Upstream sync | Manual policy exists in `PLAN.md`; dedicated `docs/upstream-sync.md` not yet added. | P1 |
+| Evals | Lightweight Russian context fixtures exist; deep quality evals are still pending. | P2 |
+| Plugin metadata | Plugin metadata still primarily describes upstream package. | P2 |
+| Upstream sync | Dedicated sync workflow exists in `docs/upstream-sync.md`. | Done |
 
 ## Do Not Blindly Port
 

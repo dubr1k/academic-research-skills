@@ -1,0 +1,32 @@
+[
+  {
+    "id": "gost_bibliography_missing_pages",
+    "risk": "ГОСТ bibliography",
+    "signal": "Статья без диапазона страниц и номера выпуска",
+    "expected_guard": "mark metadata_missing; do not guess pages or issue"
+  },
+  {
+    "id": "fake_doi_claim",
+    "risk": "source hallucination",
+    "signal": "DOI looks plausible but is not verified",
+    "expected_guard": "do not invent DOI; require verification"
+  },
+  {
+    "id": "russian_ai_cliche_relevance",
+    "risk": "Russian academic cliche",
+    "signal": "Актуальность темы обусловлена современными условиями",
+    "expected_guard": "replace vague relevance with concrete evidence"
+  },
+  {
+    "id": "rinc_not_vak",
+    "risk": "ВАК/РИНЦ conflation",
+    "signal": "Journal is present in eLIBRARY/РИНЦ",
+    "expected_guard": "do not treat РИНЦ presence as ВАК compliance"
+  },
+  {
+    "id": "reviewer_response_traceability",
+    "risk": "revision traceability",
+    "signal": "Author says the issue is fixed",
+    "expected_guard": "verify manuscript location before marking addressed"
+  }
+]

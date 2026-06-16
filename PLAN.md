@@ -26,12 +26,19 @@
 ### Следующий срез
 
 - Решить plugin packaging: один bilingual plugin или отдельный Russian plugin.
-- Расширить русскую локализацию beyond compact adapters: `agents/`, `references/`, `templates/`, eval fixtures.
-- Добавить проверки качества русских ГОСТ/ВАК/РИНЦ сценариев.
+- Расширить русскую локализацию beyond compact adapters: `agents/`, `references/`, `templates/`.
+- Добавить deep evals качества русских ГОСТ/ВАК/РИНЦ сценариев.
 
 ## Что делаем дальше
 
 Срез **P1 — формализовать русские entrypoints и metadata** выполнен. Этот раздел оставлен как архив критериев и решений P1.
+
+### Выполнено в P2a — русский academic context и fixtures
+
+- Добавлен `docs/russian-academic-context.md` с правилами ГОСТ, ВАК/РИНЦ, eLIBRARY, CyberLeninka, source verification, Russian AI-cliche checks и response traceability.
+- Добавлены примеры `examples/ru/` и `examples/bilingual/` для research, paper, reviewer, pipeline и mixed Scopus/CyberLeninka workflows.
+- Добавлен `tests/fixtures/russian_quality_cases.json` с lightweight quality fixtures.
+- Добавлен `tests/test_russian_academic_context.py`.
 
 ### Цель среза
 

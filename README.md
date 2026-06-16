@@ -54,6 +54,8 @@ The Russian layer currently includes compact `SKILL.md` adapters under [russian-
 
 The parity map is tracked in [docs/skill-parity-matrix.md](docs/skill-parity-matrix.md).
 
+Russian academic conventions are tracked in [docs/russian-academic-context.md](docs/russian-academic-context.md), with prompt examples in [examples/ru](examples/ru/) and [examples/bilingual](examples/bilingual/).
+
 ## Maintenance
 
 The English upstream core should stay close to `Imbad0202/academic-research-skills`. Russian skills are maintained as an adapter layer and updated after upstream syncs.
