@@ -17,7 +17,7 @@ upstream_date: "2026-06-08"
 
 # Академический конвейер
 
-Русскоязычная адаптация идей `academic-pipeline` из `imbad0202/academic-research-skills` для Opencode. Skill не выполняет всю содержательную работу сам: он определяет стадию, выбирает режим, загружает нужные skills, управляет checkpoint-ами и integrity gates.
+Русскоязычная адаптация идей `academic-pipeline` из `imbad0202/academic-research-skills` для Opencode. Skill не выполняет всю содержательную работу сам: он определяет стадию, выбирает режим, загружает нужные skills, управляет checkpoint-ами, integrity gates и bilingual handoff state.
 
 Источник адаптации: https://github.com/imbad0202/academic-research-skills
 Upstream snapshot: `175f79bcca4467949fa94e410c25823bd574f687` (`v3.12.0`, 2026-06-08).
@@ -58,7 +58,8 @@ Upstream snapshot: `175f79bcca4467949fa94e410c25823bd574f687` (`v3.12.0`, 2026-0
 3. запускает нужные skills/tasks;
 4. проверяет наличие deliverables;
 5. показывает checkpoint;
-6. передает материалы следующей стадии.
+6. передает материалы следующей стадии;
+7. сохраняет `source_verification_state`, `output_language`, `source_language`, `final_package_mode` и checkpoint/gate carryover между research, writing, review и revision.
 
 ## Entry point detection
 
@@ -90,6 +91,55 @@ Upstream snapshot: `175f79bcca4467949fa94e410c25823bd574f687` (`v3.12.0`, 2026-0
 | 4.5 | Final Integrity | full claim/citation check | final verification report |
 | 5 | Finalize | `akademicheskaya-statya`: format-convert/disclosure | final package |
 | 6 | Process Summary | orchestrator | process record and AI disclosure summary |
+
+## Bilingual pipeline state
+
+Каждый stage handoff должен нести явный state object. Не смешивайте язык общения, язык источников и язык финального текста.
+
+```yaml
+pipeline_state:
+  current_stage: "1|2|2.5|3|4|3'|4'|4.5|5|6"
+  output_language: "ru|en|bilingual"
+  source_language: ["ru", "en"]
+  interaction_language: "ru|en|mixed"
+  venue_context: "vak|rinc|elibrary|scopus|wos|dissertation_council|journal_specific|mixed"
+  citation_style: "gost|apa|ieee|vancouver|journal_override"
+  final_package_mode: "RU|EN|bilingual"
+  source_verification_state:
+    status: "not_started|in_progress|partial|pass|pass_with_notes|fail"
+    per_source:
+      - source_id: ""
+        source_language: "ru|en|other"
+        source_system: "elibrary|rinc|vak|cyberleninka|doi|scopus|wos|publisher|archive|other"
+        verification_status: "verified_current|partially_verified|not_verified|inaccessible|rejected"
+        metadata_missing: []
+        supports_claims: "yes|limited|no"
+        unresolved_risks: []
+    aggregate:
+      verified_count: 0
+      partial_count: 0
+      rejected_count: 0
+      unresolved_risks: []
+    last_gate: "none|stage_2_5|stage_4_5"
+    carryover_required: true
+  gate_carryover:
+    stage_2_5: "pending|pass|pass_with_notes|fail"
+    stage_4_5: "pending|pass|pass_with_notes|fail"
+    blocking_issues: []
+    open_reviewer_concerns: []
+  checkpoint_carryover:
+    last_checkpoint: "entry|stage_complete|integrity_fail|review_decision|finalization"
+    user_decision_required: true
+    allowed_next_stage: ""
+```
+
+Обязательные правила:
+
+- `output_language` описывает язык рукописи/deliverables, `source_language` описывает язык корпуса источников.
+- `final_package_mode` фиксируется до Stage 5: `RU`, `EN` или `bilingual`.
+- `source_verification_state` переносится из Stage 1 в Stage 2, затем обновляется на Stage 2.5 и Stage 4.5.
+- `gate_carryover.blocking_issues` нельзя очищать без evidence из текста, bibliography или verification report.
+- При bilingual режиме сохраняйте оригинальные названия русских источников; перевод можно добавить отдельным полем, но не заменять оригинал.
 
 ## State machine
 
@@ -132,6 +182,22 @@ Options:
 
 Нельзя auto-skip MANDATORY checkpoints.
 
+Checkpoint всегда должен показывать carryover:
+
+```text
+Language state:
+- output_language:
+- source_language:
+- final_package_mode:
+Source verification state:
+- status:
+- unresolved_risks:
+Gate carryover:
+- stage_2_5:
+- stage_4_5:
+- blocking_issues:
+```
+
 ## Integrity gates
 
 Stage 2.5 и 4.5 обязательны. Они проверяют:
@@ -163,6 +229,8 @@ Stage 4.5 проверяет с нуля, а не только старые пр
 - Annotated Bibliography;
 - Synthesis Report;
 - ограничения и unresolved controversies.
+- `pipeline_state` с `output_language`, `source_language`, `final_package_mode`;
+- `source_verification_state` по каждому источнику и агрегированный статус.
 
 ### Stage 2 -> Stage 2.5
 
@@ -172,6 +240,8 @@ Stage 4.5 проверяет с нуля, а не только старые пр
 - bibliography;
 - figures/tables/data notes;
 - список claims, если уже есть.
+- `source_verification_state` из Stage 1 без потери unresolved risks;
+- `checkpoint_carryover` с подтверждением пользователя на integrity gate.
 
 ### Stage 3 -> Stage 4
 
@@ -181,6 +251,8 @@ Stage 4.5 проверяет с нуля, а не только старые пр
 - Review Reports;
 - Revision Roadmap;
 - обязательные и optional правки.
+- `gate_carryover` из Stage 2.5;
+- reviewer concern IDs, которые должны сохраниться в revision traceability table.
 
 ### Stage 4 -> Stage 3'
 
@@ -189,6 +261,8 @@ Stage 4.5 проверяет с нуля, а не только старые пр
 - revised manuscript;
 - response to reviewers;
 - traceability table.
+- `source_verification_state` после изменений в claims/bibliography;
+- open reviewer concerns и evidence для закрытых concerns.
 
 ### Stage 4.5 -> Stage 5
 
@@ -198,6 +272,24 @@ Stage 4.5 проверяет с нуля, а не только старые пр
 - final bibliography;
 - disclosure/funding/COI/ethics statements;
 - требования формата.
+- `final_package_mode: RU|EN|bilingual`;
+- final `source_verification_state` и remaining manual checks.
+
+Подробный contract: `references/bilingual-handoff-contracts.md`.
+
+## Global/shared agent audit before delegation
+
+Если русский adapter вызывает shared/global agents, не предполагайте, что они автоматически понимают ВАК, РИНЦ, eLIBRARY, ГОСТ или российские журнальные нормы. Перед вызовом проверьте и явно передайте:
+
+- `interaction_language`, `output_language`, `source_language`, `final_package_mode`;
+- российский venue/context: ВАК, РИНЦ, eLIBRARY, диссертационный совет, конкретный журнал;
+- citation style и journal override, если ГОСТ не является целью;
+- запрет silently translate Russian titles или заменять ГОСТ/ВАК требования English international defaults;
+- source verification distinctions: CyberLeninka as access channel, eLIBRARY record, РИНЦ indexing, ВАК status, DOI, peer-review evidence;
+- gate policy: Stage 2.5 и Stage 4.5 обязательны, unresolved source risks carry over;
+- expected output package: RU-only, EN-only, or bilingual with separate Russian originals and English-facing elements.
+
+Если shared/global agent возвращает English-centric defaults, оркестратор должен отметить это как `global_agent_norm_risk` и запросить correction before stage completion.
 
 ## Opencode execution pattern
 

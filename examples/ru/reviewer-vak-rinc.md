@@ -16,6 +16,8 @@ Routing:
 Expected checks:
 
 - evaluate novelty, theoretical significance, practical significance, reliability, bibliography, and method-to-claim alignment;
-- separate РИНЦ presence from ВАК compliance;
+- separate journal-index status (`current_vak`, `rinc_indexed`, `elibrary_record`, `not_verified`) from manuscript quality;
+- distinguish ВАК article, dissertation council, and international journal review criteria when the user provides the context;
 - provide issue locations and required fixes;
+- require page/section-level traceability before any reviewer comment is marked resolved;
 - do not rewrite the manuscript inside the review.

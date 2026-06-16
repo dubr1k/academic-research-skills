@@ -25,14 +25,14 @@ Every bilingual change should be checked against these axes:
 | `docs/russian-academic-context.md` | Russian academic conventions and local-source integrity rules. | Covers ГОСТ Р 7.0.5-2008, ВАК/РИНЦ separation, source verification, style cliches, and traceability. |
 | `docs/skill-parity-matrix.md` | Maps upstream skills to Russian adapters. | Useful for upstream sync; should be revisited after each Russian asset expansion. |
 | `docs/upstream-sync.md` | Explains origin/upstream sync and snapshot updates. | Covers maintenance context; should explicitly trigger this audit after future upstream releases. |
-| `commands/` | Upstream `/ars-*` plus four `/ars-ru-*` commands. | Explicit Russian commands exist; missing an auto/router entrypoint that exposes context selection without forcing users to choose. |
+| `commands/` | Upstream `/ars-*`, four `/ars-ru-*` commands, and `/ars-auto`. | Explicit and automatic routing entrypoints exist; `/ars-auto` surfaces selected skill, language, venue, citation style, source policy, and warnings. |
 | `skills/` | Bilingual plugin-facing bundle with EN and RU skills. | Packaged, but should be checked whenever Russian adapters gain new local assets. |
-| `russian-academic-skills/` | Four Russian adapter skills with local `agents/`, `references/`, and `templates`; research and writing adapters now have deeper Russian source/status and citation-style handling. | Functional adapter layer; remaining depth work is concentrated in reviewer, pipeline, and shared-agent surfaces. |
+| `russian-academic-skills/` | Four Russian adapter skills with local `agents/`, `references/`, and `templates`; research, writing, reviewer, and pipeline adapters now have first depth-pass coverage. | Functional adapter layer; future work can add richer examples, LLM-judged evals, and upstream-sync maintenance. |
 | `agents/` | Shared upstream English/global agents. | Not yet context-aware; global shared agents can silently assume English/international norms. |
 | `academic-paper/agents/` | English paper-writing agents, including bilingual abstract support. | Strong upstream coverage; Russian context should stay in adapters unless a shared bilingual handoff is required. |
 | `deep-research/agents/` | English research agents with source verification. | Good international-source layer; Russian source verification remains adapter-specific. |
-| `examples/ru/` | Russian examples for research, paper, reviewer, and pipeline. | Good basic coverage; needs more edge cases for incomplete metadata and journal-specific overrides. |
-| `examples/bilingual/` | Mixed Scopus/APA and CyberLeninka/Scopus workflows. | Good mixed RU/EN coverage; should add reviewer-response and bilingual abstract examples. |
+| `examples/ru/` | Russian examples for research, paper, reviewer, re-review, and pipeline. | Good first depth-pass coverage; future examples can target journal-specific edge cases. |
+| `examples/bilingual/` | Mixed Scopus/APA, CyberLeninka/Scopus, APA override, source handoff, and bilingual pipeline workflows. | Good mixed RU/EN coverage; future examples can add more venue-specific final packages. |
 | `evals/gold/russian_academic_quality/` | Russian advisory-calibration gold set. | Measured by `scripts/run_evals.py`; covers ГОСТ bibliography, ВАК/РИНЦ review, source verification, style, traceability, mixed routing. |
 | `scripts/run_evals.py` | Native measurer for `russian_academic_quality`. | Good structural measurement; future work can add LLM-output judged evals separately. |
 | `.claude-plugin/plugin.json` | Bilingual plugin metadata for Claude Code. | Good high-level bilingual package signal. |
@@ -76,18 +76,24 @@ Primary surfaces: `russian-academic-skills/akademicheskaya-statya/`, `examples/r
 
 ### P3d: ВАК/РИНЦ Review and Re-review Traceability
 
-The reviewer adapter has a first ВАК/РИНЦ criteria reference and traceability template. It still needs deeper assets for:
+Status: covered in the first depth pass.
+
+The reviewer adapter now has deeper assets for:
 
 - separating journal-index status from manuscript quality;
 - review criteria for ВАК article, dissertation council, and international journal review;
 - re-review status taxonomy: addressed, partially addressed, not addressed, needs evidence;
 - page/section-level traceability before marking reviewer comments resolved.
 
-Primary surfaces: `russian-academic-skills/akademicheskii-retsenzent/`, `examples/ru/reviewer-vak-rinc.md`, `evals/gold/russian_academic_quality/`.
+Primary surfaces: `russian-academic-skills/akademicheskii-retsenzent/`, `examples/ru/reviewer-rereview-traceability.md`, `evals/gold/russian_academic_quality/`.
+
+Stable markers: `journal-index status`, `manuscript quality`, `needs_evidence`.
 
 ### P3e: Bilingual Pipeline Handoff and Global Shared Agents
 
-The pipeline adapter has first handoff contracts, but shared orchestration surfaces still skew upstream-English. The next deeper layer should cover:
+Status: covered in the first depth pass.
+
+The pipeline adapter now has deeper assets for:
 
 - bilingual pipeline handoff between research, writing, review, and revision;
 - source verification state carried across stages;
@@ -95,26 +101,31 @@ The pipeline adapter has first handoff contracts, but shared orchestration surfa
 - final package modes: RU, EN, or bilingual;
 - `agents/` global shared agents that should not assume English international norms when called from Russian adapters.
 
-Primary surfaces: `russian-academic-skills/akademicheskii-konveer/`, `agents/`, `academic-pipeline/agents/`, `examples/ru/pipeline-dissertation-to-article.md`.
+Primary surfaces: `russian-academic-skills/akademicheskii-konveer/`, `examples/bilingual/pipeline-bilingual-handoff.md`, `examples/ru/pipeline-dissertation-to-article.md`.
+
+Stable markers: `source verification state`, `output_language`, `source_language`, `final_package_mode`, `global_agent_norm_risk`.
 
 ### P3f: Auto/router Entrypoint
 
-Explicit `/ars-ru-*` commands exist, and upstream `/ars-*` commands remain intact. Missing piece: an auto/router entrypoint that lets users provide a task without choosing EN/RU manually. It should apply `docs/bilingual-routing.md` and surface the chosen context:
+Status: covered in the first depth pass.
+Stable marker: auto/router entrypoint.
 
-- selected skill;
-- request language;
-- output language;
-- venue;
-- citation style;
-- source_language policy;
+Explicit `/ars-ru-*` commands exist, upstream `/ars-*` commands remain intact, and `/ars-auto` now lets users provide a task without choosing EN/RU manually. It applies `docs/bilingual-routing.md` and surfaces the chosen context:
+
+- `selected_skill`;
+- `request_language`;
+- `output_language`;
+- `venue`;
+- `citation_style`;
+- `source_language` policy;
 - warnings for ГОСТ vs APA/IEEE/Vancouver/Chicago conflicts.
 
-Primary surfaces: `commands/`, `docs/bilingual-routing.md`, `tests/fixtures/bilingual_routing_cases.json`.
+Primary surfaces: `commands/ars-auto.md`, `docs/bilingual-routing.md`, `tests/fixtures/bilingual_routing_cases.json`.
 
 ## Recommended Order
 
-1. P3d: deepen ВАК/РИНЦ review and re-review traceability assets.
-2. P3e: adapt bilingual pipeline handoff and inspect global shared agents.
-3. P3f: add an auto/router entrypoint only after the four domain adapters have enough depth to route into.
+1. Add LLM-output judged evals on top of the structural Russian academic quality checks.
+2. Add more venue-specific examples for bilingual final packages and reviewer-response edge cases.
+3. Run the upstream sync workflow after the next upstream release and update this audit.
 
-This order keeps the adapter layer useful before adding more routing surface. A router that points to shallow downstream assets would create confidence without enough behavior behind it.
+The core P3 adapter-depth pass is covered. Future work should preserve the same pattern: add concrete assets first, then examples, then eval/test coverage, then update this audit.

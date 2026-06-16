@@ -23,7 +23,7 @@ Upstream snapshot: `175f79bcca4467949fa94e410c25823bd574f687` (`v3.12.0`, 2026-0
 Локальные материалы:
 
 - `agents/vak_rinc_reviewer_agent.md` - агент ВАК/РИНЦ-focused peer review.
-- `references/vak-rinc-review-criteria.md` - критерии ВАК/РИНЦ review и venue caveats.
+- `references/vak-rinc-review-criteria.md` - критерии ВАК/РИНЦ review, dissertation council review, international journal review и venue caveats.
 - `templates/review-report-traceability.md` - шаблон рецензии и re-review traceability table.
 
 ## Когда использовать
@@ -62,6 +62,8 @@ Upstream snapshot: `175f79bcca4467949fa94e410c25823bd574f687` (`v3.12.0`, 2026-0
 4. Синтезатор не имеет права выдумывать замечания, которых нет в отчетах отдельных ракурсов.
 5. Если Devil's Advocate находит CRITICAL issue, итоговое решение не может быть Accept.
 6. Различайте `обязательные правки` и `желательные улучшения`.
+7. Не смешивайте journal-index status с качеством рукописи: РИНЦ/eLIBRARY/ВАК/Web of Science/Scopus status описывает venue, а novelty, rigor и evidence sufficiency описывают manuscript quality.
+8. В re-review нельзя помечать замечание resolved без page/section-level evidence из новой версии рукописи.
 
 ## Opencode orchestration
 
@@ -215,12 +217,19 @@ Upstream snapshot: `175f79bcca4467949fa94e410c25823bd574f687` (`v3.12.0`, 2026-0
 
 Для ВАК/РИНЦ-контекста отдельно отметьте:
 
+- journal-index status: `current_vak`, `rinc_indexed`, `elibrary_record`, `international_indexed`, `not_verified`, `not_applicable`;
 - научную новизну;
 - теоретическую значимость;
 - практическую значимость;
 - достоверность результатов;
 - апробацию/публикации, если речь о диссертации;
 - соответствие паспорту специальности, если пользователь дал специальность.
+
+Оценивайте контекст отдельно:
+
+- ВАК article review: novelty, contribution, method-to-claim alignment, reliability, bibliography, specialty passport fit, conservative conclusions.
+- Dissertation council review: dissertation-to-article linkage, апробация, публикации по теме, положения на защиту, достоверность, личный вклад, соответствие паспорту специальности.
+- International journal review: fit/scope, originality for the field, methodological transparency, ethics/data availability, literature integration, reproducibility, contribution beyond local context.
 
 ## Re-review mode
 
@@ -237,11 +246,10 @@ Upstream snapshot: `175f79bcca4467949fa94e410c25823bd574f687` (`v3.12.0`, 2026-0
 
 Вердикты:
 
-- ADDRESSED;
-- PARTIALLY_ADDRESSED;
-- NOT_ADDRESSED;
-- NEW_ISSUE;
-- RESPONSE_UNVERIFIABLE.
+- `addressed` - исправление подтверждено в конкретной странице/разделе revised manuscript;
+- `partially_addressed` - часть требования закрыта, но остаточный риск или missing evidence сохраняется;
+- `not_addressed` - текст рукописи не изменен или изменение не отвечает замечанию;
+- `needs_evidence` - response обещает правку, но page/section evidence отсутствует или недоступно.
 
 Не принимайте авторский response как факт. Проверяйте текст рукописи.
 

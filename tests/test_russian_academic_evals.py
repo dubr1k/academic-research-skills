@@ -20,7 +20,7 @@ def test_russian_academic_quality_eval_manifest_declares_scope():
     assert manifest["task_name"] == "russian_academic_quality"
     assert manifest["task_type"] == "advisory-calibration"
     assert manifest["target"]["gold_set_path"] == "gold_set.json"
-    assert manifest["sample_n"] >= 18
+    assert manifest["sample_n"] >= 22
 
     labels = set(manifest["labels"])
     assert labels == {
@@ -37,7 +37,10 @@ def test_russian_academic_quality_eval_manifest_declares_scope():
     assert sum(distribution.values()) == manifest["sample_n"]
     assert all(count >= 2 for count in distribution.values())
     assert distribution["gost_bibliography"] >= 5
+    assert distribution["vak_rinc_status"] >= 3
     assert distribution["source_verification"] >= 5
+    assert distribution["revision_traceability"] >= 4
+    assert distribution["mixed_language_routing"] >= 3
 
 
 def test_russian_academic_quality_gold_set_covers_local_risks():
@@ -46,7 +49,7 @@ def test_russian_academic_quality_gold_set_covers_local_risks():
 
     gold = json.loads(read_text(gold_path))
     items = gold["items"]
-    assert len(items) >= 18
+    assert len(items) >= 22
     assert len({item["id"] for item in items}) == len(items)
 
     required_fields = {
@@ -69,9 +72,13 @@ def test_russian_academic_quality_gold_set_covers_local_risks():
         "gost-003-journal-article-source-type",
         "gost-004-web-source-missing-access-date",
         "gost-005-russian-journal-apa-override",
+        "vak-003-review-index-quality-separation",
         "source-003-elibrary-rinc-vak",
         "source-004-incomplete-russian-record",
         "source-005-mixed-source-language",
+        "trace-003-rereview-page-section-evidence",
+        "trace-004-needs-evidence-taxonomy",
+        "mixed-003-pipeline-final-package-mode",
     } <= ids
 
     for required_term in (
@@ -83,6 +90,9 @@ def test_russian_academic_quality_gold_set_covers_local_risks():
         "DOI",
         "metadata_missing",
         "journal override",
+        "journal-index status",
+        "needs_evidence",
+        "final_package_mode",
         "verified_current",
         "not_verified",
         "traceability",

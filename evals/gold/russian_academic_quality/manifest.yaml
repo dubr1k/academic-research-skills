@@ -11,7 +11,7 @@ target:
   entrypoint: scripts.check_russian_academic_quality
   predicted_field: expected_guards
   gold_set_path: gold_set.json
-sample_n: 18
+sample_n: 22
 labels:
   - gost_bibliography
   - vak_rinc_status
@@ -30,12 +30,12 @@ tuple_distribution:
   - label: gost_bibliography
     n: 5
   - label: vak_rinc_status
-    n: 2
+    n: 3
   - label: source_verification
     n: 5
   - label: russian_style
     n: 2
   - label: revision_traceability
-    n: 2
+    n: 4
   - label: mixed_language_routing
-    n: 2
+    n: 3

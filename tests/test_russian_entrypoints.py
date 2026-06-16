@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 
@@ -56,6 +57,34 @@ def test_ru_commands_exist_and_route_to_russian_skills():
         assert "Do not use this entrypoint" in command
         assert "EN/RU/mixed" in command
         assert "docs/bilingual-routing.md" in command
+
+
+def test_auto_command_exists_and_surfaces_routing_decision():
+    command = read_text("commands/ars-auto.md")
+
+    for required in (
+        "docs/bilingual-routing.md",
+        "selected_skill",
+        "request_language",
+        "output_language",
+        "venue",
+        "citation_style",
+        "source_language",
+        "warnings",
+        "ГОСТ",
+        "APA",
+        "IEEE",
+        "Vancouver",
+        "Chicago",
+        "Do not use this entrypoint",
+    ):
+        assert required in command
+
+    assert "as_requested" not in command
+    routing_fixtures = json.loads(read_text("tests/fixtures/bilingual_routing_cases.json"))
+    expected_skills = {case["expected_skill"] for case in routing_fixtures}
+    for skill_name in expected_skills:
+        assert skill_name in command
 
 
 def test_upstream_sync_doc_covers_required_workflow():

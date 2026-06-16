@@ -102,3 +102,23 @@ def test_context_adaptation_audit_marks_p3c_depth_pass_covered():
         "APA, IEEE, Vancouver, or Chicago",
     ):
         assert required in text
+
+
+def test_context_adaptation_audit_marks_p3d_p3e_p3f_depth_passes_covered():
+    text = read_text(AUDIT_DOC)
+
+    for required in (
+        "P3d: ВАК/РИНЦ Review and Re-review Traceability",
+        "examples/ru/reviewer-rereview-traceability.md",
+        "journal-index status",
+        "needs_evidence",
+        "P3e: Bilingual Pipeline Handoff and Global Shared Agents",
+        "examples/bilingual/pipeline-bilingual-handoff.md",
+        "source verification state",
+        "final_package_mode",
+        "global_agent_norm_risk",
+        "P3f: Auto/router Entrypoint",
+        "commands/ars-auto.md",
+        "selected_skill",
+    ):
+        assert required in text

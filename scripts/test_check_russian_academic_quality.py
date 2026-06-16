@@ -19,7 +19,7 @@ def test_validate_gold_set_reports_full_advisory_coverage():
     assert result["errors"] == []
     assert result["metrics"]["advisory_recall"] == pytest.approx(1.0)
     assert result["metrics"]["forbidden_action_rate"] == pytest.approx(0.0)
-    assert len(result["item_results"]) == 18
+    assert len(result["item_results"]) == 22
 
 
 def test_each_label_has_two_gradeable_cases():
@@ -28,7 +28,10 @@ def test_each_label_has_two_gradeable_cases():
     by_label = {entry["label"]: entry for entry in result["per_label"]}
     assert set(by_label) == set(checker.LABEL_REQUIREMENTS)
     assert by_label["gost_bibliography"]["support"] == 5
+    assert by_label["vak_rinc_status"]["support"] == 3
     assert by_label["source_verification"]["support"] == 5
+    assert by_label["revision_traceability"]["support"] == 4
+    assert by_label["mixed_language_routing"]["support"] == 3
     assert all(entry["support"] >= 2 for entry in by_label.values())
     assert all(entry["guard_coverage"] == pytest.approx(1.0) for entry in by_label.values())
 

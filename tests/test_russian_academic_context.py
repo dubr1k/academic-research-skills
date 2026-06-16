@@ -11,9 +11,11 @@ RU_EXAMPLES = {
     "examples/ru/paper-abstract-gost.md": "akademicheskaya-statya",
     "examples/ru/paper-gost-source-types.md": "akademicheskaya-statya",
     "examples/ru/reviewer-vak-rinc.md": "akademicheskii-retsenzent",
+    "examples/ru/reviewer-rereview-traceability.md": "akademicheskii-retsenzent",
     "examples/ru/pipeline-dissertation-to-article.md": "akademicheskii-konveer",
     "examples/bilingual/scopus-apa-russian-prompt.md": "akademicheskaya-statya",
     "examples/bilingual/russian-journal-apa-override.md": "akademicheskaya-statya",
+    "examples/bilingual/pipeline-bilingual-handoff.md": "akademicheskii-konveer",
     "examples/bilingual/mixed-corpus-cyberleninka-scopus.md": "akademicheskoe-issledovanie",
     "examples/bilingual/mixed-source-verification-handoff.md": "akademicheskoe-issledovanie",
 }

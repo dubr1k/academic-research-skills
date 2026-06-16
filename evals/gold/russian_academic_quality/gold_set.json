@@ -151,6 +151,26 @@
       ]
     },
     {
+      "id": "vak-003-review-index-quality-separation",
+      "label": "vak_rinc_status",
+      "prompt": "Отрецензируй рукопись для журнала РИНЦ и скажи, можно ли считать ее качественной только потому, что журнал индексируется.",
+      "expected_skill": "akademicheskii-retsenzent",
+      "expected_guards": [
+        "separate journal-index status from manuscript quality and ВАК suitability",
+        "evaluate novelty, method-to-claim alignment, evidence, and bibliography independently",
+        "require manuscript evidence before positive recommendation"
+      ],
+      "must_preserve": [
+        "journal-index status",
+        "manuscript quality",
+        "ВАК"
+      ],
+      "must_not_do": [
+        "treat РИНЦ index status as manuscript quality proof",
+        "recommend acceptance without manuscript-level evidence"
+      ]
+    },
+    {
       "id": "source-001-plausible-doi",
       "label": "source_verification",
       "prompt": "Проверь DOI 10.1234/edu.2024.5678 для русской статьи и добавь его в библиографию, если выглядит правдоподобно.",
@@ -326,6 +346,46 @@
       ]
     },
     {
+      "id": "trace-003-rereview-page-section-evidence",
+      "label": "revision_traceability",
+      "prompt": "Автор пишет в ответе рецензенту 'исправлено', но не указывает страницу или раздел рукописи. Можно закрыть замечание?",
+      "expected_skill": "akademicheskii-retsenzent",
+      "expected_guards": [
+        "require page/section-level manuscript evidence before status addressed",
+        "mark the item as needs_evidence when location is absent",
+        "keep original concern, author response, manuscript evidence, and residual issue in traceability table"
+      ],
+      "must_preserve": [
+        "page/section-level",
+        "needs_evidence",
+        "status"
+      ],
+      "must_not_do": [
+        "mark addressed from author response alone",
+        "drop unresolved reviewer concern"
+      ]
+    },
+    {
+      "id": "trace-004-needs-evidence-taxonomy",
+      "label": "revision_traceability",
+      "prompt": "Сделай re-review: часть замечаний устранена частично, одно не устранено, по одному нет доказательств в тексте.",
+      "expected_skill": "akademicheskii-retsenzent",
+      "expected_guards": [
+        "use status taxonomy addressed, partially_addressed, not_addressed, and needs_evidence",
+        "separate partial fixes from unresolved issues",
+        "require manuscript location and evidence for every status"
+      ],
+      "must_preserve": [
+        "partially_addressed",
+        "not_addressed",
+        "needs_evidence"
+      ],
+      "must_not_do": [
+        "collapse all statuses into resolved",
+        "hide partially addressed concerns"
+      ]
+    },
+    {
       "id": "mixed-001-russian-prompt-apa-output",
       "label": "mixed_language_routing",
       "prompt": "По-русски помоги спланировать статью для Scopus-журнала, но список литературы нужен в APA и аннотация на английском.",
@@ -363,6 +423,26 @@
       "must_not_do": [
         "ignore Russian venue requirements because manuscript is English",
         "translate source titles silently"
+      ]
+    },
+    {
+      "id": "mixed-003-pipeline-final-package-mode",
+      "label": "mixed_language_routing",
+      "prompt": "Запусти конвейер для русской статьи с английской аннотацией и mixed RU/EN источниками; в финале нужен bilingual submission package.",
+      "expected_skill": "akademicheskii-konveer",
+      "expected_guards": [
+        "track output_language separately from source_language across pipeline stages",
+        "carry source verification state into writing, review, revision, and finalization",
+        "declare final_package_mode as RU, EN, or bilingual before finalization"
+      ],
+      "must_preserve": [
+        "source_language",
+        "output_language",
+        "final_package_mode"
+      ],
+      "must_not_do": [
+        "drop mixed-source metadata during handoff",
+        "finalize without declaring package mode"
       ]
     }
   ]

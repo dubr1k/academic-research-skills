@@ -37,11 +37,11 @@ LABEL_GUARD_TERMS: dict[str, tuple[str, ...]] = {
 
 EXPECTED_LABEL_SUPPORT: dict[str, int] = {
     "gost_bibliography": 5,
-    "vak_rinc_status": 2,
+    "vak_rinc_status": 3,
     "source_verification": 5,
     "russian_style": 2,
-    "revision_traceability": 2,
-    "mixed_language_routing": 2,
+    "revision_traceability": 4,
+    "mixed_language_routing": 3,
 }
 
 

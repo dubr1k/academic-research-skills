@@ -5,20 +5,20 @@ This gold set captures Russian academic quality risks that the bilingual adapter
 ## Scope
 
 - ГОСТ bibliography checks, including ГОСТ Р 7.0.5-2008 metadata gaps, source-type patterns, and journal override handling.
-- ВАК/РИНЦ separation, including eLIBRARY presence that does not prove ВАК status.
+- ВАК/РИНЦ separation, including eLIBRARY presence that does not prove ВАК status and journal-index status that does not prove manuscript quality.
 - Source verification for DOI, eLIBRARY, РИНЦ/ВАК status claims, CyberLeninka access copies, incomplete Russian records, and mixed RU/EN corpora.
 - Russian academic style checks for vague relevance statements and AI-like cliches.
-- Revision-response traceability for reviewer replies and manuscript locations.
-- Mixed-language routing where source_language and output-language requirements must be preserved.
+- Revision-response traceability for reviewer replies, page/section manuscript evidence, and `needs_evidence` re-review status.
+- Mixed-language routing where source_language, output_language, final_package_mode, and router decisions must be preserved.
 
 ## Labels
 
 - `gost_bibliography`: bibliography metadata, source-type classification, journal override, and ГОСТ formatting risks.
-- `vak_rinc_status`: ВАК/РИНЦ/eLIBRARY status classification risks.
+- `vak_rinc_status`: ВАК/РИНЦ/eLIBRARY status classification and manuscript-quality separation risks.
 - `source_verification`: DOI, current status evidence, metadata gaps, access-channel, and source-language verification risks.
 - `russian_style`: Russian academic style and cliche risks.
-- `revision_traceability`: reviewer-response traceability risks.
-- `mixed_language_routing`: RU/EN routing and source-language preservation risks.
+- `revision_traceability`: reviewer-response and re-review traceability risks.
+- `mixed_language_routing`: RU/EN routing, source-language preservation, and bilingual pipeline package-mode risks.
 
 ## Expected Use
 

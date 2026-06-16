@@ -25,8 +25,8 @@
 
 ### Следующий срез
 
-- P3d: углубить ВАК/РИНЦ review и re-review traceability.
-- Затем P3e: bilingual pipeline handoff и global shared agents.
+- Post-P3: добавить LLM-output judged evals поверх structural `russian_academic_quality`.
+- Затем: расширить venue-specific examples и выполнить upstream sync при следующем upstream release.
 
 ## Что делаем дальше
 
@@ -104,6 +104,28 @@
 - `vak-article-package.md` получил Citation Style Decision и journal override checks.
 - Добавлены примеры `examples/ru/paper-gost-source-types.md` и `examples/bilingual/russian-journal-apa-override.md`.
 - `russian_academic_quality` gold set расширен с 15 до 18 кейсов; `gost_bibliography` теперь покрывает разные типы источников, missing access date и российский APA override.
+
+### Выполнено в P3d — ВАК/РИНЦ review и re-review traceability depth
+
+- `vak-rinc-review-criteria.md` разделяет `journal-index status` и `manuscript quality`.
+- Добавлены отдельные критерии для ВАК article, dissertation council и international journal review.
+- `review-report-traceability.md` и `vak_rinc_reviewer_agent.md` закрепляют статусы `addressed`, `partially_addressed`, `not_addressed`, `needs_evidence`.
+- Page/section-level manuscript evidence стало обязательным перед закрытием замечания как `addressed`.
+- Добавлен пример `examples/ru/reviewer-rereview-traceability.md`.
+
+### Выполнено в P3e — bilingual pipeline handoff и global shared agents
+
+- `bilingual-handoff-contracts.md` расширен `source_verification_state`, `gate_carryover`, `checkpoint_carryover`, `output_language`, `source_language` и `final_package_mode`.
+- `russian_pipeline_state_agent.md` и `pipeline-dashboard.md` теперь показывают source verification state, final package mode и shared/global agent audit.
+- Добавлен `global_agent_norm_risk` для случаев, когда shared/global agent возвращает English-centric assumptions.
+- Добавлен пример `examples/bilingual/pipeline-bilingual-handoff.md`.
+
+### Выполнено в P3f — auto/router entrypoint
+
+- Добавлена команда `commands/ars-auto.md`.
+- `/ars-auto` применяет `docs/bilingual-routing.md` и выводит routing header: `selected_skill`, `request_language`, `output_language`, `venue`, `citation_style`, `source_language`, `warnings`.
+- Router не создает новый тяжелый skill; он выбирает один из существующих EN/RU skills.
+- `russian_academic_quality` gold set расширен с 18 до 22 кейсов: добавлены reviewer status separation, re-review taxonomy и bilingual pipeline final package mode.
 
 ### Цель среза
 
