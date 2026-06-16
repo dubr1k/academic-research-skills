@@ -1,6 +1,15 @@
 ---
 name: akademicheskii-retsenzent
 description: "Русскоязычный peer-review skill для Opencode. Используйте для независимой рецензии научной статьи, методологической проверки, pre-submission review, ВАК/журнальной оценки, re-review после правок и калибровки качества рецензирования. Адаптировано из imbad0202/academic-research-skills под русский язык и Opencode task()."
+version: "3.12.0-ru.1"
+last_updated: "2026-06-16"
+status: "active-russian-adapter"
+data_access_level: "user_materials_with_optional_source_verification"
+task_type: "review"
+depends_on: []
+upstream_snapshot: "175f79bcca4467949fa94e410c25823bd574f687"
+upstream_version: "v3.12.0"
+upstream_date: "2026-06-08"
 ---
 
 # Академический рецензент

@@ -13,16 +13,25 @@
 - Добавлен `tests/test_bilingual_docs.py`.
 - Полный тестовый прогон прошел: `2707 passed, 1 xfailed, 127 subtests passed`.
 
+### Выполнено во втором срезе (P1)
+
+- Унифицирован frontmatter всех 4 русских `SKILL.md`.
+- Добавлены обязательные metadata-поля: `name`, `description`, `version`, `last_updated`, `status`, `data_access_level`, `task_type`, `depends_on`, `upstream_snapshot`, `upstream_version`, `upstream_date`.
+- Добавлены русские slash-command entrypoints: `/ars-ru-research`, `/ars-ru-paper`, `/ars-ru-reviewer`, `/ars-ru-pipeline`.
+- Добавлен `docs/upstream-sync.md` с remote layout, sync workflow, snapshot update rules, plugin packaging decision и тестовым протоколом.
+- Добавлен `tests/test_russian_entrypoints.py`.
+- `.claude-plugin/*` проверены; русский слой задокументирован как manual adapter layer до отдельного plugin packaging среза.
+- Полный тестовый прогон прошел: `2710 passed, 1 xfailed, 127 subtests passed`.
+
 ### Следующий срез
 
-- Унифицировать frontmatter русских `SKILL.md`.
-- Добавить `/ars-ru-*` команды или documented aliases.
-- Добавить `docs/upstream-sync.md`.
-- Обновить `.claude-plugin/*`, если bilingual bundle должен устанавливаться как plugin.
+- Решить plugin packaging: один bilingual plugin или отдельный Russian plugin.
+- Расширить русскую локализацию beyond compact adapters: `agents/`, `references/`, `templates/`, eval fixtures.
+- Добавить проверки качества русских ГОСТ/ВАК/РИНЦ сценариев.
 
 ## Что делаем дальше
 
-Ближайший рабочий срез: **P1 — формализовать русские entrypoints и metadata**.
+Срез **P1 — формализовать русские entrypoints и metadata** выполнен. Этот раздел оставлен как архив критериев и решений P1.
 
 ### Цель среза
 
