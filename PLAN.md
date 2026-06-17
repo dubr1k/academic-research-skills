@@ -25,7 +25,7 @@
 
 ### Следующий срез
 
-- Добавить cached judge verdict fixtures и dimension-level metrics поверх captured candidate outputs.
+- Расширить cached judge verdict set негативными и `needs_human_review` кейсами.
 - Следующий upstream sync выполнять после нового upstream release поверх snapshot `88fc003e6abf5fe9fe86dc8200f8d4aa8d511956`.
 
 ## Что делаем дальше
@@ -156,6 +156,13 @@
 - `russian_academic_quality_judged` получил `candidate_outputs/baseline/*.md` и `manifest.json` с SHA-256 hash для каждого recorded `model_output`.
 - Manifest `russian_academic_quality_judged` теперь указывает `target.candidate_output_dir: candidate_outputs/baseline`.
 - Добавлен `--check` режим, который ловит drift между `gold_set.json` и captured candidate outputs.
+
+### Выполнено в Post-P3e — cached judge verdict fixtures и dimension metrics
+
+- Добавлен `judge_verdicts/baseline/` для `russian_academic_quality_judged`: по одному cached verdict JSON на каждый captured candidate output.
+- Verdict fixtures фиксируют `verdict`, `dimension_results`, `hard_failures`, `candidate_path`, `candidate_sha256`, rationale и evidence quotes.
+- `scripts/check_russian_academic_quality_judged.py` теперь валидирует cached verdicts и считает `dimension_pass_rate` и `needs_human_review_rate`.
+- `scripts/run_evals.py` прокидывает `target.judge_verdict_dir` и выводит dimension metrics в per-class отчет.
 
 ### Цель среза
 
@@ -538,7 +545,7 @@ docs(russian): formalize ru entrypoints and sync workflow
 
 ## Следующий практический шаг
 
-P0, P1, P2, первый P3 depth pass, Post-P3a judged evals, Post-P3b venue examples, Post-P3c upstream sync и Post-P3d candidate-output capture выполнены. Следующий практический шаг:
+P0, P1, P2, первый P3 depth pass, Post-P3a judged evals, Post-P3b venue examples, Post-P3c upstream sync, Post-P3d candidate-output capture и Post-P3e cached verdict metrics выполнены. Следующий практический шаг:
 
-1. Добавить cached judge verdict fixtures и dimension-level metrics поверх captured candidate outputs.
+1. Расширить cached judge verdict set негативными и `needs_human_review` кейсами.
 2. При следующем upstream release снова выполнить `docs/upstream-sync.md` поверх snapshot `88fc003e6abf5fe9fe86dc8200f8d4aa8d511956`.

@@ -1,0 +1,18 @@
+{
+  "case_id": "judged-mixed-001",
+  "candidate_path": "judged-mixed-001.md",
+  "candidate_sha256": "761368af51df8d3c61006fbec636b7d1a7db879c704a1056b38a4ae7cb059fde",
+  "verdict": "pass",
+  "dimension_results": {
+    "language_routing_integrity": "pass",
+    "local_norm_compliance": "pass",
+    "forbidden_action_absence": "pass"
+  },
+  "hard_failures": [],
+  "rationale": "The output keeps output language, source language, and final package mode separate while preserving source titles.",
+  "evidence_quotes": [
+    "output_language",
+    "source_language",
+    "final_package_mode"
+  ]
+}

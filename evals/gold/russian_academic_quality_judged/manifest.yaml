@@ -12,6 +12,7 @@ target:
   predicted_field: model_output
   gold_set_path: gold_set.json
   candidate_output_dir: candidate_outputs/baseline
+  judge_verdict_dir: judge_verdicts/baseline
 sample_n: 6
 labels:
   - gost_bibliography
@@ -25,6 +26,12 @@ thresholds:
     comparison: ">="
     threshold_value: 0.90
   critical_failure_rate:
+    comparison: "=="
+    threshold_value: 0.00
+  dimension_pass_rate:
+    comparison: ">="
+    threshold_value: 0.90
+  needs_human_review_rate:
     comparison: "=="
     threshold_value: 0.00
 tuple_distribution:

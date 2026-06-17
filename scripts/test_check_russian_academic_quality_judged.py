@@ -17,6 +17,14 @@ GOLD_SET = (
     / "russian_academic_quality_judged"
     / "gold_set.json"
 )
+VERDICT_DIR = (
+    REPO_ROOT
+    / "evals"
+    / "gold"
+    / "russian_academic_quality_judged"
+    / "judge_verdicts"
+    / "baseline"
+)
 
 
 def test_validate_gold_set_scores_recorded_outputs():
@@ -25,6 +33,8 @@ def test_validate_gold_set_scores_recorded_outputs():
     assert result["errors"] == []
     assert result["metrics"]["judged_pass_rate"] == pytest.approx(1.0)
     assert result["metrics"]["critical_failure_rate"] == pytest.approx(0.0)
+    assert result["metrics"]["dimension_pass_rate"] == pytest.approx(1.0)
+    assert result["metrics"]["needs_human_review_rate"] == pytest.approx(0.0)
     assert len(result["item_results"]) == 6
 
 
@@ -60,3 +70,53 @@ def test_forbidden_output_marker_is_reported(tmp_path):
 
     assert result["metrics"]["critical_failure_rate"] > 0.0
     assert any("contains forbidden output markers" in error for error in result["errors"])
+
+
+def test_cached_judge_verdicts_are_loaded_and_scored():
+    result = checker.validate_gold_set(GOLD_SET, VERDICT_DIR)
+
+    assert result["errors"] == []
+    assert result["metrics"]["judged_pass_rate"] == pytest.approx(1.0)
+    assert result["metrics"]["dimension_pass_rate"] == pytest.approx(1.0)
+    assert result["metrics"]["needs_human_review_rate"] == pytest.approx(0.0)
+
+    for item in result["item_results"]:
+        verdict = item["cached_judge_verdict"]
+        assert verdict["verdict"] == "pass"
+        assert verdict["hard_failures"] == []
+        assert set(verdict["dimension_results"].values()) == {"pass"}
+
+
+def test_cached_judge_verdict_hash_drift_is_reported(tmp_path):
+    source = json.loads((VERDICT_DIR / "judged-gost-001.json").read_text(encoding="utf-8"))
+    source["candidate_sha256"] = "0" * 64
+    verdict_dir = tmp_path / "verdicts"
+    verdict_dir.mkdir()
+    for path in VERDICT_DIR.glob("*.json"):
+        target = verdict_dir / path.name
+        if path.name == "judged-gost-001.json":
+            target.write_text(json.dumps(source), encoding="utf-8")
+        else:
+            target.write_text(path.read_text(encoding="utf-8"), encoding="utf-8")
+
+    result = checker.validate_gold_set(GOLD_SET, verdict_dir)
+
+    assert result["errors"]
+    assert any("candidate_sha256 drift" in error for error in result["errors"])
+
+
+def test_needs_human_review_is_not_a_pass(tmp_path):
+    verdict_dir = tmp_path / "verdicts"
+    verdict_dir.mkdir()
+    for path in VERDICT_DIR.glob("*.json"):
+        data = json.loads(path.read_text(encoding="utf-8"))
+        if path.name == "judged-style-001.json":
+            data["verdict"] = "needs_human_review"
+            data["dimension_results"]["style_quality"] = "needs_human_review"
+        (verdict_dir / path.name).write_text(json.dumps(data), encoding="utf-8")
+
+    result = checker.validate_gold_set(GOLD_SET, verdict_dir)
+
+    assert result["metrics"]["judged_pass_rate"] < 1.0
+    assert result["metrics"]["needs_human_review_rate"] > 0.0
+    assert any("needs_human_review is not a pass" in error for error in result["errors"])

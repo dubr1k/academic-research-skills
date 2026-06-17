@@ -1,0 +1,18 @@
+{
+  "case_id": "judged-vak-001",
+  "candidate_path": "judged-vak-001.md",
+  "candidate_sha256": "7808e4814ca87bd42a518658b5d6bc9a89a49004e72c042361d18ef99aeb1ef8",
+  "verdict": "pass",
+  "dimension_results": {
+    "local_norm_compliance": "pass",
+    "verification_honesty": "pass",
+    "forbidden_action_absence": "pass"
+  },
+  "hard_failures": [],
+  "rationale": "The output separates index evidence from manuscript quality and does not treat indexing as proof of quality.",
+  "evidence_quotes": [
+    "ВАК, РИНЦ и eLIBRARY evidence",
+    "journal-index status",
+    "manuscript quality"
+  ]
+}

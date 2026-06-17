@@ -275,6 +275,10 @@ def test_russian_academic_quality_judged_dispatch_shape(validator):
     by_metric = {pc["metric"]: pc for pc in result["per_class"]}
     assert by_metric["critical_failure_rate"]["direction"] == "lower_is_better"
     assert by_metric["judged_pass_rate"]["direction"] == "higher_is_better"
+    assert by_metric["dimension_pass_rate"]["direction"] == "higher_is_better"
+    assert by_metric["needs_human_review_rate"]["direction"] == "lower_is_better"
+    assert by_metric["dimension_pass_rate"]["passed"] is True
+    assert by_metric["needs_human_review_rate"]["passed"] is True
     assert {pc["class_name"] for pc in result["per_class"]} >= {
         "gost_bibliography",
         "vak_rinc_status",

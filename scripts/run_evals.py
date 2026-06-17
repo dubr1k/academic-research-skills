@@ -397,7 +397,8 @@ def measure_russian_academic_quality_judged(task_dir: Path, manifest: dict[str, 
 
     target = manifest.get("target", {})
     gold_path = task_dir / target.get("gold_set_path", "gold_set.json")
-    evaluation = judged.validate_gold_set(gold_path)
+    verdict_dir = task_dir / target["judge_verdict_dir"] if "judge_verdict_dir" in target else None
+    evaluation = judged.validate_gold_set(gold_path, verdict_dir)
     if evaluation["errors"]:
         raise ValueError("; ".join(evaluation["errors"]))
 
@@ -437,6 +438,40 @@ def measure_russian_academic_quality_judged(task_dir: Path, manifest: dict[str, 
             critical_thr["threshold_value"],
         )
 
+    dimension_thr = thresholds.get("dimension_pass_rate", {})
+    dimension_comparison = dimension_thr.get("comparison", ">=")
+    dimension_metric = {
+        "class_name": "dimension_pass_rate",
+        "metric": "dimension_pass_rate",
+        "value": metrics["dimension_pass_rate"],
+        "direction": "higher_is_better",
+    }
+    if "threshold_value" in dimension_thr:
+        dimension_metric["threshold_value"] = dimension_thr["threshold_value"]
+        dimension_metric["comparison"] = dimension_comparison
+        dimension_metric["passed"] = _threshold_passed(
+            metrics["dimension_pass_rate"],
+            dimension_comparison,
+            dimension_thr["threshold_value"],
+        )
+
+    review_thr = thresholds.get("needs_human_review_rate", {})
+    review_comparison = review_thr.get("comparison", "==")
+    review_metric = {
+        "class_name": "needs_human_review_rate",
+        "metric": "needs_human_review_rate",
+        "value": metrics["needs_human_review_rate"],
+        "direction": "lower_is_better",
+    }
+    if "threshold_value" in review_thr:
+        review_metric["threshold_value"] = review_thr["threshold_value"]
+        review_metric["comparison"] = review_comparison
+        review_metric["passed"] = _threshold_passed(
+            metrics["needs_human_review_rate"],
+            review_comparison,
+            review_thr["threshold_value"],
+        )
+
     per_class: list[dict[str, Any]] = [
         {
             "class_name": "judged_pass_rate",
@@ -450,6 +485,8 @@ def measure_russian_academic_quality_judged(task_dir: Path, manifest: dict[str, 
             },
         },
         critical_metric,
+        dimension_metric,
+        review_metric,
     ]
     for entry in evaluation["per_label"]:
         per_class.append({

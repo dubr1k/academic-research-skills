@@ -151,9 +151,17 @@ The judged Russian eval now mirrors every `model_output` fixture into `candidate
 
 Primary surfaces: `evals/gold/russian_academic_quality_judged/candidate_outputs/baseline/`, `scripts/capture_russian_academic_quality_outputs.py`, `scripts/test_capture_russian_academic_quality_outputs.py`.
 
+### Post-P3e: Cached Judge Verdicts and Dimension Metrics
+
+Status: covered for the first cached-verdict pass.
+
+The judged Russian eval now has cached judge verdict fixtures for every captured candidate output. The checker validates `candidate_sha256`, `verdict`, `dimension_results`, `hard_failures`, rationale, and evidence quotes, then reports `dimension_pass_rate` and `needs_human_review_rate` alongside the original judged pass and critical failure metrics.
+
+Primary surfaces: `evals/gold/russian_academic_quality_judged/judge_verdicts/baseline/`, `scripts/check_russian_academic_quality_judged.py`, `scripts/test_check_russian_academic_quality_judged.py`.
+
 ## Recommended Order
 
-1. Add cached judge verdict fixtures and dimension-level metrics on top of captured candidate outputs.
+1. Expand the cached judge verdict set with more negative and `needs_human_review` cases.
 2. Run the upstream sync workflow again after the next upstream release and update this audit.
 
 The core P3 adapter-depth pass is covered. Future work should preserve the same pattern: add concrete assets first, then examples, then eval/test coverage, then update this audit.

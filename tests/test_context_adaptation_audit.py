@@ -163,3 +163,16 @@ def test_context_adaptation_audit_marks_post_p3d_capture_covered():
         "--check",
     ):
         assert required in text
+
+
+def test_context_adaptation_audit_marks_post_p3e_cached_verdicts_covered():
+    text = read_text(AUDIT_DOC)
+
+    for required in (
+        "Post-P3e: Cached Judge Verdicts and Dimension Metrics",
+        "judge_verdicts/baseline",
+        "dimension_pass_rate",
+        "needs_human_review_rate",
+        "candidate_sha256",
+    ):
+        assert required in text

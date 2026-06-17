@@ -1,0 +1,18 @@
+{
+  "case_id": "judged-style-001",
+  "candidate_path": "judged-style-001.md",
+  "candidate_sha256": "5a84e8fad7d543ee474b5484e0671de0334f4a082add1089c2cb5df675bae475",
+  "verdict": "pass",
+  "dimension_results": {
+    "style_quality": "pass",
+    "verification_honesty": "pass",
+    "forbidden_action_absence": "pass"
+  },
+  "hard_failures": [],
+  "rationale": "The output identifies Russian academic cliches and asks for concrete contribution, data, method, and limits.",
+  "evidence_quotes": [
+    "AI-like cliche",
+    "конкретизировать вклад",
+    "не усиливая утверждения без источников"
+  ]
+}
