@@ -508,10 +508,8 @@ docs(russian): formalize ru entrypoints and sync workflow
 
 ## Следующий практический шаг
 
-Первый P0-срез выполнен. Следующий практический шаг:
+P0, P1, P2 и первый P3 depth pass выполнены. Следующий практический шаг:
 
-1. Унифицировать frontmatter в `russian-academic-skills/*/SKILL.md`.
-2. Добавить русские slash-command entrypoints `/ars-ru-*`.
-3. Добавить `docs/upstream-sync.md`.
-4. Решить, как bilingual bundle должен отображаться в `.claude-plugin/plugin.json` и `.claude-plugin/marketplace.json`.
-5. Расширить тесты на команды и plugin metadata.
+1. Добавить LLM-output judged evals поверх structural `russian_academic_quality`.
+2. Расширить venue-specific examples для ВАК, РИНЦ/eLIBRARY, диссертационного совета, Scopus/WoS и journal override workflows.
+3. При следующем upstream release выполнить `docs/upstream-sync.md`: fetch/diff upstream, обновить английское ядро, перенести релевантные изменения в русские adapters и обновить snapshot hash.
