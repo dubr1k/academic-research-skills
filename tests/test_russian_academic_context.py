@@ -13,11 +13,16 @@ RU_EXAMPLES = {
     "examples/ru/reviewer-vak-rinc.md": "akademicheskii-retsenzent",
     "examples/ru/reviewer-rereview-traceability.md": "akademicheskii-retsenzent",
     "examples/ru/pipeline-dissertation-to-article.md": "akademicheskii-konveer",
+    "examples/ru/venue-vak-submission-package.md": "akademicheskaya-statya",
+    "examples/ru/venue-rinc-elibrary-status-check.md": "akademicheskoe-issledovanie",
+    "examples/ru/venue-dissertation-council-review.md": "akademicheskii-retsenzent",
     "examples/bilingual/scopus-apa-russian-prompt.md": "akademicheskaya-statya",
     "examples/bilingual/russian-journal-apa-override.md": "akademicheskaya-statya",
     "examples/bilingual/pipeline-bilingual-handoff.md": "akademicheskii-konveer",
     "examples/bilingual/mixed-corpus-cyberleninka-scopus.md": "akademicheskoe-issledovanie",
     "examples/bilingual/mixed-source-verification-handoff.md": "akademicheskoe-issledovanie",
+    "examples/bilingual/venue-scopus-wos-russian-sources.md": "akademicheskoe-issledovanie",
+    "examples/bilingual/venue-journal-override-final-package.md": "akademicheskii-konveer",
 }
 
 
@@ -51,6 +56,46 @@ def test_ru_and_bilingual_examples_route_to_expected_skills():
         assert f"Expected skill: `{expected_skill}`" in text
         assert "Routing:" in text
         assert "Expected checks:" in text
+
+
+def test_venue_specific_examples_cover_target_contexts():
+    expected_terms = {
+        "examples/ru/venue-vak-submission-package.md": (
+            "ВАК",
+            "submission package",
+            "ГОСТ",
+            "journal override",
+        ),
+        "examples/ru/venue-rinc-elibrary-status-check.md": (
+            "РИНЦ",
+            "eLIBRARY",
+            "journal-index status",
+            "current status evidence",
+        ),
+        "examples/ru/venue-dissertation-council-review.md": (
+            "диссертационный совет",
+            "автореферат",
+            "traceability",
+            "page/section evidence",
+        ),
+        "examples/bilingual/venue-scopus-wos-russian-sources.md": (
+            "Scopus",
+            "WoS",
+            "source_language",
+            "CyberLeninka",
+        ),
+        "examples/bilingual/venue-journal-override-final-package.md": (
+            "final_package_mode",
+            "journal override",
+            "APA",
+            "bilingual",
+        ),
+    }
+
+    for path, terms in expected_terms.items():
+        text = read_text(ROOT / path)
+        for term in terms:
+            assert term in text
 
 
 def test_russian_quality_fixtures_are_covered_by_context_doc():

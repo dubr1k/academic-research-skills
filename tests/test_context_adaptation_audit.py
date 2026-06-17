@@ -122,3 +122,19 @@ def test_context_adaptation_audit_marks_p3d_p3e_p3f_depth_passes_covered():
         "selected_skill",
     ):
         assert required in text
+
+
+def test_context_adaptation_audit_marks_post_p3b_venue_examples_covered():
+    text = read_text(AUDIT_DOC)
+
+    for required in (
+        "Post-P3b: Venue-specific Examples",
+        "examples/ru/venue-vak-submission-package.md",
+        "examples/ru/venue-rinc-elibrary-status-check.md",
+        "examples/ru/venue-dissertation-council-review.md",
+        "examples/bilingual/venue-scopus-wos-russian-sources.md",
+        "examples/bilingual/venue-journal-override-final-package.md",
+        "Scopus/WoS",
+        "dissertation council",
+    ):
+        assert required in text

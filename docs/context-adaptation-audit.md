@@ -31,8 +31,8 @@ Every bilingual change should be checked against these axes:
 | `agents/` | Shared upstream English/global agents. | Not yet context-aware; global shared agents can silently assume English/international norms. |
 | `academic-paper/agents/` | English paper-writing agents, including bilingual abstract support. | Strong upstream coverage; Russian context should stay in adapters unless a shared bilingual handoff is required. |
 | `deep-research/agents/` | English research agents with source verification. | Good international-source layer; Russian source verification remains adapter-specific. |
-| `examples/ru/` | Russian examples for research, paper, reviewer, re-review, and pipeline. | Good first depth-pass coverage; future examples can target journal-specific edge cases. |
-| `examples/bilingual/` | Mixed Scopus/APA, CyberLeninka/Scopus, APA override, source handoff, and bilingual pipeline workflows. | Good mixed RU/EN coverage; future examples can add more venue-specific final packages. |
+| `examples/ru/` | Russian examples for research, paper, reviewer, re-review, pipeline, ВАК package, РИНЦ/eLIBRARY status, and dissertation council review. | Good venue-specific coverage for Russian academic workflows. |
+| `examples/bilingual/` | Mixed Scopus/APA, CyberLeninka/Scopus, APA override, source handoff, bilingual pipeline, Scopus/WoS Russian-source, and journal override final-package workflows. | Good mixed RU/EN coverage with venue-specific final packages. |
 | `evals/gold/russian_academic_quality/` | Russian advisory-calibration gold set. | Measured by `scripts/run_evals.py`; covers ГОСТ bibliography, ВАК/РИНЦ review, source verification, style, traceability, mixed routing. |
 | `evals/gold/russian_academic_quality_judged/` | Russian recorded-output judged gold set. | First LLM-output judged layer over cached `model_output` text; live LLM judging remains future advisory work. |
 | `scripts/run_evals.py` | Native measurers for `russian_academic_quality` and `russian_academic_quality_judged`. | Structural and recorded-output Russian evals now both run through the harness. |
@@ -123,9 +123,23 @@ Explicit `/ars-ru-*` commands exist, upstream `/ars-*` commands remain intact, a
 
 Primary surfaces: `commands/ars-auto.md`, `docs/bilingual-routing.md`, `tests/fixtures/bilingual_routing_cases.json`.
 
+### Post-P3b: Venue-specific Examples
+
+Status: covered in the first venue-specific pass.
+
+The examples layer now has dedicated venue fixtures for:
+
+- ВАК submission package with ГОСТ default and journal override decision;
+- РИНЦ/eLIBRARY current status evidence and journal-index status separation;
+- dissertation council review, автореферат, traceability, and page/section evidence;
+- Scopus/WoS English article planning with Russian sources and preserved `source_language`;
+- bilingual final package with APA journal override and `final_package_mode`.
+
+Primary surfaces: `examples/ru/venue-vak-submission-package.md`, `examples/ru/venue-rinc-elibrary-status-check.md`, `examples/ru/venue-dissertation-council-review.md`, `examples/bilingual/venue-scopus-wos-russian-sources.md`, `examples/bilingual/venue-journal-override-final-package.md`.
+
 ## Recommended Order
 
-1. Add more venue-specific examples for bilingual final packages and reviewer-response edge cases.
-2. Run the upstream sync workflow after the next upstream release and update this audit.
+1. Run the upstream sync workflow after the next upstream release and update this audit.
+2. Expand live/cached judged-output evals only after stable candidate-output capture exists.
 
 The core P3 adapter-depth pass is covered. Future work should preserve the same pattern: add concrete assets first, then examples, then eval/test coverage, then update this audit.

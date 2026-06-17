@@ -25,8 +25,8 @@
 
 ### Следующий срез
 
-- Post-P3b: расширить venue-specific examples для bilingual final packages и reviewer-response edge cases.
-- Затем: выполнить upstream sync при следующем upstream release.
+- Upstream sync при следующем upstream release.
+- Затем: расширить live/cached judged-output evals после появления стабильного capture candidate outputs.
 
 ## Что делаем дальше
 
@@ -134,6 +134,13 @@
 - Добавлен `scripts/check_russian_academic_quality_judged.py` с метриками `judged_pass_rate` и `critical_failure_rate`.
 - `scripts/run_evals.py` теперь измеряет `russian_academic_quality_judged` как native `llm-output-judged` task.
 - `.github/workflows/eval-harness.yml` запускается при изменении русских quality checker scripts.
+
+### Выполнено в Post-P3b — venue-specific examples
+
+- Добавлены русские venue examples: `venue-vak-submission-package.md`, `venue-rinc-elibrary-status-check.md`, `venue-dissertation-council-review.md`.
+- Добавлены bilingual venue examples: `venue-scopus-wos-russian-sources.md`, `venue-journal-override-final-package.md`.
+- Примеры покрывают ВАК submission package, РИНЦ/eLIBRARY current status evidence, dissertation council review, Scopus/WoS article with Russian sources, APA journal override и `final_package_mode: bilingual`.
+- `docs/context-adaptation-audit.md` обновлен: Post-P3b отмечен как covered in the first venue-specific pass.
 
 ### Цель среза
 
@@ -518,5 +525,5 @@ docs(russian): formalize ru entrypoints and sync workflow
 
 P0, P1, P2 и первый P3 depth pass выполнены. Следующий практический шаг:
 
-1. Расширить venue-specific examples для ВАК, РИНЦ/eLIBRARY, диссертационного совета, Scopus/WoS и journal override workflows.
-2. При следующем upstream release выполнить `docs/upstream-sync.md`: fetch/diff upstream, обновить английское ядро, перенести релевантные изменения в русские adapters и обновить snapshot hash.
+1. При следующем upstream release выполнить `docs/upstream-sync.md`: fetch/diff upstream, обновить английское ядро, перенести релевантные изменения в русские adapters и обновить snapshot hash.
+2. После появления стабильного capture candidate outputs расширить live/cached judged-output evals.
