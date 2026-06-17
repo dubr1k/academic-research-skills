@@ -123,6 +123,7 @@ def test_russian_academic_quality_judged_eval_manifest_declares_scope():
     assert manifest["task_name"] == "russian_academic_quality_judged"
     assert manifest["task_type"] == "llm-output-judged"
     assert manifest["target"]["gold_set_path"] == "gold_set.json"
+    assert manifest["target"]["candidate_output_dir"] == "candidate_outputs/baseline"
     assert manifest["target"]["predicted_field"] == "model_output"
     assert manifest["sample_n"] == 6
 
@@ -165,3 +166,21 @@ def test_russian_academic_quality_judged_gold_set_scores_outputs():
         "output_language",
     ):
         assert required_term in serialized
+
+
+def test_russian_academic_quality_judged_candidate_outputs_are_captured():
+    output_dir = JUDGED_EVAL_DIR / "candidate_outputs" / "baseline"
+    manifest_path = output_dir / "manifest.json"
+    assert manifest_path.exists()
+
+    capture_manifest = json.loads(read_text(manifest_path))
+    assert capture_manifest["task_name"] == "russian_academic_quality_judged"
+    assert capture_manifest["source_gold_set"] == "gold_set.json"
+
+    outputs = capture_manifest["outputs"]
+    assert len(outputs) == 6
+    for output in outputs:
+        path = output_dir / output["path"]
+        assert path.exists()
+        assert path.read_text(encoding="utf-8").strip()
+        assert len(output["sha256"]) == 64

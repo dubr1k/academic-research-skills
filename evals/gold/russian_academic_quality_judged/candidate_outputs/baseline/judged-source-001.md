@@ -1,0 +1,1 @@
+Ответ переносит source_verification_state через handoff, различает CyberLeninka как access channel, verified_current и not_verified статусы, и оставляет unresolved risks до проверки eLIBRARY, DOI и claim support.

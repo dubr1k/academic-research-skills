@@ -1,0 +1,1 @@
+Ответ явно разделяет output_language, source_language и final_package_mode: bilingual package может включать English manuscript и русскую source matrix, при этом оригинальные названия источников сохраняются без скрытого перевода.

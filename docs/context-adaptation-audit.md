@@ -137,17 +137,23 @@ The examples layer now has dedicated venue fixtures for:
 
 Primary surfaces: `examples/ru/venue-vak-submission-package.md`, `examples/ru/venue-rinc-elibrary-status-check.md`, `examples/ru/venue-dissertation-council-review.md`, `examples/bilingual/venue-scopus-wos-russian-sources.md`, `examples/bilingual/venue-journal-override-final-package.md`.
 
-## Recommended Order
-
 ### Post-P3c: Upstream Sync v3.12.1
 
 Status: covered for upstream snapshot `88fc003e6abf5fe9fe86dc8200f8d4aa8d511956` (`v3.12.1`, 2026-06-17).
 
 The English core has been merged from `upstream/main`. The bilingual fork keeps `README.md`, plugin metadata, Russian adapters, and bilingual docs as overlay surfaces, while `README.en.md` tracks the upstream English README.
 
+### Post-P3d: Candidate Output Capture
+
+Status: covered for the first recorded-output capture pass.
+
+The judged Russian eval now mirrors every `model_output` fixture into `candidate_outputs/baseline/*.md` with a SHA-256 `manifest.json`. `scripts.capture_russian_academic_quality_outputs` can regenerate the capture or run `--check` to detect drift before future live/cached judges consume the files.
+
+Primary surfaces: `evals/gold/russian_academic_quality_judged/candidate_outputs/baseline/`, `scripts/capture_russian_academic_quality_outputs.py`, `scripts/test_capture_russian_academic_quality_outputs.py`.
+
 ## Recommended Order
 
-1. Expand live/cached judged-output evals only after stable candidate-output capture exists.
+1. Add cached judge verdict fixtures and dimension-level metrics on top of captured candidate outputs.
 2. Run the upstream sync workflow again after the next upstream release and update this audit.
 
 The core P3 adapter-depth pass is covered. Future work should preserve the same pattern: add concrete assets first, then examples, then eval/test coverage, then update this audit.

@@ -25,7 +25,7 @@
 
 ### Следующий срез
 
-- Расширить live/cached judged-output evals после появления стабильного capture candidate outputs.
+- Добавить cached judge verdict fixtures и dimension-level metrics поверх captured candidate outputs.
 - Следующий upstream sync выполнять после нового upstream release поверх snapshot `88fc003e6abf5fe9fe86dc8200f8d4aa8d511956`.
 
 ## Что делаем дальше
@@ -149,6 +149,13 @@
 - `README.en.md` обновлен из upstream README.
 - Bilingual `README.md`, `.claude-plugin/*`, `.codex-plugin/plugin.json` и plugin tests сохранены как bilingual fork overlay с версией `3.12.1`.
 - Все русские adapters обновили `upstream_snapshot`, `upstream_version` и `upstream_date`.
+
+### Выполнено в Post-P3d — candidate-output capture
+
+- Добавлен `scripts/capture_russian_academic_quality_outputs.py`.
+- `russian_academic_quality_judged` получил `candidate_outputs/baseline/*.md` и `manifest.json` с SHA-256 hash для каждого recorded `model_output`.
+- Manifest `russian_academic_quality_judged` теперь указывает `target.candidate_output_dir: candidate_outputs/baseline`.
+- Добавлен `--check` режим, который ловит drift между `gold_set.json` и captured candidate outputs.
 
 ### Цель среза
 
@@ -531,7 +538,7 @@ docs(russian): formalize ru entrypoints and sync workflow
 
 ## Следующий практический шаг
 
-P0, P1, P2, первый P3 depth pass, Post-P3a judged evals, Post-P3b venue examples и Post-P3c upstream sync выполнены. Следующий практический шаг:
+P0, P1, P2, первый P3 depth pass, Post-P3a judged evals, Post-P3b venue examples, Post-P3c upstream sync и Post-P3d candidate-output capture выполнены. Следующий практический шаг:
 
-1. После появления стабильного capture candidate outputs расширить live/cached judged-output evals.
+1. Добавить cached judge verdict fixtures и dimension-level metrics поверх captured candidate outputs.
 2. При следующем upstream release снова выполнить `docs/upstream-sync.md` поверх snapshot `88fc003e6abf5fe9fe86dc8200f8d4aa8d511956`.

@@ -1,0 +1,43 @@
+{
+  "task_name": "russian_academic_quality_judged",
+  "source_gold_set": "gold_set.json",
+  "output_count": 6,
+  "outputs": [
+    {
+      "id": "judged-gost-001",
+      "label": "gost_bibliography",
+      "path": "judged-gost-001.md",
+      "sha256": "2cfc26f22d41a3a501ee2b3f2150c20dfaa8c4638f2895bc26eb94906a2e8cd9"
+    },
+    {
+      "id": "judged-vak-001",
+      "label": "vak_rinc_status",
+      "path": "judged-vak-001.md",
+      "sha256": "7808e4814ca87bd42a518658b5d6bc9a89a49004e72c042361d18ef99aeb1ef8"
+    },
+    {
+      "id": "judged-source-001",
+      "label": "source_verification",
+      "path": "judged-source-001.md",
+      "sha256": "dafc4724d99f907f75a7e433c6f5aa90cf8a058a1449c8f1ffca611f56c10fa4"
+    },
+    {
+      "id": "judged-style-001",
+      "label": "russian_style",
+      "path": "judged-style-001.md",
+      "sha256": "5a84e8fad7d543ee474b5484e0671de0334f4a082add1089c2cb5df675bae475"
+    },
+    {
+      "id": "judged-trace-001",
+      "label": "revision_traceability",
+      "path": "judged-trace-001.md",
+      "sha256": "196e0d015657b76520a5c187e75320e850bc42d77634b6dc3d6bb3a4d8225d82"
+    },
+    {
+      "id": "judged-mixed-001",
+      "label": "mixed_language_routing",
+      "path": "judged-mixed-001.md",
+      "sha256": "761368af51df8d3c61006fbec636b7d1a7db879c704a1056b38a4ae7cb059fde"
+    }
+  ]
+}

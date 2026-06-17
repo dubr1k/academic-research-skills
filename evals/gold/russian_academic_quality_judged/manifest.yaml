@@ -11,6 +11,7 @@ target:
   entrypoint: scripts.check_russian_academic_quality_judged
   predicted_field: model_output
   gold_set_path: gold_set.json
+  candidate_output_dir: candidate_outputs/baseline
 sample_n: 6
 labels:
   - gost_bibliography

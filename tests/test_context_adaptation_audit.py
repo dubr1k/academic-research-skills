@@ -150,3 +150,16 @@ def test_context_adaptation_audit_marks_post_p3c_upstream_sync_covered():
         "upstream English README",
     ):
         assert required in text
+
+
+def test_context_adaptation_audit_marks_post_p3d_capture_covered():
+    text = read_text(AUDIT_DOC)
+
+    for required in (
+        "Post-P3d: Candidate Output Capture",
+        "candidate_outputs/baseline",
+        "scripts/capture_russian_academic_quality_outputs.py",
+        "SHA-256",
+        "--check",
+    ):
+        assert required in text
