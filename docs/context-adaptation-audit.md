@@ -139,7 +139,15 @@ Primary surfaces: `examples/ru/venue-vak-submission-package.md`, `examples/ru/ve
 
 ## Recommended Order
 
-1. Run the upstream sync workflow after the next upstream release and update this audit.
-2. Expand live/cached judged-output evals only after stable candidate-output capture exists.
+### Post-P3c: Upstream Sync v3.12.1
+
+Status: covered for upstream snapshot `88fc003e6abf5fe9fe86dc8200f8d4aa8d511956` (`v3.12.1`, 2026-06-17).
+
+The English core has been merged from `upstream/main`. The bilingual fork keeps `README.md`, plugin metadata, Russian adapters, and bilingual docs as overlay surfaces, while `README.en.md` tracks the upstream English README.
+
+## Recommended Order
+
+1. Expand live/cached judged-output evals only after stable candidate-output capture exists.
+2. Run the upstream sync workflow again after the next upstream release and update this audit.
 
 The core P3 adapter-depth pass is covered. Future work should preserve the same pattern: add concrete assets first, then examples, then eval/test coverage, then update this audit.

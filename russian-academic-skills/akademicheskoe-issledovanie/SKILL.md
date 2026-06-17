@@ -1,15 +1,15 @@
 ---
 name: akademicheskoe-issledovanie
 description: "Русскоязычный academic research skill для Opencode. Используйте для научного исследования, обзора литературы, systematic review, meta-analysis, fact-check, проверки источников, формулировки исследовательского вопроса и сократического прояснения темы. Адаптировано из imbad0202/academic-research-skills под русский язык, ГОСТ и Opencode task()."
-version: "3.12.0-ru.1"
+version: "3.12.1-ru.1"
 last_updated: "2026-06-16"
 status: "active-russian-adapter"
 data_access_level: "external_sources_with_verification"
 task_type: "research"
 depends_on: []
-upstream_snapshot: "175f79bcca4467949fa94e410c25823bd574f687"
-upstream_version: "v3.12.0"
-upstream_date: "2026-06-08"
+upstream_snapshot: "88fc003e6abf5fe9fe86dc8200f8d4aa8d511956"
+upstream_version: "v3.12.1"
+upstream_date: "2026-06-17"
 ---
 
 # Академическое исследование
@@ -17,7 +17,7 @@ upstream_date: "2026-06-08"
 Русскоязычная адаптация идей `deep-research` из `imbad0202/academic-research-skills` для Opencode. Skill помогает провести исследование от неясной темы до проверенного обзора, исследовательского плана или отчета.
 
 Источник адаптации: https://github.com/imbad0202/academic-research-skills
-Upstream snapshot: `175f79bcca4467949fa94e410c25823bd574f687` (`v3.12.0`, 2026-06-08).
+Upstream snapshot: `88fc003e6abf5fe9fe86dc8200f8d4aa8d511956` (`v3.12.1`, 2026-06-17).
 Лицензия источника: Creative Commons Attribution-NonCommercial 4.0 International, Copyright (c) 2026 Cheng-I Wu.
 
 Локальные материалы:

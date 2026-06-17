@@ -138,3 +138,15 @@ def test_context_adaptation_audit_marks_post_p3b_venue_examples_covered():
         "dissertation council",
     ):
         assert required in text
+
+
+def test_context_adaptation_audit_marks_post_p3c_upstream_sync_covered():
+    text = read_text(AUDIT_DOC)
+
+    for required in (
+        "Post-P3c: Upstream Sync v3.12.1",
+        "88fc003e6abf5fe9fe86dc8200f8d4aa8d511956",
+        "README.en.md",
+        "upstream English README",
+    ):
+        assert required in text

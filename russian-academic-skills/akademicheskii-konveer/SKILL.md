@@ -1,7 +1,7 @@
 ---
 name: akademicheskii-konveer
 description: "Русскоязычный academic pipeline orchestrator skill для Opencode. Используйте для полного цикла research -> paper -> integrity check -> review -> revision -> re-review -> finalization. Координирует akademicheskoe-issledovanie, akademicheskaya-statya и akademicheskii-retsenzent. Адаптировано из imbad0202/academic-research-skills под русский язык и Opencode task()."
-version: "3.12.0-ru.1"
+version: "3.12.1-ru.1"
 last_updated: "2026-06-16"
 status: "active-russian-adapter"
 data_access_level: "orchestrates_user_materials_and_verified_sources"
@@ -10,9 +10,9 @@ depends_on:
   - "akademicheskoe-issledovanie"
   - "akademicheskaya-statya"
   - "akademicheskii-retsenzent"
-upstream_snapshot: "175f79bcca4467949fa94e410c25823bd574f687"
-upstream_version: "v3.12.0"
-upstream_date: "2026-06-08"
+upstream_snapshot: "88fc003e6abf5fe9fe86dc8200f8d4aa8d511956"
+upstream_version: "v3.12.1"
+upstream_date: "2026-06-17"
 ---
 
 # Академический конвейер
@@ -20,7 +20,7 @@ upstream_date: "2026-06-08"
 Русскоязычная адаптация идей `academic-pipeline` из `imbad0202/academic-research-skills` для Opencode. Skill не выполняет всю содержательную работу сам: он определяет стадию, выбирает режим, загружает нужные skills, управляет checkpoint-ами, integrity gates и bilingual handoff state.
 
 Источник адаптации: https://github.com/imbad0202/academic-research-skills
-Upstream snapshot: `175f79bcca4467949fa94e410c25823bd574f687` (`v3.12.0`, 2026-06-08).
+Upstream snapshot: `88fc003e6abf5fe9fe86dc8200f8d4aa8d511956` (`v3.12.1`, 2026-06-17).
 Лицензия источника: Creative Commons Attribution-NonCommercial 4.0 International, Copyright (c) 2026 Cheng-I Wu.
 
 Локальные материалы:

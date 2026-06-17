@@ -2,7 +2,7 @@
 
 This matrix tracks how the Russian adapter layer maps to the upstream Academic Research Skills package.
 
-Upstream snapshot for the current Russian layer: `175f79bcca4467949fa94e410c25823bd574f687` (`v3.12.0`, 2026-06-08).
+Upstream snapshot for the current Russian layer: `88fc003e6abf5fe9fe86dc8200f8d4aa8d511956` (`v3.12.1`, 2026-06-17).
 
 ## Summary
 

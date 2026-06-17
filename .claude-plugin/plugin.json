@@ -1,6 +1,6 @@
 {
   "name": "academic-research-skills",
-  "version": "3.12.0",
+  "version": "3.12.1",
   "description": "Bilingual Academic Research Skills bundle for Claude Code: preserves the upstream English research, writing, review, and pipeline workflows while adding Russian ГОСТ, ВАК, РИНЦ/eLIBRARY, CyberLeninka, and mixed RU/EN academic context adapters.",
   "author": {
     "name": "Cheng-I Wu; Russian adaptation by dubr1k",
