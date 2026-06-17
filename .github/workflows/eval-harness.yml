@@ -30,6 +30,7 @@ on:
       # the harness itself + gold sets
       - "evals/gold/**"
       - "scripts/run_evals.py"
+      - "scripts/check_russian_academic_quality*.py"
       - "scripts/check_ranking_lift.py"
       - "shared/evals_lift_report.schema.json"
       - ".github/workflows/eval-harness.yml"
@@ -52,6 +53,7 @@ on:
       - "scripts/check_rq_framing_patterns.py"
       - "evals/gold/**"
       - "scripts/run_evals.py"
+      - "scripts/check_russian_academic_quality*.py"
       - "scripts/check_ranking_lift.py"
       - "shared/evals_lift_report.schema.json"
       - ".github/workflows/eval-harness.yml"

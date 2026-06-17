@@ -6,6 +6,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 EVAL_DIR = ROOT / "evals" / "gold" / "russian_academic_quality"
+JUDGED_EVAL_DIR = ROOT / "evals" / "gold" / "russian_academic_quality_judged"
 
 
 def read_text(path: Path) -> str:
@@ -112,3 +113,55 @@ def test_russian_academic_quality_eval_is_documented():
         "traceability",
     ):
         assert required_term in readme
+
+
+def test_russian_academic_quality_judged_eval_manifest_declares_scope():
+    manifest_path = JUDGED_EVAL_DIR / "manifest.yaml"
+    assert manifest_path.exists()
+
+    manifest = yaml.safe_load(read_text(manifest_path))
+    assert manifest["task_name"] == "russian_academic_quality_judged"
+    assert manifest["task_type"] == "llm-output-judged"
+    assert manifest["target"]["gold_set_path"] == "gold_set.json"
+    assert manifest["target"]["predicted_field"] == "model_output"
+    assert manifest["sample_n"] == 6
+
+    labels = set(manifest["labels"])
+    assert labels == {
+        "gost_bibliography",
+        "vak_rinc_status",
+        "source_verification",
+        "russian_style",
+        "revision_traceability",
+        "mixed_language_routing",
+    }
+
+
+def test_russian_academic_quality_judged_gold_set_scores_outputs():
+    gold_path = JUDGED_EVAL_DIR / "gold_set.json"
+    assert gold_path.exists()
+
+    gold = json.loads(read_text(gold_path))
+    items = gold["items"]
+    assert len(items) == 6
+    assert len({item["id"] for item in items}) == len(items)
+
+    required_fields = {"id", "label", "prompt", "model_output", "rubric"}
+    for item in items:
+        assert required_fields <= set(item)
+        assert item["model_output"].strip()
+        assert item["rubric"]["must_include"]
+        assert item["rubric"]["must_avoid"]
+
+    serialized = json.dumps(gold, ensure_ascii=False)
+    for required_term in (
+        "model_output",
+        "must_include",
+        "must_avoid",
+        "ГОСТ",
+        "journal-index status",
+        "source_verification_state",
+        "needs_evidence",
+        "output_language",
+    ):
+        assert required_term in serialized

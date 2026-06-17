@@ -1,0 +1,41 @@
+task_name: russian_academic_quality_judged
+manifest_version: "1.0.0"
+ars_min_version: "3.12.0"
+task_type: llm-output-judged
+description: |
+  Recorded-output judged layer for the Russian academic adapter. It complements
+  the structural russian_academic_quality task by scoring model_output text
+  against required Russian academic quality markers and forbidden critical
+  failure markers.
+target:
+  entrypoint: scripts.check_russian_academic_quality_judged
+  predicted_field: model_output
+  gold_set_path: gold_set.json
+sample_n: 6
+labels:
+  - gost_bibliography
+  - vak_rinc_status
+  - source_verification
+  - russian_style
+  - revision_traceability
+  - mixed_language_routing
+thresholds:
+  judged_pass_rate:
+    comparison: ">="
+    threshold_value: 0.90
+  critical_failure_rate:
+    comparison: "=="
+    threshold_value: 0.00
+tuple_distribution:
+  - label: gost_bibliography
+    n: 1
+  - label: vak_rinc_status
+    n: 1
+  - label: source_verification
+    n: 1
+  - label: russian_style
+    n: 1
+  - label: revision_traceability
+    n: 1
+  - label: mixed_language_routing
+    n: 1

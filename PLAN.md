@@ -25,8 +25,8 @@
 
 ### Следующий срез
 
-- Post-P3: добавить LLM-output judged evals поверх structural `russian_academic_quality`.
-- Затем: расширить venue-specific examples и выполнить upstream sync при следующем upstream release.
+- Post-P3b: расширить venue-specific examples для bilingual final packages и reviewer-response edge cases.
+- Затем: выполнить upstream sync при следующем upstream release.
 
 ## Что делаем дальше
 
@@ -126,6 +126,14 @@
 - `/ars-auto` применяет `docs/bilingual-routing.md` и выводит routing header: `selected_skill`, `request_language`, `output_language`, `venue`, `citation_style`, `source_language`, `warnings`.
 - Router не создает новый тяжелый skill; он выбирает один из существующих EN/RU skills.
 - `russian_academic_quality` gold set расширен с 18 до 22 кейсов: добавлены reviewer status separation, re-review taxonomy и bilingual pipeline final package mode.
+
+### Выполнено в Post-P3a — LLM-output judged evals
+
+- Добавлен `evals/gold/russian_academic_quality_judged/` как recorded-output judged layer поверх structural `russian_academic_quality`.
+- Новый gold set содержит 6 `model_output` fixtures: по одному для ГОСТ bibliography, ВАК/РИНЦ status, source verification, Russian style, revision traceability и mixed-language routing.
+- Добавлен `scripts/check_russian_academic_quality_judged.py` с метриками `judged_pass_rate` и `critical_failure_rate`.
+- `scripts/run_evals.py` теперь измеряет `russian_academic_quality_judged` как native `llm-output-judged` task.
+- `.github/workflows/eval-harness.yml` запускается при изменении русских quality checker scripts.
 
 ### Цель среза
 
@@ -510,6 +518,5 @@ docs(russian): formalize ru entrypoints and sync workflow
 
 P0, P1, P2 и первый P3 depth pass выполнены. Следующий практический шаг:
 
-1. Добавить LLM-output judged evals поверх structural `russian_academic_quality`.
-2. Расширить venue-specific examples для ВАК, РИНЦ/eLIBRARY, диссертационного совета, Scopus/WoS и journal override workflows.
-3. При следующем upstream release выполнить `docs/upstream-sync.md`: fetch/diff upstream, обновить английское ядро, перенести релевантные изменения в русские adapters и обновить snapshot hash.
+1. Расширить venue-specific examples для ВАК, РИНЦ/eLIBRARY, диссертационного совета, Scopus/WoS и journal override workflows.
+2. При следующем upstream release выполнить `docs/upstream-sync.md`: fetch/diff upstream, обновить английское ядро, перенести релевантные изменения в русские adapters и обновить snapshot hash.

@@ -1,6 +1,6 @@
 # Russian Academic Quality Gold Set
 
-This gold set captures Russian academic quality risks that the bilingual adapter layer must handle consistently. It is an advisory-calibration set, not a deterministic runtime harness.
+This gold set captures Russian academic quality risks that the bilingual adapter layer must handle consistently. It is an advisory-calibration set for structural guard coverage; recorded model outputs are scored in the sibling `russian_academic_quality_judged` task.
 
 ## Scope
 

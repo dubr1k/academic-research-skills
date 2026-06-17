@@ -1,0 +1,111 @@
+{
+  "items": [
+    {
+      "id": "judged-gost-001",
+      "label": "gost_bibliography",
+      "prompt": "Оцени ответ модели на запрос об оформлении библиографии для российского журнала с возможным APA override.",
+      "model_output": "Нужно зафиксировать source_type для каждой записи, проверить ГОСТ Р 7.0.5-2008 только как default, отдельно записать journal override и не закрывать metadata_missing по DOI, страницам или дате обращения без evidence.",
+      "rubric": {
+        "must_include": [
+          "ГОСТ",
+          "source_type",
+          "journal override",
+          "metadata_missing"
+        ],
+        "must_avoid": [
+          "fabricate DOI",
+          "force ГОСТ despite journal override"
+        ]
+      }
+    },
+    {
+      "id": "judged-vak-001",
+      "label": "vak_rinc_status",
+      "prompt": "Оцени ответ модели на рецензию статьи для ВАК/РИНЦ журнала.",
+      "model_output": "Ответ разделяет ВАК, РИНЦ и eLIBRARY evidence: journal-index status проверяется отдельно от manuscript quality, а замечания к методологии и аргументации нельзя закрывать только фактом индексации журнала.",
+      "rubric": {
+        "must_include": [
+          "ВАК",
+          "РИНЦ",
+          "journal-index status",
+          "manuscript quality"
+        ],
+        "must_avoid": [
+          "индексация доказывает качество рукописи",
+          "eLIBRARY proves VAK status"
+        ]
+      }
+    },
+    {
+      "id": "judged-source-001",
+      "label": "source_verification",
+      "prompt": "Оцени ответ модели на mixed RU/EN source verification request.",
+      "model_output": "Ответ переносит source_verification_state через handoff, различает CyberLeninka как access channel, verified_current и not_verified статусы, и оставляет unresolved risks до проверки eLIBRARY, DOI и claim support.",
+      "rubric": {
+        "must_include": [
+          "source_verification_state",
+          "CyberLeninka",
+          "verified_current",
+          "not_verified"
+        ],
+        "must_avoid": [
+          "CyberLeninka proves peer review",
+          "invent missing DOI"
+        ]
+      }
+    },
+    {
+      "id": "judged-style-001",
+      "label": "russian_style",
+      "prompt": "Оцени ответ модели на русскую academic style ревизию.",
+      "model_output": "Ответ отмечает AI-like cliche и Russian academic слабые места: вместо общих фраз нужно конкретизировать вклад, данные, метод и границы вывода, не усиливая утверждения без источников.",
+      "rubric": {
+        "must_include": [
+          "AI-like cliche",
+          "Russian academic",
+          "конкретизировать вклад"
+        ],
+        "must_avoid": [
+          "оставить общую фразу",
+          "усилить утверждения без источников"
+        ]
+      }
+    },
+    {
+      "id": "judged-trace-001",
+      "label": "revision_traceability",
+      "prompt": "Оцени ответ модели на re-review после правок.",
+      "model_output": "Ответ требует traceability table, сохраняет concern IDs и присваивает needs_evidence, если нет page/section evidence в рукописи; addressed допустим только после проверки текста и response letter.",
+      "rubric": {
+        "must_include": [
+          "traceability",
+          "needs_evidence",
+          "page/section evidence",
+          "addressed"
+        ],
+        "must_avoid": [
+          "закрыть замечание без evidence",
+          "drop concern IDs"
+        ]
+      }
+    },
+    {
+      "id": "judged-mixed-001",
+      "label": "mixed_language_routing",
+      "prompt": "Оцени ответ модели на bilingual pipeline request: русский разговор, английская статья, mixed sources.",
+      "model_output": "Ответ явно разделяет output_language, source_language и final_package_mode: bilingual package может включать English manuscript и русскую source matrix, при этом оригинальные названия источников сохраняются без скрытого перевода.",
+      "rubric": {
+        "must_include": [
+          "output_language",
+          "source_language",
+          "final_package_mode",
+          "bilingual"
+        ],
+        "must_avoid": [
+          "silently translate titles",
+          "collapse output_language and source_language"
+        ]
+      }
+    }
+  ]
+}

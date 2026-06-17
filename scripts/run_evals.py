@@ -18,6 +18,9 @@ Per-task measurement dispatch:
 * ``russian_academic_quality`` (advisory-calibration) — dispatches to the
   Russian adapter structural checker and adapts advisory-recall /
   forbidden-action-rate output into the per-task lift-report shape.
+* ``russian_academic_quality_judged`` (llm-output-judged) — dispatches to the
+  recorded-output Russian quality checker and adapts judged-pass /
+  critical-failure output into the per-task lift-report shape.
 
 CLI::
 
@@ -388,6 +391,85 @@ def measure_russian_academic_quality(task_dir: Path, manifest: dict[str, Any]) -
     }
 
 
+def measure_russian_academic_quality_judged(task_dir: Path, manifest: dict[str, Any]) -> dict[str, Any]:
+    """Dispatch to scripts.check_russian_academic_quality_judged and adapt metrics."""
+    from scripts import check_russian_academic_quality_judged as judged
+
+    target = manifest.get("target", {})
+    gold_path = task_dir / target.get("gold_set_path", "gold_set.json")
+    evaluation = judged.validate_gold_set(gold_path)
+    if evaluation["errors"]:
+        raise ValueError("; ".join(evaluation["errors"]))
+
+    metrics = evaluation["metrics"]
+    thresholds = manifest.get("thresholds", {})
+
+    pass_thr = thresholds.get("judged_pass_rate", {})
+    pass_comparison = pass_thr.get("comparison", ">=")
+    pass_metric = {
+        "metric": "judged_pass_rate",
+        "value": metrics["judged_pass_rate"],
+        "direction": "higher_is_better",
+    }
+    if "threshold_value" in pass_thr:
+        pass_metric["threshold_value"] = pass_thr["threshold_value"]
+        pass_metric["comparison"] = pass_comparison
+        pass_metric["passed"] = _threshold_passed(
+            metrics["judged_pass_rate"],
+            pass_comparison,
+            pass_thr["threshold_value"],
+        )
+
+    critical_thr = thresholds.get("critical_failure_rate", {})
+    critical_comparison = critical_thr.get("comparison", "==")
+    critical_metric = {
+        "class_name": "critical_failure_rate",
+        "metric": "critical_failure_rate",
+        "value": metrics["critical_failure_rate"],
+        "direction": "lower_is_better",
+    }
+    if "threshold_value" in critical_thr:
+        critical_metric["threshold_value"] = critical_thr["threshold_value"]
+        critical_metric["comparison"] = critical_comparison
+        critical_metric["passed"] = _threshold_passed(
+            metrics["critical_failure_rate"],
+            critical_comparison,
+            critical_thr["threshold_value"],
+        )
+
+    per_class: list[dict[str, Any]] = [
+        {
+            "class_name": "judged_pass_rate",
+            "metric": "judged_pass_rate",
+            "value": metrics["judged_pass_rate"],
+            "direction": "higher_is_better",
+            **{
+                key: value
+                for key, value in pass_metric.items()
+                if key in {"threshold_value", "comparison", "passed"}
+            },
+        },
+        critical_metric,
+    ]
+    for entry in evaluation["per_label"]:
+        per_class.append({
+            "class_name": entry["label"],
+            "metric": "judged_pass_rate",
+            "value": entry["judged_pass_rate"],
+            "direction": "higher_is_better",
+            "support": entry["support"],
+        })
+
+    return {
+        "task_name": manifest.get("task_name", task_dir.name),
+        "manifest_version": str(manifest.get("manifest_version", "0.0.0")),
+        "status": "measured",
+        "sample_n": len(evaluation["item_results"]),
+        "aggregate_metric": pass_metric,
+        "per_class": per_class,
+    }
+
+
 # ---------------------------------------------------------------------------
 # Task dispatch
 # ---------------------------------------------------------------------------
@@ -412,6 +494,7 @@ _NATIVE_MEASURERS = {
     "citation_extraction": measure_citation_extraction,
     "rq_framing_patterns": measure_rq_framing_patterns,
     "russian_academic_quality": measure_russian_academic_quality,
+    "russian_academic_quality_judged": measure_russian_academic_quality_judged,
 }
 
 

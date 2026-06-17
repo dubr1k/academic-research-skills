@@ -266,6 +266,27 @@ def test_russian_academic_quality_dispatch_shape(validator):
     assert sorted(validator.iter_errors(report), key=lambda e: e.path) == []
 
 
+def test_russian_academic_quality_judged_dispatch_shape(validator):
+    result = run_evals.run_task("russian_academic_quality_judged")
+    assert result["status"] == "measured"
+    assert result["aggregate_metric"]["metric"] == "judged_pass_rate"
+    assert result["aggregate_metric"]["passed"] is True
+
+    by_metric = {pc["metric"]: pc for pc in result["per_class"]}
+    assert by_metric["critical_failure_rate"]["direction"] == "lower_is_better"
+    assert by_metric["judged_pass_rate"]["direction"] == "higher_is_better"
+    assert {pc["class_name"] for pc in result["per_class"]} >= {
+        "gost_bibliography",
+        "vak_rinc_status",
+        "source_verification",
+        "russian_style",
+        "revision_traceability",
+        "mixed_language_routing",
+    }
+    report = run_evals.build_report(["russian_academic_quality_judged"])
+    assert sorted(validator.iter_errors(report), key=lambda e: e.path) == []
+
+
 # ---------------------------------------------------------------------------
 # Baseline / compare populates lift_pre / lift_post
 # ---------------------------------------------------------------------------
@@ -392,6 +413,7 @@ def test_discover_always_includes_native_tasks(tmp_path):
     discovered = run_evals.discover_tasks(gold_root)
     assert "citation_extraction" in discovered
     assert "rq_framing_patterns" in discovered
+    assert "russian_academic_quality_judged" in discovered
 
 
 def test_absent_phase2_task_still_pending_not_raise(tmp_path, validator):

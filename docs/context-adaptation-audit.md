@@ -34,7 +34,8 @@ Every bilingual change should be checked against these axes:
 | `examples/ru/` | Russian examples for research, paper, reviewer, re-review, and pipeline. | Good first depth-pass coverage; future examples can target journal-specific edge cases. |
 | `examples/bilingual/` | Mixed Scopus/APA, CyberLeninka/Scopus, APA override, source handoff, and bilingual pipeline workflows. | Good mixed RU/EN coverage; future examples can add more venue-specific final packages. |
 | `evals/gold/russian_academic_quality/` | Russian advisory-calibration gold set. | Measured by `scripts/run_evals.py`; covers ГОСТ bibliography, ВАК/РИНЦ review, source verification, style, traceability, mixed routing. |
-| `scripts/run_evals.py` | Native measurer for `russian_academic_quality`. | Good structural measurement; future work can add LLM-output judged evals separately. |
+| `evals/gold/russian_academic_quality_judged/` | Russian recorded-output judged gold set. | First LLM-output judged layer over cached `model_output` text; live LLM judging remains future advisory work. |
+| `scripts/run_evals.py` | Native measurers for `russian_academic_quality` and `russian_academic_quality_judged`. | Structural and recorded-output Russian evals now both run through the harness. |
 | `.claude-plugin/plugin.json` | Bilingual plugin metadata for Claude Code. | Good high-level bilingual package signal. |
 | `.codex-plugin/plugin.json` | Codex-compatible bilingual metadata. | Good high-level bilingual package signal. |
 
@@ -124,8 +125,7 @@ Primary surfaces: `commands/ars-auto.md`, `docs/bilingual-routing.md`, `tests/fi
 
 ## Recommended Order
 
-1. Add LLM-output judged evals on top of the structural Russian academic quality checks.
-2. Add more venue-specific examples for bilingual final packages and reviewer-response edge cases.
-3. Run the upstream sync workflow after the next upstream release and update this audit.
+1. Add more venue-specific examples for bilingual final packages and reviewer-response edge cases.
+2. Run the upstream sync workflow after the next upstream release and update this audit.
 
 The core P3 adapter-depth pass is covered. Future work should preserve the same pattern: add concrete assets first, then examples, then eval/test coverage, then update this audit.

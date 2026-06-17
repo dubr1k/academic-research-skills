@@ -16,6 +16,7 @@ evals/
 │   │   └── expected_outcomes.json
 │   ├── rq_framing_patterns/           # #257 Socratic wording advisory calibration
 │   ├── russian_academic_quality/      # Russian ГОСТ/ВАК/РИНЦ advisory calibration
+│   ├── russian_academic_quality_judged/# Russian recorded-output judged eval
 │   ├── status_classification/         # Phase 2 (lands post-#183)
 │   └── summarization_adequacy/        # Phase 2 (lands post-#183)
 ```
@@ -38,11 +39,12 @@ See each task's `README.md` for task-specific conventions (tuple naming, kind di
 
 ## Validator
 
-Run `python -m scripts.check_evals_gold_set evals/gold/<task>` to validate any gold set against its manifest. The same validator runs in CI on every PR that touches `evals/gold/**`.
+Run `python -m scripts.check_evals_gold_set evals/gold/citation_extraction` for the citation tuple/expected-outcome format. Gold sets that use a native `gold_set.json` checker, such as the Russian academic quality tasks, should be validated through their task-specific `scripts.check_*` module and `scripts.run_evals.py`.
 
 ## Provenance
 
 - Phase 1a (citation-extraction gold set) + Phase 1b (`run_evals.py` harness + lift gate): v3.10 #184, spec `docs/design/2026-05-21-v3.10-184-extend-eval-harness-spec.md`
 - RQ framing patterns: Kong #257 idea-diversity advisory, spec `docs/design/2026-05-28-kong-257-idea-diversity-coverage-gap-advisory.md`
 - Russian academic quality: bilingual fork P2e/P2f advisory calibration and structural measurer for ГОСТ, ВАК/РИНЦ, eLIBRARY/CyberLeninka source verification, Russian style, revision traceability, and mixed-language routing.
+- Russian academic quality judged: Post-P3 recorded-output judged layer for the same Russian labels. CI scores cached `model_output` text deterministically against rubric markers; live LLM judging remains a future advisory layer.
 - Phase 2 (status + summarization): scheduled post-#183 ship
