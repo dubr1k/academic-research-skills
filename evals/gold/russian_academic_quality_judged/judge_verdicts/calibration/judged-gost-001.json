@@ -1,0 +1,18 @@
+{
+  "case_id": "judged-gost-001",
+  "candidate_path": "judged-gost-001.md",
+  "candidate_sha256": "2cfc26f22d41a3a501ee2b3f2150c20dfaa8c4638f2895bc26eb94906a2e8cd9",
+  "verdict": "pass",
+  "dimension_results": {
+    "local_norm_compliance": "pass",
+    "verification_honesty": "pass",
+    "forbidden_action_absence": "pass"
+  },
+  "hard_failures": [],
+  "rationale": "Calibration pass anchor: the output records ГОСТ as the default, preserves journal override handling, and keeps missing metadata open.",
+  "evidence_quotes": [
+    "ГОСТ Р 7.0.5-2008 только как default",
+    "journal override",
+    "metadata_missing"
+  ]
+}

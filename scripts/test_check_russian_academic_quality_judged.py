@@ -25,6 +25,14 @@ VERDICT_DIR = (
     / "judge_verdicts"
     / "baseline"
 )
+CALIBRATION_VERDICT_DIR = (
+    REPO_ROOT
+    / "evals"
+    / "gold"
+    / "russian_academic_quality_judged"
+    / "judge_verdicts"
+    / "calibration"
+)
 
 
 def test_validate_gold_set_scores_recorded_outputs():
@@ -120,3 +128,25 @@ def test_needs_human_review_is_not_a_pass(tmp_path):
     assert result["metrics"]["judged_pass_rate"] < 1.0
     assert result["metrics"]["needs_human_review_rate"] > 0.0
     assert any("needs_human_review is not a pass" in error for error in result["errors"])
+
+
+def test_calibration_verdicts_cover_negative_and_human_review_cases():
+    result = checker.validate_gold_set(GOLD_SET, CALIBRATION_VERDICT_DIR)
+
+    assert result["errors"]
+    assert result["metrics"]["judged_pass_rate"] < 1.0
+    assert result["metrics"]["dimension_pass_rate"] < 1.0
+    assert result["metrics"]["needs_human_review_rate"] > 0.0
+    assert any("fabricated_source_verification" in error for error in result["errors"])
+    assert any("needs_human_review is not a pass" in error for error in result["errors"])
+
+    verdicts = {
+        item["id"]: item["cached_judge_verdict"]
+        for item in result["item_results"]
+    }
+    assert any(verdict["verdict"] == "fail" for verdict in verdicts.values())
+    assert any(
+        verdict["verdict"] == "needs_human_review"
+        or "needs_human_review" in verdict["dimension_results"].values()
+        for verdict in verdicts.values()
+    )

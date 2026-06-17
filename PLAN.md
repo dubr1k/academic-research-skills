@@ -25,7 +25,6 @@
 
 ### Следующий срез
 
-- Расширить cached judge verdict set негативными и `needs_human_review` кейсами.
 - Следующий upstream sync выполнять после нового upstream release поверх snapshot `88fc003e6abf5fe9fe86dc8200f8d4aa8d511956`.
 
 ## Что делаем дальше
@@ -163,6 +162,13 @@
 - Verdict fixtures фиксируют `verdict`, `dimension_results`, `hard_failures`, `candidate_path`, `candidate_sha256`, rationale и evidence quotes.
 - `scripts/check_russian_academic_quality_judged.py` теперь валидирует cached verdicts и считает `dimension_pass_rate` и `needs_human_review_rate`.
 - `scripts/run_evals.py` прокидывает `target.judge_verdict_dir` и выводит dimension metrics в per-class отчет.
+
+### Выполнено в Post-P3f — negative и needs_human_review verdict calibration
+
+- Добавлен non-gating `judge_verdicts/calibration/` для `russian_academic_quality_judged` с теми же six case IDs, что и baseline.
+- Calibration set включает explicit `fail` hard failure `fabricated_source_verification` и explicit `needs_human_review` style-quality case.
+- Manifest теперь указывает `target.judge_calibration_verdict_dir: judge_verdicts/calibration`.
+- Тесты проверяют, что calibration verdicts снижают `judged_pass_rate`/`dimension_pass_rate` и не засчитывают `needs_human_review` как pass.
 
 ### Цель среза
 
@@ -545,7 +551,6 @@ docs(russian): formalize ru entrypoints and sync workflow
 
 ## Следующий практический шаг
 
-P0, P1, P2, первый P3 depth pass, Post-P3a judged evals, Post-P3b venue examples, Post-P3c upstream sync, Post-P3d candidate-output capture и Post-P3e cached verdict metrics выполнены. Следующий практический шаг:
+P0, P1, P2, первый P3 depth pass, Post-P3a judged evals, Post-P3b venue examples, Post-P3c upstream sync, Post-P3d candidate-output capture, Post-P3e cached verdict metrics и Post-P3f verdict calibration выполнены. Следующий практический шаг:
 
-1. Расширить cached judge verdict set негативными и `needs_human_review` кейсами.
-2. При следующем upstream release снова выполнить `docs/upstream-sync.md` поверх snapshot `88fc003e6abf5fe9fe86dc8200f8d4aa8d511956`.
+1. При следующем upstream release снова выполнить `docs/upstream-sync.md` поверх snapshot `88fc003e6abf5fe9fe86dc8200f8d4aa8d511956`.

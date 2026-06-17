@@ -176,3 +176,16 @@ def test_context_adaptation_audit_marks_post_p3e_cached_verdicts_covered():
         "candidate_sha256",
     ):
         assert required in text
+
+
+def test_context_adaptation_audit_marks_post_p3f_calibration_verdicts_covered():
+    text = read_text(AUDIT_DOC)
+
+    for required in (
+        "Post-P3f: Negative and Human-review Verdict Calibration",
+        "judge_verdicts/calibration",
+        "fabricated_source_verification",
+        "needs_human_review",
+        "Calibration verdicts are non-gating",
+    ):
+        assert required in text

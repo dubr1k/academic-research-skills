@@ -159,9 +159,16 @@ The judged Russian eval now has cached judge verdict fixtures for every captured
 
 Primary surfaces: `evals/gold/russian_academic_quality_judged/judge_verdicts/baseline/`, `scripts/check_russian_academic_quality_judged.py`, `scripts/test_check_russian_academic_quality_judged.py`.
 
+### Post-P3f: Negative and Human-review Verdict Calibration
+
+Status: covered.
+
+The judged Russian eval now has a separate calibration verdict set with explicit negative and `needs_human_review` examples. Calibration verdicts are non-gating: `judge_verdicts/baseline/` remains the deterministic CI pass gate, while `judge_verdicts/calibration/` proves the checker catches hard failures such as `fabricated_source_verification` and refuses to count human-review cases as pass.
+
+Primary surfaces: `evals/gold/russian_academic_quality_judged/judge_verdicts/calibration/`, `evals/gold/russian_academic_quality_judged/manifest.yaml`, `scripts/test_check_russian_academic_quality_judged.py`, `tests/test_russian_academic_evals.py`.
+
 ## Recommended Order
 
-1. Expand the cached judge verdict set with more negative and `needs_human_review` cases.
-2. Run the upstream sync workflow again after the next upstream release and update this audit.
+1. Run the upstream sync workflow again after the next upstream release and update this audit.
 
 The core P3 adapter-depth pass is covered. Future work should preserve the same pattern: add concrete assets first, then examples, then eval/test coverage, then update this audit.

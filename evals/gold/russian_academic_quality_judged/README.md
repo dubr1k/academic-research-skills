@@ -46,6 +46,11 @@ for each captured candidate output. Each verdict records:
 `needs_human_review` is deliberately not a pass. This keeps future live/cached
 judge integration conservative while preserving deterministic CI behavior.
 
+The sibling `judge_verdicts/calibration/` directory is non-gating. It mirrors
+the baseline case IDs but includes explicit `fail` and `needs_human_review`
+examples so the checker proves it can catch hard failures without making the
+default CI eval red.
+
 Regenerate or verify the capture with:
 
 ```bash
@@ -60,4 +65,11 @@ python -m scripts.capture_russian_academic_quality_outputs --check
 python -m scripts.check_russian_academic_quality_judged --verdict-dir evals/gold/russian_academic_quality_judged/judge_verdicts/baseline
 python -m scripts.run_evals --task russian_academic_quality_judged
 pytest scripts/test_capture_russian_academic_quality_outputs.py scripts/test_check_russian_academic_quality_judged.py tests/test_russian_academic_evals.py
+```
+
+Inspect the non-gating calibration set separately; it exits non-zero by design
+because it contains `fail` and `needs_human_review` verdicts:
+
+```bash
+python -m scripts.check_russian_academic_quality_judged --verdict-dir evals/gold/russian_academic_quality_judged/judge_verdicts/calibration
 ```

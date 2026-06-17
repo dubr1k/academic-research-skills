@@ -13,6 +13,7 @@ target:
   gold_set_path: gold_set.json
   candidate_output_dir: candidate_outputs/baseline
   judge_verdict_dir: judge_verdicts/baseline
+  judge_calibration_verdict_dir: judge_verdicts/calibration
 sample_n: 6
 labels:
   - gost_bibliography

@@ -125,6 +125,7 @@ def test_russian_academic_quality_judged_eval_manifest_declares_scope():
     assert manifest["target"]["gold_set_path"] == "gold_set.json"
     assert manifest["target"]["candidate_output_dir"] == "candidate_outputs/baseline"
     assert manifest["target"]["judge_verdict_dir"] == "judge_verdicts/baseline"
+    assert manifest["target"]["judge_calibration_verdict_dir"] == "judge_verdicts/calibration"
     assert manifest["target"]["predicted_field"] == "model_output"
     assert manifest["sample_n"] == 6
 
@@ -205,3 +206,26 @@ def test_russian_academic_quality_judged_cached_verdicts_are_present():
         assert isinstance(verdict["hard_failures"], list)
         assert verdict["rationale"]
         assert verdict["evidence_quotes"]
+
+
+def test_russian_academic_quality_judged_calibration_verdicts_are_present():
+    verdict_dir = JUDGED_EVAL_DIR / "judge_verdicts" / "calibration"
+    assert verdict_dir.exists()
+
+    verdict_paths = sorted(verdict_dir.glob("*.json"))
+    assert len(verdict_paths) == 6
+
+    verdict_values = set()
+    dimension_values = set()
+    for path in verdict_paths:
+        verdict = json.loads(read_text(path))
+        assert verdict["case_id"] == path.stem
+        assert verdict["candidate_path"].endswith(".md")
+        assert len(verdict["candidate_sha256"]) == 64
+        assert verdict["rationale"]
+        assert verdict["evidence_quotes"]
+        verdict_values.add(verdict["verdict"])
+        dimension_values.update(verdict["dimension_results"].values())
+
+    assert "fail" in verdict_values
+    assert "needs_human_review" in verdict_values | dimension_values

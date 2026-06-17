@@ -112,6 +112,8 @@ def _validate_cached_verdict(item_id: str, verdict: dict[str, Any]) -> tuple[lis
         has_hard_failure = True
     else:
         has_hard_failure = bool(hard_failures)
+        if has_hard_failure:
+            errors.append(f"{item_id}: hard_failures present: {hard_failures}")
 
     if not isinstance(verdict.get("rationale"), str) or not verdict["rationale"].strip():
         errors.append(f"{item_id}: rationale must be non-empty")
