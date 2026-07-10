@@ -1,11 +1,11 @@
 # Academic Research Skills for Claude Code
 
-[![Version](https://img.shields.io/badge/version-v3.12.1-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.12.1)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20696614.svg)](https://doi.org/10.5281/zenodo.20696614)
+[![Version](https://img.shields.io/badge/version-v3.15.0-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.15.0)
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20696614-blue)](https://doi.org/10.5281/zenodo.20696614)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
 [![Sponsor](https://img.shields.io/badge/sponsor-Buy%20Me%20a%20Coffee-orange?logo=buy-me-a-coffee)](https://buymeacoffee.com/crucify020v)
 
-[English](README.md) | [繁體中文版](README.zh-TW.md) | [日本語版](README.ja-JP.md)
+[English](README.md) | [繁體中文版](README.zh-TW.md) | [日本語版](README.ja-JP.md) | [한국어](README.ko-KR.md)
 
 一套完整的学术研究 Claude Code 技能包，涵盖从研究到论文出版的全流程。
 
@@ -59,13 +59,15 @@ v3.3 的灵感来自 [**PaperOrchestra**](https://arxiv.org/abs/2604.05018)（So
 
 **验证可用：** 运行 `/ars-plan` 并描述你正在写的论文，ARS 会用苏格拉底式对话帮你规划章节结构。如果想做单次测试，可以运行 `/ars-lit-review "你的主题"`。
 
-**👉 [docs/SETUP.md](docs/SETUP.md)** — 完整指南：安装 Claude Code、设置 API key、选用的 Pandoc/tectonic（DOCX/PDF）、跨模型验证（`ARS_CROSS_MODEL`），以及五种安装方式（Plugin、项目 skills、全局 skills、claude.ai Project、repo clone）。
+**👉 [docs/SETUP.md](docs/SETUP.md)** — 完整指南：安装 Claude Code、设置 API key、选用的 Pandoc/tectonic（DOCX/PDF）、跨模型验证（`ARS_CROSS_MODEL`），以及六种安装方式（Plugin、项目 skills、全局 skills、claude.ai Project、repo clone、Claude Science 导入）。
+
+**使用 Claude Science？** 四个 skill 可直接导入：**Skills → Import from GitHub**，粘贴 `https://github.com/Imbad0202/academic-research-skills`，点 **Preview**，再点 **Import 4 skills**（需本 repo v3.14.0+——导入器读取 marketplace manifest 中显式声明的 skill 路径）。导入是一次性快照：ARS 更新后需重新导入。导入的 skill 承载 ARS 方法论（研究／写作／评审协议）；Claude Code 专属机制——slash commands、hooks、subagent 编排——不会转移。详见 [docs/SETUP.md](docs/SETUP.md) Method 5。
 
 **用 Codex CLI？** 请安装姐妹版：[`Imbad0202/academic-research-skills-codex`](https://github.com/Imbad0202/academic-research-skills-codex)。同一套 workflow 内容，Codex 原生打包为单一 `$academic-research-suite` skill，提供 `ars-*` 别名。
 
 ## 性能与费用
 
-**👉 [docs/PERFORMANCE.md](docs/PERFORMANCE.md)** — 各模式 token 预算、完整 pipeline 估算（一篇 15k 字论文约 ~$4–6），以及建议的 Claude Code 设置（Skip Permissions；Agent Team 选用）。
+**👉 [docs/PERFORMANCE.md](docs/PERFORMANCE.md)** — 各模式 token 预算、完整 pipeline 估算（一篇 15k 字论文约 ~$4–6），以及建议的 Claude Code 设置（Auto 模式；Agent Team 选用）。
 
 ## 使用指南与文章
 
@@ -230,7 +232,7 @@ ARS Stage 2 写作      →  用验证过的实验结果撰写论文
 
 各 agent 的职责与各阶段产出物现已移至 [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)。版本号保留在此以维持 release metadata 集中管理。
 
-### Deep Research (v2.10.0)
+### Deep Research (v2.11.0)
 
 13 个 Agent 的研究团队。模式：full、quick、review、lit-review、three-way-scan、fact-check、socratic、systematic-review。完整 agent 名单与产出物：见 ARCHITECTURE.md §3。
 
@@ -242,7 +244,7 @@ ARS Stage 2 写作      →  用验证过的实验结果撰写论文
 
 7 个 Agent 的多视角审查，搭配 **0-100 质量量表**。模式：full、re-review、quick、methodology-focus、guided、calibration。**决策对照：** ≥80 接受、65-79 小修、50-64 大修、<50 退稿。第一轮审查团队 vs. 精简再审团队的分界：见 ARCHITECTURE.md §3 Stage 3 / Stage 3'。
 
-### Academic Pipeline (v3.12.1)
+### Academic Pipeline (v3.15.0)
 
 10 阶段调度器，含学术诚信验证、两阶段审查、苏格拉底指导、协作质量评估。Pipeline 保证：每个阶段都需用户确认 checkpoint；学术诚信验证（Stage 2.5 + 4.5）不可跳过；R&R 追溯矩阵（Schema 11）独立验证作者修订主张。v3.4 添加 Compliance Agent（PRISMA-trAIce + RAISE）于 Stage 2.5 / 4.5。v3.5 添加 **协作深度观察员**（`collaboration_depth_agent`，仅咨询性质、永不阻挡流程）于每一次 FULL/SLIM checkpoint 与 pipeline 完成时。MANDATORY 学术诚信闸门（2.5 / 4.5）明确跳过观察员，避免稀释合规检查。理论基础：Wang & Zhang (2026), IJETHE 23:11。逐阶段矩阵（agent、产出物、闸门）：见 ARCHITECTURE.md §3。
 
@@ -305,6 +307,18 @@ https://github.com/Imbad0202/academic-research-skills
 ---
 
 ## 更新纪录
+
+### v3.15.0（2026-07-04）— 发版闸门强化、prompt 债务清理第二轮、防漂移锁
+
+> 以发版纪律与质量卫生为主的版本；skill 行为无变更。**新增：**三道 CI 闸门 — CHANGELOG-covers-merges tag 前闸门（#483）、版本一致性 invariant 9-11 加 tag 时重跑闸门（#487）、把 SessionStart announce 清单钉到实际 16 个指令清单的 command-invariants 闸门（#486）— 以及两道防漂移锁：Phase Boundary enforcement 句在全部 23 个 Bucket A agent 区块逐字钉死、SETUP 跨模型示例与 canonical 型号表互相钉死（#491 → #492）。**变更：**prompt 债务清理第二轮深扫第一轮延后的 17 个 agent（#489 → #490）：修正两个 socratic_mentor 的活矛盾（过期的 15 轮劝退规则 vs 文档明载的典型 20-30 轮）、修正全仓库 29 处过期的 enforcement 状态句、修剪 7 个 agent 的 few-shot 与重复流程脚手架 — 经 4 批并行稽核 + 独立 codex 跨模型挑战验证；稽核报告在 `audits/`。**修复：**DOI 徽章改由 shields.io 提供（#482）。`academic-pipeline` 跟随套件版本至 v3.15.0；其他三个 skill 版本不变。
+
+### v3.14.0（2026-07-02）— Claude Science 可导入性、eval comment 呈现、prompt 债务清理
+
+> 一个以可移植性与打磨为主的 release，skill 行为无变更。**新增：** Claude Science 可导入性——marketplace manifest 显式声明 skill 路径，让无法穿越 symlink `skills/` 目录的 GitHub-API 导入器（Claude Science「Import from GitHub」、Windows checkout）能找到全部四个 skill；已在 Claude Science 端到端验证，README + SETUP 新增导入指南（#480）。eval-harness 的 PR comment 改为一行结论 + 逐任务表格、原始 JSON 折叠进 `<details>`，取代裸贴整份报告——仅显示层，gate 逻辑字节不变（#479）。**变更：** 依 2026-07 harness-retirement 审计，自四个写作面 agent 移除过期的 writing-harness scaffold（#476/#477 → #478，净 −111 行 prompt）；remind-don't-block 的 Platform Port Reminder 在 PR 新增顶层目录时提示 platform-ports 政策（#473）。**文档：** devCharlotte 母语审校的韩文 README（#469/#471）；GitHub Copilot repository instructions（#465）；建议 auto permission mode 取代 Skip Permissions（#464）。累积于 `[Unreleased]` 的 16 条积压条目（代码均在 v3.13.0 tag 前已上——diff/patch revision mode #390、submission-package verifier #394、eval gold sets #215/#216 等）并入版本记录；详见 `CHANGELOG.md`。`academic-pipeline` 随 suite 至 v3.14.0；其余三个 skill 版本不变。
+
+### v3.13.0（2026-06-18）— Hook 可移植性、provider-agnostic 验证、guard 正确性
+
+> 一个 minor release，强化安装／执行面并扩展跨模型范围。**修正：** 写入范围 guard 在 git-clone + symlink 安装布局下不再误挡使用者自己的 `CLAUDE.md`（#459，收掉 #448/#449 的残余一半——`CLAUDE.md` 是文档而非承载 enforcement 的档案，故移出 infra 保护清单，所有承载档案仍受保护）；Windows Python hook 可移植性 + 无 Python 时优雅降级，改由跨平台 `hooks/run_guard.sh` launcher 启动，会拒绝 0-byte 的 Microsoft Store `python3` stub 且不再洗 hook log（#454）；`draft_writer` dual-phase static union 文档化 + Windows POSIX-safe 路径匹配（#451）。**新增：** provider-agnostic 跨模型验证，接受 OpenAI 相容端点（MiMo、DeepSeek、自架）与 grounded first-party OpenAI 并存，且后者绝不被静默降级（#455）；opt-in 的 Socratic 邻近 framing probe（借自 STORM 的视角扩展，`ARS_SOCRATIC_ADJACENT_PROBE=1`，预设 OFF，纯 prose-layer——`deep-research` 2.10.0 → 2.11.0）（#461）。`academic-pipeline` 随 suite 至 v3.13.0；`academic-paper` 与 `academic-paper-reviewer` 不变。逐 issue 细节见 `CHANGELOG.md`。
 
 ### v3.12.1（2026-06-15）— 审稿回复分流模式（PR #433 整合）
 

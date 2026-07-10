@@ -1,16 +1,16 @@
 ---
 name: akademicheskaya-statya
 description: "Русскоязычный academic paper writing skill для Opencode. Используйте для планирования, структуры, черновика, аннотации, литературного обзора, ревизии, ответа рецензентам, проверки цитирования, ГОСТ/APA/IEEE/Vancouver оформления и disclosure научной статьи. Адаптировано из imbad0202/academic-research-skills под русский язык и Opencode task()."
-version: "3.12.1-ru.1"
-last_updated: "2026-06-16"
+version: "3.15.0-ru.1"
+last_updated: "2026-07-10"
 status: "active-russian-adapter"
 data_access_level: "user_materials_and_verified_sources"
 task_type: "writing"
 depends_on:
   - "akademicheskoe-issledovanie"
-upstream_snapshot: "88fc003e6abf5fe9fe86dc8200f8d4aa8d511956"
-upstream_version: "v3.12.1"
-upstream_date: "2026-06-17"
+upstream_snapshot: "ad0a7759cee9e7d2db5ca7ea1666096dea8e5d3c"
+upstream_version: "v3.15.0"
+upstream_date: "2026-07-08"
 ---
 
 # Академическая статья
@@ -18,7 +18,7 @@ upstream_date: "2026-06-17"
 Русскоязычная адаптация идей `academic-paper` из `imbad0202/academic-research-skills` для Opencode. Skill помогает спланировать, написать, переработать и оформить научную статью или главу диссертации.
 
 Источник адаптации: https://github.com/imbad0202/academic-research-skills
-Upstream snapshot: `88fc003e6abf5fe9fe86dc8200f8d4aa8d511956` (`v3.12.1`, 2026-06-17).
+Upstream snapshot: `ad0a7759cee9e7d2db5ca7ea1666096dea8e5d3c` (`v3.15.0`, 2026-07-08).
 Лицензия источника: Creative Commons Attribution-NonCommercial 4.0 International, Copyright (c) 2026 Cheng-I Wu.
 
 Локальные материалы:
@@ -83,6 +83,12 @@ Upstream snapshot: `88fc003e6abf5fe9fe86dc8200f8d4aa8d511956` (`v3.12.1`, 2026-0
 ```
 
 Не используйте Claude-style `@agent`. Все параллельные блоки оформляйте через Opencode task fan-out.
+
+### Phase boundary и write-scope guard (v3.15)
+
+В hook-enabled Claude Code runtime deterministic PreToolUse write-scope guard ограничивает single-phase agents разрешенными deliverables. На Windows он требует Git Bash и рабочий Python; отсутствие Python должно безопасно отключать optional guard, а не блокировать основную prompt-driven работу. В Opencode, Codex и других runtimes без hook сохраняйте те же границы в контракте `task()` и выполняйте post-task diff check после делегации. Guard - дополнительное hardening, а не замена citation/claim audit.
+
+Не разрешайте writing-agent менять review report, source-verification artifacts или pipeline state вне явно переданного write scope. При ambiguous cross-phase input сначала уточните режим.
 
 ## Процесс full-режима
 

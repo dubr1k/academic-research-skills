@@ -65,5 +65,22 @@ def test_russian_skills_keep_upstream_attribution():
     for path in skill_paths:
         text = path.read_text(encoding="utf-8")
         assert "https://github.com/imbad0202/academic-research-skills" in text.lower()
-        assert "88fc003e6abf5fe9fe86dc8200f8d4aa8d511956" in text
+        assert "ad0a7759cee9e7d2db5ca7ea1666096dea8e5d3c" in text
+        assert "v3.15.0" in text
         assert "Creative Commons Attribution-NonCommercial 4.0 International" in text
+
+
+def test_v315_features_are_adapted_across_all_four_russian_skills():
+    research = read_text("russian-academic-skills/akademicheskoe-issledovanie/SKILL.md")
+    paper = read_text("russian-academic-skills/akademicheskaya-statya/SKILL.md")
+    reviewer = read_text("russian-academic-skills/akademicheskii-retsenzent/SKILL.md")
+    pipeline = read_text("russian-academic-skills/akademicheskii-konveer/SKILL.md")
+
+    assert "Adjacent-framing probe (v3.15)" in research
+    assert "OPENALEX_API_KEY" in research
+    assert "budget" in research and "429" in research
+    assert "write-scope guard (v3.15)" in paper
+    assert "post-task diff" in paper
+    assert "write-scope guard" in reviewer and "READ-ONLY" in reviewer
+    assert "write_scope_guard: active|inactive|unsupported" in pipeline
+    assert "Stage 2.5/4.5" in pipeline

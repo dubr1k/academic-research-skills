@@ -1,15 +1,15 @@
 ---
 name: akademicheskii-retsenzent
 description: "Русскоязычный peer-review skill для Opencode. Используйте для независимой рецензии научной статьи, методологической проверки, pre-submission review, ВАК/журнальной оценки, re-review после правок и калибровки качества рецензирования. Адаптировано из imbad0202/academic-research-skills под русский язык и Opencode task()."
-version: "3.12.1-ru.1"
-last_updated: "2026-06-16"
+version: "3.15.0-ru.1"
+last_updated: "2026-07-10"
 status: "active-russian-adapter"
 data_access_level: "user_materials_with_optional_source_verification"
 task_type: "review"
 depends_on: []
-upstream_snapshot: "88fc003e6abf5fe9fe86dc8200f8d4aa8d511956"
-upstream_version: "v3.12.1"
-upstream_date: "2026-06-17"
+upstream_snapshot: "ad0a7759cee9e7d2db5ca7ea1666096dea8e5d3c"
+upstream_version: "v3.15.0"
+upstream_date: "2026-07-08"
 ---
 
 # Академический рецензент
@@ -17,7 +17,7 @@ upstream_date: "2026-06-17"
 Русскоязычная адаптация идей `academic-paper-reviewer` из `imbad0202/academic-research-skills` для Opencode. Skill имитирует независимую многоракурсную рецензию научной статьи и выдает редакционное решение с roadmap правок.
 
 Источник адаптации: https://github.com/imbad0202/academic-research-skills
-Upstream snapshot: `88fc003e6abf5fe9fe86dc8200f8d4aa8d511956` (`v3.12.1`, 2026-06-17).
+Upstream snapshot: `ad0a7759cee9e7d2db5ca7ea1666096dea8e5d3c` (`v3.15.0`, 2026-07-08).
 Лицензия источника: Creative Commons Attribution-NonCommercial 4.0 International, Copyright (c) 2026 Cheng-I Wu.
 
 Локальные материалы:
@@ -64,6 +64,8 @@ Upstream snapshot: `88fc003e6abf5fe9fe86dc8200f8d4aa8d511956` (`v3.12.1`, 2026-0
 6. Различайте `обязательные правки` и `желательные улучшения`.
 7. Не смешивайте journal-index status с качеством рукописи: РИНЦ/eLIBRARY/ВАК/Web of Science/Scopus status описывает venue, а novelty, rigor и evidence sufficiency описывают manuscript quality.
 8. В re-review нельзя помечать замечание resolved без page/section-level evidence из новой версии рукописи.
+9. Deterministic write-scope guard в hook-enabled runtimes усиливает READ-ONLY, но не является единственным контролем: при его graceful degradation reviewer все равно возвращает только review artifacts и не изменяет рукопись.
+10. Ambiguous cross-phase input сначала маршрутизируется на уточнение; нельзя превращать review в скрытый revision только потому, что в запросе есть оба типа материалов.
 
 ## Opencode orchestration
 

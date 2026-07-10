@@ -9,9 +9,19 @@
     {
       "name": "academic-research-skills",
       "source": "./",
-      "description": "8 skills: 4 upstream English skills and 4 Russian academic context adapters with `/ars-*` and `/ars-ru-*` command entrypoints.",
-      "version": "3.12.1",
-      "license": "CC-BY-NC-4.0"
+      "description": "8 skills: 4 upstream English skills and 4 Russian academic context adapters with /ars-* and /ars-ru-* entrypoints.",
+      "version": "3.15.0",
+      "license": "CC-BY-NC-4.0",
+      "skills": [
+        "./academic-paper",
+        "./academic-paper-reviewer",
+        "./academic-pipeline",
+        "./deep-research",
+        "./russian-academic-skills/akademicheskaya-statya",
+        "./russian-academic-skills/akademicheskii-konveer",
+        "./russian-academic-skills/akademicheskii-retsenzent",
+        "./russian-academic-skills/akademicheskoe-issledovanie"
+      ]
     }
   ]
 }

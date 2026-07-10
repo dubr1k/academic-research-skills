@@ -39,10 +39,13 @@ git fetch upstream
 
 5. Update the Russian adapter snapshot metadata after the upstream merge is accepted:
 
-   - set `upstream_snapshot` in every Russian `SKILL.md` to the upstream commit hash;
+   - set `upstream_snapshot` in every Russian `SKILL.md` to the exact upstream commit hash;
+   - set `upstream_version` and `upstream_date` from the tracked release/head;
    - update the visible `Upstream snapshot:` line in every Russian `SKILL.md`;
-   - update the snapshot badge and maintenance notes in `README.md` if the tracked upstream version changes;
-   - update `docs/skill-parity-matrix.md` when upstream capabilities change.
+   - refresh `README.en.md` from the same upstream commit;
+   - update root/Russian snapshot badges and both plugin manifest versions;
+   - preserve explicit marketplace paths for all four English and four Russian skills;
+   - update `docs/skill-parity-matrix.md` with a feature-by-feature adaptation decision.
 
 ## Russian Adapter Review
 
@@ -70,14 +73,18 @@ This fork uses one bilingual plugin bundle rather than a separate Russian plugin
 Run targeted bilingual checks first:
 
 ```bash
-pytest tests/test_bilingual_docs.py tests/test_russian_entrypoints.py
-pytest tests/test_bilingual_plugin_packaging.py
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest tests/test_bilingual_docs.py tests/test_russian_entrypoints.py
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest tests/test_bilingual_plugin_packaging.py
+python scripts/check_version_consistency.py
+python scripts/check_spec_consistency.py
+python scripts/check_setup_cross_model_parity.py
+python tools/release-discipline/scripts/check_command_invariants.py
 ```
 
-Then run the full suite:
+Then run every test file listed by the CI pytest manifest and the full suite. If globally installed pytest plugins conflict with the repository, keep `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1`; do not change project dependencies merely to satisfy an unrelated external plugin.
 
 ```bash
-pytest
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest
 ```
 
 Before committing, verify:

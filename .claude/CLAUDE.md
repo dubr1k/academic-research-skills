@@ -6,10 +6,34 @@ A suite of Claude Code skills for rigorous academic research, paper writing, pee
 
 | Skill | Purpose | Key Modes |
 |-------|---------|-----------|
-| `deep-research` v2.10.0 | 13-agent research team | full, quick, socratic, review, lit-review, three-way-scan, fact-check, systematic-review |
+| `deep-research` v2.11.0 | 13-agent research team | full, quick, socratic, review, lit-review, three-way-scan, fact-check, systematic-review |
 | `academic-paper` v3.2.0 | 12-agent paper writing | full, plan, outline-only, revision, revision-coach, abstract-only, lit-review, format-convert, citation-check, disclosure, rebuttal-audit |
 | `academic-paper-reviewer` v1.10.0 | Multi-perspective paper review (5 reviewers + optional cross-model DA critique) | full, re-review, quick, methodology-focus, guided, calibration |
-| `academic-pipeline` v3.12.1 | Full pipeline orchestrator | (coordinates all above) |
+| `academic-pipeline` v3.15.0 | Full pipeline orchestrator | (coordinates all above) |
+
+## v3.15 Key Additions (release-gate hardening + prompt-debt retirement round 2 + defrift locks)
+
+- **Prompt-debt retirement round 2 (#489 → #490).** Deep-scanned the 17 agents the #476 pass deferred (all 5 academic-pipeline, 5 deep-research, 5 academic-paper, field_analyst, compliance_agent) via 4 parallel batches + codex cross-model challenge. 13 findings (2 P1 + 11 P2, 2 user-rejected): both `socratic_mentor` agents carried live self-contradictions (stale "quit after 15 rounds" vs documented typical 20-30) — auto-end machinery merged to a single authority per file, threshold 30; the repo-wide stale "hook deferred to #134" enforcement sentence (false since PR #294) rewritten at 29 surfaces; few-shot/duplication trims across 7 agents. The 2026-06-10 F-007 negative-framing deferred item closes as verified-no-rewrite-needed. Report: `audits/harness-retirement-2026-07-04.md`.
+- **Defrift locks (#491 → #492).** `check_v3_9_2_phase_boundary.py` invariant 4 pins the canonical enforcement sentence verbatim across all 23 Bucket A blocks (the drift class that sat wrong for a month now fails CI); new `check_setup_cross_model_parity.py` pins SETUP en/zh-TW `ARS_CROSS_MODEL` examples to each other and to the canonical model tables (table-column-scoped after a codex P1); local pytest manifest gains the v3.9.4 temporal test whose CI-only coverage caused a local-green/CI-red split (58 → 60 entries).
+- **Release-gate hardening (#483, #487, #486).** `check_changelog_covers_merges.py` pre-tag gate (every release-worthy merge since the previous tag must be documented in CHANGELOG, fail-closed); version-consistency invariants 9-11 (release-notes body ≥100 chars, Last-Updated within ±7 days of the CHANGELOG date, Key-Additions heading matches suite version) + a `tag-version-match.yml` gate re-running the full lint at tag time; command-invariants gate pinning the SessionStart announce list to the actual 16-command inventory (announce list had drifted twice).
+- **DOI badge fix (#482).** Served from shields.io (Zenodo's badge endpoint rate-limits GitHub's image proxy); link target stays the concept DOI.
+
+## v3.14 Key Additions (Claude Science importability + eval-comment rendering + prompt-debt retirement)
+
+- **Claude Science / GitHub-importer compatibility (#480).** `.claude-plugin/marketplace.json` declares explicit skill paths (`"skills": [...]`); symlink-blind GitHub-API importers (Claude Science "Import from GitHub", Windows checkouts) now find all four skills. Marketplace-root replace semantics keep Claude Code installs loading the same four skills — no content change, no double-loading. Verified end-to-end on Claude Science; import guide in README + docs/SETUP.md Method 5.
+- **Eval-harness PR comment renderer (#479).** `scripts/render_eval_comment.py` renders a one-line verdict + per-task table + raw JSON folded into `<details>`, replacing the raw report dump. The row verdict mirrors the threshold gate's failure signal (aggregate AND per-class) with a CI-pinned agreement test; table cells escape pipes/line boundaries. Evaluation logic untouched.
+- **Prompt-debt retirement (#476/#477 → #478).** Expired writing-harness scaffolds removed from `abstract_bilingual_agent`, `citation_compliance_agent`, `draft_writer_agent`, and `research_question_agent` (net −111 lines) after the 2026-07 harness-retirement audit (report under `audits/`); three-track verification (sub-agent audit + codex review + eval harness at 100%).
+- **Platform Port Reminder CI (#473).** Remind-don't-block workflow surfacing the "Platform ports (community-maintained only)" policy when a PR adds a new top-level directory.
+- **Changelog backlog rollup.** 16 `[Unreleased]` entries whose code shipped before the v3.13.0 tag (#390 diff/patch revision mode, #394 submission-package verifier, #215/#216 eval gold sets, and more) are versioned under 3.14.0 with a provenance note.
+
+## v3.13 Key Additions (portability + verifier reach + guard correctness)
+
+- **Write-scope guard: `CLAUDE.md` dropped from infra-protected globs (#459).** Closes the residual half of #448/#449. Under the git-clone + symlink install layout `plugin_root` collapses onto `workspace_root`, so the bare `CLAUDE.md` / `.claude/CLAUDE.md` infra globs re-denied the user's own `CLAUDE.md`. `CLAUDE.md` is documentation, not a load-bearing enforcement file, so it is removed from the infra list; every load-bearing file (guard script, manifest, hooks, plugin metadata, agent frontmatter, lint) stays protected.
+- **Windows Python hook portability + graceful no-Python degradation (#454).** The PreToolUse write-scope guard is now launched via a cross-platform `hooks/run_guard.sh` that finds a real interpreter (rejecting the 0-byte Microsoft Store `python3` stub) and runs the guard as a time-bounded supervised subprocess; if no interpreter is found or the guard misbehaves, the launcher emits a valid pass-through and never spams the hook log.
+- **Provider-agnostic cross-model verification (#455).** The cross-model verification layer accepts OpenAI-compatible endpoints (MiMo, DeepSeek, self-hosted) alongside first-party OpenAI, with the grounded first-party path preserved and never silently downgraded.
+- **Opt-in Socratic adjacent-framing probe (#461; `deep-research` 2.10.0 → 2.11.0).** When `ARS_SOCRATIC_ADJACENT_PROBE=1`, the Socratic Mentor may surface ONE adjacent research framing as a pure question during exploratory Layer-1 framing (STORM-borrowed perspective expansion). Default OFF, prose-layer only, Kong L2 verb-test bounded.
+
+Spec: `docs/design/2026-06-16-448-infra-protection-plugin-root-scope-spec.md` (+ the #454/#453/adjacent-probe design docs).
 
 ## v3.12 Key Additions (Kong auto-research feature track + partial-evidence decomposition)
 
@@ -272,7 +296,7 @@ Materials: Complete paper text. field_analyst_agent auto-detects domain and conf
 Materials: Editorial Decision Letter, Revision Roadmap, Per-reviewer detailed comments
 
 ## Version Info
-- **Suite version**: 3.12.1 (per CHANGELOG.md)
-- **Last Updated**: 2026-06-15
+- **Suite version**: 3.15.0 (per CHANGELOG.md)
+- **Last Updated**: 2026-07-04
 - **Author**: Cheng-I Wu
 - **License**: CC-BY-NC 4.0

@@ -1,15 +1,15 @@
 ---
 name: akademicheskoe-issledovanie
 description: "Русскоязычный academic research skill для Opencode. Используйте для научного исследования, обзора литературы, systematic review, meta-analysis, fact-check, проверки источников, формулировки исследовательского вопроса и сократического прояснения темы. Адаптировано из imbad0202/academic-research-skills под русский язык, ГОСТ и Opencode task()."
-version: "3.12.1-ru.1"
-last_updated: "2026-06-16"
+version: "3.15.0-ru.1"
+last_updated: "2026-07-10"
 status: "active-russian-adapter"
 data_access_level: "external_sources_with_verification"
 task_type: "research"
 depends_on: []
-upstream_snapshot: "88fc003e6abf5fe9fe86dc8200f8d4aa8d511956"
-upstream_version: "v3.12.1"
-upstream_date: "2026-06-17"
+upstream_snapshot: "ad0a7759cee9e7d2db5ca7ea1666096dea8e5d3c"
+upstream_version: "v3.15.0"
+upstream_date: "2026-07-08"
 ---
 
 # Академическое исследование
@@ -17,7 +17,7 @@ upstream_date: "2026-06-17"
 Русскоязычная адаптация идей `deep-research` из `imbad0202/academic-research-skills` для Opencode. Skill помогает провести исследование от неясной темы до проверенного обзора, исследовательского плана или отчета.
 
 Источник адаптации: https://github.com/imbad0202/academic-research-skills
-Upstream snapshot: `88fc003e6abf5fe9fe86dc8200f8d4aa8d511956` (`v3.12.1`, 2026-06-17).
+Upstream snapshot: `ad0a7759cee9e7d2db5ca7ea1666096dea8e5d3c` (`v3.15.0`, 2026-07-08).
 Лицензия источника: Creative Commons Attribution-NonCommercial 4.0 International, Copyright (c) 2026 Cheng-I Wu.
 
 Локальные материалы:
@@ -246,6 +246,16 @@ Integrity floor: если есть явный undisclosed conflict или фал
 4. Perspective: как это увидит другая дисциплина или школа?
 5. Consequence: что изменится, если вывод верен?
 6. Questioning the question: не задает ли сам вопрос неверную рамку?
+
+### Adjacent-framing probe (v3.15)
+
+После первичной формулировки RQ предложите 2-4 соседние рамки: другой уровень анализа, соседнюю дисциплину, альтернативный механизм или другую группу стейкхолдеров. Для каждой рамки укажите, какое допущение она проверяет и какие новые источники или данные потребуются. Это advisory probe: он не заменяет выбранный пользователем RQ и не расширяет scope без подтверждения.
+
+В российском контексте отдельно проверьте, не скрывает ли исходная рамка различия между федеральным и региональным уровнем, нормативным статусом и практикой, ВАК/РИНЦ visibility и собственно научным качеством.
+
+### API verification discipline (v3.15)
+
+При автоматизированной проверке поддерживайте `OPENALEX_API_KEY`, если ключ предоставлен окружением; никогда не просите вставлять его в отчет. Для `429` учитывайте оставшийся request/time budget и прекращайте повторы, если следующий backoff его исчерпает. Для arXiv соблюдайте ToU-aligned backoff. Исчерпанный бюджет означает `partially_verified` или `inaccessible`, а не ложный `verified_current`.
 
 Слои диалога:
 

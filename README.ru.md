@@ -1,7 +1,7 @@
 # Русские академические навыки для Claude Code и Opencode
 
 [![Исходный проект](https://img.shields.io/badge/upstream-Imbad0202%2Facademic--research--skills-blue)](https://github.com/Imbad0202/academic-research-skills)
-[![Снимок](https://img.shields.io/badge/snapshot-v3.12.0%20%2F%20175f79b-lightgrey)](https://github.com/Imbad0202/academic-research-skills/commit/175f79bcca4467949fa94e410c25823bd574f687)
+[![Снимок](https://img.shields.io/badge/snapshot-v3.15.0%20%2F%20ad0a775-lightgrey)](https://github.com/Imbad0202/academic-research-skills/commit/ad0a7759cee9e7d2db5ca7ea1666096dea8e5d3c)
 [![Лицензия: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
 
 Русскоязычная адаптация идей из проекта [`Imbad0202/academic-research-skills`](https://github.com/Imbad0202/academic-research-skills) для научной работы в Claude Code и Opencode.

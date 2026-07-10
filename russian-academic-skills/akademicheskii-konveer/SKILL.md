@@ -1,8 +1,8 @@
 ---
 name: akademicheskii-konveer
 description: "Русскоязычный academic pipeline orchestrator skill для Opencode. Используйте для полного цикла research -> paper -> integrity check -> review -> revision -> re-review -> finalization. Координирует akademicheskoe-issledovanie, akademicheskaya-statya и akademicheskii-retsenzent. Адаптировано из imbad0202/academic-research-skills под русский язык и Opencode task()."
-version: "3.12.1-ru.1"
-last_updated: "2026-06-16"
+version: "3.15.0-ru.1"
+last_updated: "2026-07-10"
 status: "active-russian-adapter"
 data_access_level: "orchestrates_user_materials_and_verified_sources"
 task_type: "pipeline"
@@ -10,9 +10,9 @@ depends_on:
   - "akademicheskoe-issledovanie"
   - "akademicheskaya-statya"
   - "akademicheskii-retsenzent"
-upstream_snapshot: "88fc003e6abf5fe9fe86dc8200f8d4aa8d511956"
-upstream_version: "v3.12.1"
-upstream_date: "2026-06-17"
+upstream_snapshot: "ad0a7759cee9e7d2db5ca7ea1666096dea8e5d3c"
+upstream_version: "v3.15.0"
+upstream_date: "2026-07-08"
 ---
 
 # Академический конвейер
@@ -20,7 +20,7 @@ upstream_date: "2026-06-17"
 Русскоязычная адаптация идей `academic-pipeline` из `imbad0202/academic-research-skills` для Opencode. Skill не выполняет всю содержательную работу сам: он определяет стадию, выбирает режим, загружает нужные skills, управляет checkpoint-ами, integrity gates и bilingual handoff state.
 
 Источник адаптации: https://github.com/imbad0202/academic-research-skills
-Upstream snapshot: `88fc003e6abf5fe9fe86dc8200f8d4aa8d511956` (`v3.12.1`, 2026-06-17).
+Upstream snapshot: `ad0a7759cee9e7d2db5ca7ea1666096dea8e5d3c` (`v3.15.0`, 2026-07-08).
 Лицензия источника: Creative Commons Attribution-NonCommercial 4.0 International, Copyright (c) 2026 Cheng-I Wu.
 
 Локальные материалы:
@@ -76,6 +76,12 @@ Upstream snapshot: `88fc003e6abf5fe9fe86dc8200f8d4aa8d511956` (`v3.12.1`, 2026-0
 | Есть финальный текст | Stage 4.5 Final Integrity или Stage 5 Finalize |
 
 Если entry point неясен, задайте один вопрос: `Какие материалы уже есть: тема, список источников, черновик, замечания рецензентов или финальный текст?`
+
+### Runtime enforcement state (v3.15)
+
+В hook-enabled Claude Code deterministic write-scope guard ограничивает single-phase agents. На Windows launcher использует Git Bash и рабочий Python; если Python отсутствует, optional guard cleanly no-op. Оркестратор обязан явно записать `write_scope_guard: active|inactive|unsupported` в runtime state, но не должен считать inactive guard integrity failure: обязательные Stage 2.5/4.5, handoff contracts и post-task diff checks остаются в силе во всех runtimes.
+
+Для Opencode/Codex передавайте allowlist artifacts в каждом `task()` и проверяйте, что агент не изменил чужую фазу. Ambiguous cross-phase materials должны попасть в clarification до делегации, а не в автоматический multi-phase run.
 
 ## 10 стадий
 

@@ -1,7 +1,7 @@
 {
   "name": "academic-research-skills",
-  "version": "3.12.1",
-  "description": "Bilingual Academic Research Skills bundle for Claude Code: preserves the upstream English research, writing, review, and pipeline workflows while adding Russian ГОСТ, ВАК, РИНЦ/eLIBRARY, CyberLeninka, and mixed RU/EN academic context adapters.",
+  "version": "3.15.0",
+  "description": "Bilingual Academic Research Skills bundle for Claude Code: upstream English research, writing, review, and pipeline workflows plus Russian ГОСТ, ВАК, РИНЦ/eLIBRARY, CyberLeninka, and mixed RU/EN context adapters.",
   "author": {
     "name": "Cheng-I Wu; Russian adaptation by dubr1k",
     "url": "https://github.com/dubr1k"
@@ -10,19 +10,9 @@
   "repository": "https://github.com/dubr1k/academic-research-skills",
   "license": "CC-BY-NC-4.0",
   "keywords": [
-    "academic",
-    "research",
-    "writing",
-    "review",
-    "deep-research",
-    "literature-review",
-    "systematic-review",
-    "peer-review",
-    "scholarly-publishing",
-    "russian-academic-writing",
-    "gost",
-    "vak",
-    "rinc",
-    "bilingual"
+    "academic", "research", "writing", "review", "deep-research",
+    "literature-review", "systematic-review", "peer-review",
+    "scholarly-publishing", "russian-academic-writing", "gost", "vak",
+    "rinc", "bilingual"
   ]
 }
