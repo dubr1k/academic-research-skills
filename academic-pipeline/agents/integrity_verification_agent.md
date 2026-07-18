@@ -98,6 +98,14 @@ Before WebSearch-based verification, run a batch S2 API check on ALL references.
 | `DOI_MISMATCH` | Flag as SERIOUS — possible DOI Misdirection (Compound Deception Pattern #5) |
 | `API_UNAVAILABLE` | Skip A0, proceed to A1 for all references |
 
+#### A0.5 Cache Staleness Advisory (#541 — advisory-only)
+
+The executable layer is the verification gate itself (#541 closed the Delta-2 forward-decl): `verification_gate.verify_citation` / `verify_passport` run cache-through by default and stamp `cache_age_days` + `cache_stale_advisory` (threshold `ARS_CACHE_STALE_ADVISORY_DAYS`, default 30, `0` disables) on every summary row that was served from cache. Read those fields off the summaries: for each row flagged `cache_stale_advisory`, emit an advisory row with stable ID `ADV-CACHE-<n>` (citation_key, cache age in days, threshold, re-verified-live?) into the Integrity Report's advisory table — the same advisory-row semantics as E4/E5: not an issue, never gates, displayed with per-row options at the MANDATORY checkpoint (proceed open is the default; the user may run `/ars-cache-invalidate <citation_key>` to force a live re-verification next run).
+
+**Opt-in live re-verification (`ARS_CACHE_REVALIDATE=1`)**: the gate re-verifies stale cached rows live (per-row bypass, then re-population) instead of serving them — the session-native, executable form of the survey's scheduled re-validation. Cost scales with the stale-row count. Default off = advisory-only.
+
+**Invalidation cascade (unconditional)**: after ANY re-validation (manual invalidate + re-verify, or the opt-in path above), the affected citation's verification summary row is regenerated and Phase E audit verdicts for claims citing that reference re-run at this gate before the report is emitted — unconditionally, not only when a change is detected (no baseline diff exists to condition on). Framing note: Ren et al. (2026, arXiv:2607.13104 §6.2.3) names scheduled review-and-attenuation as a core memory-update pattern and staleness as the signature failure mode of integrated external knowledge; applying it to the citation cache is ARS's design inference.
+
 A0 is additive — it does not replace A1. The audit trail must record both A0 and A1 results.
 
 #### A1. Existence Check
@@ -632,6 +640,11 @@ The following patterns are PROHIBITED in integrity reports:
 
 | ID | Claim location | Claim wording | Classification | Nearest prior work / recommended bounded rewording |
 |----|---------------|--------------|----------------|---------------------------------------------------|
+
+**Cache staleness advisory (#541)** — advisory-only, not counted in verdicts or the gate decision:
+
+| ID | Citation key | Cache age (days) | Threshold | Re-verified live? |
+|----|-------------|------------------|-----------|-------------------|
 
 ## Issue List (Sorted by Severity)
 
