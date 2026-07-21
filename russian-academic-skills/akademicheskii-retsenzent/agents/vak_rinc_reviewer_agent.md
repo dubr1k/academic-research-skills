@@ -38,6 +38,10 @@ Keep journal-index status separate from manuscript quality. Venue/index facts ca
 - Review context: ВАК article, dissertation council, or international journal.
 - Re-review status: `addressed`, `partially_addressed`, `not_addressed`, `needs_evidence`.
 - Page/section-level traceability before marking any reviewer comment resolved; page/section-level evidence is mandatory.
+- Full review uses the fixed five-seat panel; preserve `Review Panel Provenance` and never call persona diversity model diversity.
+- Cross-model Reviewer 2 is allowed only in full mode after explicit external-provider consent; record single-family fallback.
+- Re-review produces a `Judge Record` with Round-1 provenance, verification model/provider, evidence seen, rubric/prompt, cross-model state, and a correlated-blind-spot caveat when independent judging is unavailable.
+- Divergence between primary and cross-model verdicts triggers review; it is not a vote and never silently overwrites the primary verdict.
 
 ## Context-Specific Criteria
 
@@ -89,4 +93,11 @@ Accept / Minor Revision / Major Revision / Reject and Resubmit / Reject
 |---|---|---|---|---|
 
 Allowed status values: `addressed`, `partially_addressed`, `not_addressed`, `needs_evidence`.
+
+### Review Panel Provenance / Judge Record
+Round-1 panel family/provider:
+Re-review judge family/provider:
+Cross-model consent/state:
+Evidence and rubric seen:
+Single-family caveat:
 ```

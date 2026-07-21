@@ -2,16 +2,16 @@
 
 This matrix tracks how the Russian adapter layer maps to the upstream Academic Research Skills package.
 
-Upstream snapshot for the current Russian layer: `ad0a7759cee9e7d2db5ca7ea1666096dea8e5d3c` (`v3.15.0`, 2026-07-08).
+Upstream snapshot for the current Russian layer: `f5402b114d5c997ac00505d0fb9285cd392ae313` (`v3.18.0`, 2026-07-20).
 
 ## Summary
 
-| Upstream skill | Russian adapter | Current status | v3.15 adaptation |
+| Upstream skill | Russian adapter | Current status | v3.18 adaptation |
 |---|---|---|---|
-| `deep-research` | `akademicheskoe-issledovanie` | Active compact adapter | Adjacent-framing probe adapted for Russian institutional/regional frames; OpenAlex API-key, budget-aware 429 and arXiv backoff semantics preserve fail-closed source status. |
-| `academic-paper` | `akademicheskaya-statya` | Active compact adapter | Write-scope/phase-boundary rules mapped to Claude hooks and explicit Opencode/Codex task allowlists; optional guard never replaces citation/claim audit. |
-| `academic-paper-reviewer` | `akademicheskii-retsenzent` | Active compact adapter | READ-ONLY contract remains effective when optional hook degrades; ambiguous review/revision inputs require clarification. |
-| `academic-pipeline` | `akademicheskii-konveer` | Active compact adapter | Runtime guard state is carried explicitly while mandatory Stage 2.5/4.5 and RU/EN handoff gates remain runtime-independent. |
+| `deep-research` | `akademicheskoe-issledovanie` | Active compact adapter | Per-sub-question scope bindings, search-bounded novelty, cache staleness/live re-validation and PDF `read_scope` fail-closed semantics adapted for RU sources and institutions. |
+| `academic-paper` | `akademicheskaya-statya` | Active compact adapter | CARS/title checks, search-bounded novelty, scope-preserving drafting and consent-aware model routing adapted to Russian academic prose. |
+| `academic-paper-reviewer` | `akademicheskii-retsenzent` | Active compact adapter | Fixed five-seat panel, panel provenance, consent-bound cross-model Reviewer 2 and independent re-review `Judge Record` preserved. |
+| `academic-pipeline` | `akademicheskii-konveer` | Active compact adapter | Risk-stratified Stage 2.5, full Stage 4.5, PDF/read attestation, Stage 5/6 boundaries, cache/scope/novelty carryover and model routing adapted. |
 
 ## Preserved Upstream Core
 
@@ -45,6 +45,19 @@ The Russian adapters add context-specific behavior rather than translating every
 | Explicit marketplace skill paths | Preserved and extended | Manifest explicitly lists all four English and all four Russian skills | Extended |
 | SETUP/command/release invariant gates | Preserved | Bilingual metadata/version tests and sync checklist run alongside upstream validators | Extended |
 | `THIRD_PARTY.md` and Korean README | Preserved | Root bilingual README links both without changing attribution/endorsement semantics | Documented |
+
+## v3.16-v3.18 Capability Review
+
+| Upstream change | English core | Russian adapter action | Parity |
+|---|---|---|---|
+| Model tiering and hardened cross-model checkpoints | Preserved verbatim upstream | Relative execution/judgment routing documented; external-provider manuscript transfer requires explicit consent | Adapted |
+| Per-sub-question scope bindings and scope-conformance advisory | Preserved | Russian geography, institution type, education level and VAK specialty cannot broaden silently | Adapted |
+| Search-bounded novelty claims | Preserved | RU/EN database, language and venue limits must remain visible; no global novelty from local-only search | Adapted |
+| Citation-cache staleness and opt-in live re-validation | Preserved | Current VAK/RINC/eLIBRARY and legal/normative status is revalidated before final claims | Adapted |
+| Fixed five-seat reviewer panel, cross-model Reviewer 2 and independent re-review judge | Preserved | Panel provenance and `Judge Record` required; persona diversity is not model diversity | Adapted |
+| Risk-stratified Stage 2.5 and 100% Stage 4.5 | Preserved | HIGH-IMPACT/RANDOM/TOP-UP tiers and full final verification are explicit in RU pipeline | Adapted |
+| PDF preflight, anchor-aware finalizer and `read_scope` attestation | Preserved | `manual_pdf` page claims fail closed without matching preflight and actual read evidence | Adapted |
+| Stage 5 checkpoint and Stage 6 terminal semantics | Preserved | RU pipeline separates entry, delivery acceptance, optional process record and terminal acknowledgement | Adapted |
 
 ## Gap List
 

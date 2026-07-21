@@ -78,7 +78,7 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest tests/test_bilingual_plugin_packaging.py
 python scripts/check_version_consistency.py
 python scripts/check_spec_consistency.py
 python scripts/check_setup_cross_model_parity.py
-python tools/release-discipline/scripts/check_command_invariants.py
+python tools/release-discipline/scripts/check_command_invariants.py --manifest .command-invariants.toml
 ```
 
 Then run every test file listed by the CI pytest manifest and the full suite. If globally installed pytest plugins conflict with the repository, keep `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1`; do not change project dependencies merely to satisfy an unrelated external plugin.

@@ -14,12 +14,17 @@ EXPECTED_ASSETS = {
             "not_verified",
             "metadata_missing",
             "verification ladder",
+            "staleness advisory",
+            "read_scope",
+            "PDF preflight",
         ],
         "templates/literature-matrix-gost.md": [
             "Source language",
             "Source system",
             "Current status evidence",
             "ГОСТ Draft Entry",
+            "Nearest prior work",
+            "ref_retrieval_method",
         ],
     },
     "akademicheskaya-statya": {
@@ -76,6 +81,8 @@ EXPECTED_ASSETS = {
             "output_language",
             "final_package_mode",
             "shared agent context audit",
+            "risk_stratified_claim_tiers",
+            "re_review_judge_record",
         ],
         "templates/pipeline-dashboard.md": [
             "Russian Academic Pipeline Dashboard",

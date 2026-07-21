@@ -50,6 +50,10 @@ source_verification_state:
     unresolved_risks: []
   last_gate: "none|stage_2_5|stage_4_5"
   carryover_required: true
+  cache_freshness: "fresh|stale|live_revalidated|not_applicable"
+  pdf_preflight_sidecars: []
+  human_read_ledger: "path-or-null"
+  read_scope_attestation: "complete|partial|missing|not_applicable"
 ```
 
 Carryover rules:
@@ -60,6 +64,8 @@ Carryover rules:
 - Stage 3 receives unresolved source risks so reviewers can distinguish content issues from evidence issues.
 - Stage 4 must update the state when claims, citations, bibliography, tables, or source scope change.
 - Stage 4.5 updates `last_gate: stage_4_5` and blocks finalization on fabricated sources, unsupported claims, or untraceable data.
+- Parent RQ and per-sub-question scope bindings survive every stage; deviations require explicit user approval.
+- Search-bounded novelty provenance, cache freshness, PDF preflight and actual `read_scope` cannot be dropped at handoff.
 
 ## Gate And Checkpoint Carryover
 
@@ -71,6 +77,9 @@ gate_carryover:
   stage_4_5: "pending|pass|pass_with_notes|fail"
   blocking_issues: []
   open_reviewer_concerns: []
+  risk_stratified_claim_tiers: []
+  review_panel_provenance: {}
+  re_review_judge_record: {}
 checkpoint_carryover:
   checkpoint_type: "full|slim|mandatory"
   last_checkpoint: "entry|stage_complete|integrity_fail|review_decision|finalization"
@@ -133,6 +142,7 @@ Minimum acceptance:
 
 - `fail` cannot route to Stage 3 without a fix-and-reverify loop;
 - `pass_with_notes` carries notes into review and revision instead of dropping them.
+- Stage 2.5 records `HIGH-IMPACT`, `RANDOM`, `TOP-UP`, and `NOT-SELECTED`; Stage 4.5 independently verifies 100% of claims.
 
 ### Review -> Revision
 
@@ -162,12 +172,14 @@ Deliver:
 - changed claims/citations/source additions;
 - updated source verification state;
 - open reviewer concerns.
+- Editorial Decision Letter with `Review Panel Provenance` for the independent `Judge Record`.
 
 Minimum acceptance:
 
 - closed concerns cite manuscript locations or response evidence;
 - new claims or sources introduced during revision are marked for final integrity;
 - unresolved source risks carry into Stage 4.5 even if reviewers accept the revision.
+- single-family re-review keeps the correlated-blind-spot caveat visible.
 
 ### Final Integrity -> Finalization
 
@@ -180,6 +192,7 @@ Deliver:
 - final source verification state;
 - final package mode: `RU`, `EN`, or `bilingual`;
 - output file/package checklist.
+- Stage 5 entry checkpoint decision, final-paper FULL completion checkpoint, and Stage 6 `completed|skipped|pending_acknowledgement` state.
 
 Minimum acceptance:
 

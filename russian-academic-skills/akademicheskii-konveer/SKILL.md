@@ -1,8 +1,8 @@
 ---
 name: akademicheskii-konveer
 description: "Русскоязычный academic pipeline orchestrator skill для Opencode. Используйте для полного цикла research -> paper -> integrity check -> review -> revision -> re-review -> finalization. Координирует akademicheskoe-issledovanie, akademicheskaya-statya и akademicheskii-retsenzent. Адаптировано из imbad0202/academic-research-skills под русский язык и Opencode task()."
-version: "3.15.0-ru.1"
-last_updated: "2026-07-10"
+version: "3.18.0-ru.1"
+last_updated: "2026-07-21"
 status: "active-russian-adapter"
 data_access_level: "orchestrates_user_materials_and_verified_sources"
 task_type: "pipeline"
@@ -10,9 +10,9 @@ depends_on:
   - "akademicheskoe-issledovanie"
   - "akademicheskaya-statya"
   - "akademicheskii-retsenzent"
-upstream_snapshot: "ad0a7759cee9e7d2db5ca7ea1666096dea8e5d3c"
-upstream_version: "v3.15.0"
-upstream_date: "2026-07-08"
+upstream_snapshot: "f5402b114d5c997ac00505d0fb9285cd392ae313"
+upstream_version: "v3.18.0"
+upstream_date: "2026-07-20"
 ---
 
 # Академический конвейер
@@ -20,7 +20,7 @@ upstream_date: "2026-07-08"
 Русскоязычная адаптация идей `academic-pipeline` из `imbad0202/academic-research-skills` для Opencode. Skill не выполняет всю содержательную работу сам: он определяет стадию, выбирает режим, загружает нужные skills, управляет checkpoint-ами, integrity gates и bilingual handoff state.
 
 Источник адаптации: https://github.com/imbad0202/academic-research-skills
-Upstream snapshot: `ad0a7759cee9e7d2db5ca7ea1666096dea8e5d3c` (`v3.15.0`, 2026-07-08).
+Upstream snapshot: `f5402b114d5c997ac00505d0fb9285cd392ae313` (`v3.18.0`, 2026-07-20).
 Лицензия источника: Creative Commons Attribution-NonCommercial 4.0 International, Copyright (c) 2026 Cheng-I Wu.
 
 Локальные материалы:
@@ -282,6 +282,18 @@ Stage 4.5 проверяет с нуля, а не только старые пр
 - final `source_verification_state` и remaining manual checks.
 
 Подробный contract: `references/bilingual-handoff-contracts.md`.
+
+## Upstream v3.16-v3.18 integrity carryover
+
+1. **Stage 2.5 risk-stratified claim check:** проверяйте 100% `HIGH-IMPACT` claims (headline, numerical, causal, methods-critical, disputed), 10% случайного остатка и доводите выборку минимум до `min(10, total claims)`; для текста с менее чем 10 claims проверяйте все. Tier каждой claim фиксируется в registry.
+2. **Stage 4.5:** выполняйте независимую проверку 100% claims с нуля. Исправление прежних findings не заменяет поиск новых проблем.
+3. **Scope conformance:** handoff несет parent RQ и per-sub-question scope bindings. Любое расширение региона, периода, популяции, образовательного уровня или ВАК-специальности без user-approved deviation блокирует переход.
+4. **Novelty:** отсутствие/новизна привязаны к Search Strategy и ближайшей prior work. Ограниченный RU/EN поиск нельзя представлять как исчерпывающий мировой приоритет.
+5. **Citation cache:** staleness advisory переносится между стадиями; для текущего статуса ВАК/РИНЦ/eLIBRARY и других time-sensitive claims перед финалом нужна live re-validation.
+6. **PDF/read integrity:** `manual_pdf` + page anchors требуют preflight sidecar и фактического `read_scope`. Anchor-aware finalizer не повышает citation provenance, если заявленные страницы не прочитаны или attestation неполна.
+7. **Re-review independence:** Stage 4 -> 3' передает Editorial Decision Letter с `Review Panel Provenance`; Stage 3' возвращает `Judge Record` и caveat, если независимую model-family проверку обеспечить нельзя.
+8. **Stage 5/6 semantics:** после Stage 4.5 PASS обязателен отдельный Stage 5 entry checkpoint; после доставки final paper — FULL completion checkpoint. Stage 6 пользователь может пропустить; если он запущен, `completed` наступает только после process record и terminal acknowledgement.
+9. **Model routing:** unset наследует session model; `economy` понижает только execution роли до установленного floor; `quality-boost` повышает judgment/checkpoint роли. Cross-model dispatch требует отдельного consent на внешний provider.
 
 ## Global/shared agent audit before delegation
 

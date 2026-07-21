@@ -1,15 +1,15 @@
 ---
 name: akademicheskii-retsenzent
 description: "Русскоязычный peer-review skill для Opencode. Используйте для независимой рецензии научной статьи, методологической проверки, pre-submission review, ВАК/журнальной оценки, re-review после правок и калибровки качества рецензирования. Адаптировано из imbad0202/academic-research-skills под русский язык и Opencode task()."
-version: "3.15.0-ru.1"
-last_updated: "2026-07-10"
+version: "3.18.0-ru.1"
+last_updated: "2026-07-21"
 status: "active-russian-adapter"
 data_access_level: "user_materials_with_optional_source_verification"
 task_type: "review"
 depends_on: []
-upstream_snapshot: "ad0a7759cee9e7d2db5ca7ea1666096dea8e5d3c"
-upstream_version: "v3.15.0"
-upstream_date: "2026-07-08"
+upstream_snapshot: "f5402b114d5c997ac00505d0fb9285cd392ae313"
+upstream_version: "v3.18.0"
+upstream_date: "2026-07-20"
 ---
 
 # Академический рецензент
@@ -17,7 +17,7 @@ upstream_date: "2026-07-08"
 Русскоязычная адаптация идей `academic-paper-reviewer` из `imbad0202/academic-research-skills` для Opencode. Skill имитирует независимую многоракурсную рецензию научной статьи и выдает редакционное решение с roadmap правок.
 
 Источник адаптации: https://github.com/imbad0202/academic-research-skills
-Upstream snapshot: `ad0a7759cee9e7d2db5ca7ea1666096dea8e5d3c` (`v3.15.0`, 2026-07-08).
+Upstream snapshot: `f5402b114d5c997ac00505d0fb9285cd392ae313` (`v3.18.0`, 2026-07-20).
 Лицензия источника: Creative Commons Attribution-NonCommercial 4.0 International, Copyright (c) 2026 Cheng-I Wu.
 
 Локальные материалы:
@@ -254,6 +254,14 @@ Upstream snapshot: `ad0a7759cee9e7d2db5ca7ea1666096dea8e5d3c` (`v3.15.0`, 2026-0
 - `needs_evidence` - response обещает правку, но page/section evidence отсутствует или недоступно.
 
 Не принимайте авторский response как факт. Проверяйте текст рукописи.
+
+### Независимость re-review judge и panel provenance (v3.17-v3.18)
+
+- В `full` сохраняйте фиксированную пятикомпонентную содержательную panel: EIC, methodology, domain, perspective и Devil's Advocate. Persona diversity не выдавайте за model diversity.
+- Cross-model reviewer track применяется только к `full` и только после явного согласия пользователя на передачу рукописи внешнему provider. Конфигурация `ARS_CROSS_MODEL` без consent не разрешает загрузку текста. В decision letter фиксируйте `Review Panel Provenance`, включая fallback на single-family.
+- В `re-review` сформируйте `Judge Record`: кто вынес исходное решение, кто проверяет закрытие замечаний, model family/provider и доступную provenance. Judge не должен просто воспроизводить исходный panel synthesis; при невозможности независимого judge явно укажите correlated-blind-spot caveat.
+- Статус concern определяется revised manuscript и location evidence, а не response letter. Новый judge сначала проверяет traceability, затем residual/new issues и только потом выносит новое решение.
+- Model tiering не может понижать judgment surfaces. `economy` относится к execution-задачам, `quality-boost` может повысить reviewer/judge checkpoint; unset сохраняет session model.
 
 ## Структура отчета
 

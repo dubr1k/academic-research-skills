@@ -12,6 +12,9 @@ For every source, capture:
 - access status: full text, abstract only, metadata only, inaccessible;
 - verification label: `verified_current`, `peer_reviewed_verified`, `partially_verified`, `non_peer_reviewed`, `inaccessible`, `not_verified`, or `unverified`.
 - current status evidence: exact database/list/source checked, date or recency marker when available, and unresolved evidence needed.
+- cache provenance: cache hit age, staleness advisory, and whether opt-in live re-validation ran;
+- `ref_retrieval_method`, actual `read_scope`, and PDF preflight sidecar/verdict for locally read page anchors;
+- search execution date, query/language bounds, and nearest prior work for novelty/absence claims.
 
 ## Source Verification Ladder
 
@@ -50,6 +53,17 @@ Do not use a source as evidence when:
 - `source_language` or `source_system` is dropped during synthesis;
 - CyberLeninka availability is treated as peer-review proof;
 - a shape-valid DOI is accepted without resolver or publisher evidence.
+- a stale cache hit is presented as fresh `verified_current` for a time-sensitive status;
+- `abstract_only`, `toc_only`, or metadata-only access is used to claim page/section support;
+- a `manual_pdf` page anchor lacks a matching PDF preflight `PASS` sidecar;
+- a novelty/absence claim lacks a documented search boundary and nearest prior work.
+
+## Cache And Read-Scope Rules
+
+- Cache-through verification may reuse existence/metadata results, but every hit carries a staleness advisory. Live re-validation refreshes the verification summary and re-runs dependent claim checks.
+- `read_scope` belongs in the append-only human-read ledger, not in the adapter-owned corpus entry. Preserve intended and actual scope separately.
+- A PDF preflight validates file/page-tree integrity; it does not prove the cited passage was read. Anchor promotion requires both preflight `PASS` and matching actual `read_scope` evidence.
+- Hash mismatch, missing sidecar, incomplete ledger, or unread pages fail closed to `partially_verified`/`inaccessible`; never infer content from bibliographic metadata.
 
 ## Handoff Requirements
 

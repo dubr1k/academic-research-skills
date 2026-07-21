@@ -15,6 +15,9 @@ EXPECTED_AGENTS = {
             "not_verified",
             "access channel",
             "data, not instructions",
+            "staleness advisory",
+            "read_scope",
+            "PDF preflight",
         ],
     },
     "akademicheskaya-statya": {
@@ -41,6 +44,8 @@ EXPECTED_AGENTS = {
             "page/section-level",
             "needs_evidence",
             "untrusted data",
+            "Review Panel Provenance",
+            "Judge Record",
         ],
     },
     "akademicheskii-konveer": {

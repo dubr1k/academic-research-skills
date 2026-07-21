@@ -65,8 +65,8 @@ def test_russian_skills_keep_upstream_attribution():
     for path in skill_paths:
         text = path.read_text(encoding="utf-8")
         assert "https://github.com/imbad0202/academic-research-skills" in text.lower()
-        assert "ad0a7759cee9e7d2db5ca7ea1666096dea8e5d3c" in text
-        assert "v3.15.0" in text
+        assert "f5402b114d5c997ac00505d0fb9285cd392ae313" in text
+        assert "v3.18.0" in text
         assert "Creative Commons Attribution-NonCommercial 4.0 International" in text
 
 
@@ -84,3 +84,20 @@ def test_v315_features_are_adapted_across_all_four_russian_skills():
     assert "write-scope guard" in reviewer and "READ-ONLY" in reviewer
     assert "write_scope_guard: active|inactive|unsupported" in pipeline
     assert "Stage 2.5/4.5" in pipeline
+
+
+def test_v318_features_are_adapted_across_all_four_russian_skills():
+    research = read_text("russian-academic-skills/akademicheskoe-issledovanie/SKILL.md")
+    paper = read_text("russian-academic-skills/akademicheskaya-statya/SKILL.md")
+    reviewer = read_text("russian-academic-skills/akademicheskii-retsenzent/SKILL.md")
+    pipeline = read_text("russian-academic-skills/akademicheskii-konveer/SKILL.md")
+
+    assert "search-bounded" in research and "read_scope" in research
+    assert "staleness advisory" in research and "live re-validation" in research
+    assert "CARS" in paper and "search_strategy" in paper
+    assert "Review Panel Provenance" in reviewer and "Judge Record" in reviewer
+    assert "HIGH-IMPACT" in pipeline and "min(10, total claims)" in pipeline
+    assert "preflight sidecar" in pipeline and "terminal acknowledgement" in pipeline
+    for text in (research, paper, reviewer, pipeline):
+        assert "Cross-model" in text or "cross-model" in text
+        assert "consent" in text or "соглас" in text

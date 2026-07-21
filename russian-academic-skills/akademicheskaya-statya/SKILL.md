@@ -1,16 +1,16 @@
 ---
 name: akademicheskaya-statya
 description: "Русскоязычный academic paper writing skill для Opencode. Используйте для планирования, структуры, черновика, аннотации, литературного обзора, ревизии, ответа рецензентам, проверки цитирования, ГОСТ/APA/IEEE/Vancouver оформления и disclosure научной статьи. Адаптировано из imbad0202/academic-research-skills под русский язык и Opencode task()."
-version: "3.15.0-ru.1"
-last_updated: "2026-07-10"
+version: "3.18.0-ru.1"
+last_updated: "2026-07-21"
 status: "active-russian-adapter"
 data_access_level: "user_materials_and_verified_sources"
 task_type: "writing"
 depends_on:
   - "akademicheskoe-issledovanie"
-upstream_snapshot: "ad0a7759cee9e7d2db5ca7ea1666096dea8e5d3c"
-upstream_version: "v3.15.0"
-upstream_date: "2026-07-08"
+upstream_snapshot: "f5402b114d5c997ac00505d0fb9285cd392ae313"
+upstream_version: "v3.18.0"
+upstream_date: "2026-07-20"
 ---
 
 # Академическая статья
@@ -18,7 +18,7 @@ upstream_date: "2026-07-08"
 Русскоязычная адаптация идей `academic-paper` из `imbad0202/academic-research-skills` для Opencode. Skill помогает спланировать, написать, переработать и оформить научную статью или главу диссертации.
 
 Источник адаптации: https://github.com/imbad0202/academic-research-skills
-Upstream snapshot: `ad0a7759cee9e7d2db5ca7ea1666096dea8e5d3c` (`v3.15.0`, 2026-07-08).
+Upstream snapshot: `f5402b114d5c997ac00505d0fb9285cd392ae313` (`v3.18.0`, 2026-07-20).
 Лицензия источника: Creative Commons Attribution-NonCommercial 4.0 International, Copyright (c) 2026 Cheng-I Wu.
 
 Локальные материалы:
@@ -238,6 +238,14 @@ style и источник требования.
 - author contributions/CRediT, если применимо;
 - AI disclosure statement, если AI использовался;
 - корректный список литературы.
+
+## Upstream v3.16-v3.18: риторика, новизна и модельная маршрутизация
+
+- Во введении используйте CARS как диагностическую рамку: обозначьте territory, конкретную niche и собственный move без ритуального `тема актуальна`. Для заголовка проверяйте объект, контекст, отношение/механизм и границы; не обещайте причинность или универсальность, которых нет в дизайне.
+- Absence/novelty claims разрешены только из документированной `search_strategy`: базы, запросы, даты, языки, inclusion/exclusion и ближайшая prior work. Если поиск ограничен русскоязычным корпусом, нельзя превращать вывод в глобальное `исследований нет`.
+- При переносе claims из research brief сохраняйте per-sub-question scope bindings. Текст статьи не должен незаметно расширять регион, период, образовательный уровень, выборку или паспорт специальности.
+- Если runtime поддерживает `ARS_MODEL_TIERING`, execution и judgment роли маршрутизируются отдельно: unset наследует session model, `economy` не понижает judgment-задачи, `quality-boost` повышает только checkpoint/judgment surfaces. Не фиксируйте конкретные model IDs в skill.
+- Cross-model проверка рукописи допускается только после явного согласия на передачу текста внешнему provider; переменная окружения означает настройку, но не consent.
 
 ## Качество письма
 

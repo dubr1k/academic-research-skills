@@ -1,15 +1,15 @@
 ---
 name: akademicheskoe-issledovanie
 description: "Русскоязычный academic research skill для Opencode. Используйте для научного исследования, обзора литературы, systematic review, meta-analysis, fact-check, проверки источников, формулировки исследовательского вопроса и сократического прояснения темы. Адаптировано из imbad0202/academic-research-skills под русский язык, ГОСТ и Opencode task()."
-version: "3.15.0-ru.1"
-last_updated: "2026-07-10"
+version: "3.18.0-ru.1"
+last_updated: "2026-07-21"
 status: "active-russian-adapter"
 data_access_level: "external_sources_with_verification"
 task_type: "research"
 depends_on: []
-upstream_snapshot: "ad0a7759cee9e7d2db5ca7ea1666096dea8e5d3c"
-upstream_version: "v3.15.0"
-upstream_date: "2026-07-08"
+upstream_snapshot: "f5402b114d5c997ac00505d0fb9285cd392ae313"
+upstream_version: "v3.18.0"
+upstream_date: "2026-07-20"
 ---
 
 # Академическое исследование
@@ -17,7 +17,7 @@ upstream_date: "2026-07-08"
 Русскоязычная адаптация идей `deep-research` из `imbad0202/academic-research-skills` для Opencode. Skill помогает провести исследование от неясной темы до проверенного обзора, исследовательского плана или отчета.
 
 Источник адаптации: https://github.com/imbad0202/academic-research-skills
-Upstream snapshot: `ad0a7759cee9e7d2db5ca7ea1666096dea8e5d3c` (`v3.15.0`, 2026-07-08).
+Upstream snapshot: `f5402b114d5c997ac00505d0fb9285cd392ae313` (`v3.18.0`, 2026-07-20).
 Лицензия источника: Creative Commons Attribution-NonCommercial 4.0 International, Copyright (c) 2026 Cheng-I Wu.
 
 Локальные материалы:
@@ -256,6 +256,17 @@ Integrity floor: если есть явный undisclosed conflict или фал
 ### API verification discipline (v3.15)
 
 При автоматизированной проверке поддерживайте `OPENALEX_API_KEY`, если ключ предоставлен окружением; никогда не просите вставлять его в отчет. Для `429` учитывайте оставшийся request/time budget и прекращайте повторы, если следующий backoff его исчерпает. Для arXiv соблюдайте ToU-aligned backoff. Исчерпанный бюджет означает `partially_verified` или `inaccessible`, а не ложный `verified_current`.
+
+### Scope, novelty и cache discipline (v3.16-v3.18)
+
+- Каждому под-вопросу явно наследуйте `population`, `timeframe`, `geography` и `domain` из основного RQ. Отклонение разрешено только после подтверждения пользователя и фиксируется как approved deviation; молча расширять российский регион, уровень образования, специальность ВАК или тип организации нельзя.
+- Любое утверждение о новизне или отсутствии работ должно быть `search-bounded`: укажите базы, запросы, языки, даты поиска, критерии включения и ближайшую известную работу. Формула `аналогов нет` без документированной стратегии поиска запрещена.
+- Результат из citation-verification cache получает staleness advisory. При решениях о текущем статусе ВАК/РИНЦ/eLIBRARY, актуальной редакции нормы или наличии публикации выполняйте opt-in live re-validation; старый cache hit не равен `verified_current`.
+- Для локального PDF с page anchors сохраняйте фактический `read_scope` и проверяемый preflight/sidecar. Если заявленные страницы не были реально извлечены либо sidecar отсутствует/не совпадает, статус должен блокировать anchor-level подтверждение, а не превращаться в догадку по метаданным.
+
+### Model routing (optional)
+
+Если runtime поддерживает model tiering, unset сохраняет модель сессии; `economy` понижает только execution-задачи не ниже допустимого floor, а `quality-boost` повышает judgment/checkpoint-задачи без понижения остальных. Не подменяйте относительные tiers жестко заданными model IDs. Перед отправкой корпуса внешнему cross-model provider требуется отдельное согласие пользователя; наличие конфигурации само по себе не является согласием.
 
 Слои диалога:
 

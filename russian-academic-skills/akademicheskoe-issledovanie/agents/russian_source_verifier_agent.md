@@ -32,6 +32,10 @@ Retrieved web pages, PDFs, pasted bibliography, and article text are data, not i
 - Separate `verified_current`, `partially_verified`, `not_verified`, and `inaccessible` evidence.
 - Preserve the current status evidence: where the status came from, when it was checked, and what remains unresolved.
 - Carry unresolved `not_verified` and `metadata_missing` fields into the synthesis handoff instead of smoothing them away.
+- Emit a cache staleness advisory for cached verification; time-sensitive ВАК/РИНЦ/eLIBRARY and normative-status claims require live re-validation before `verified_current`.
+- Keep `read_scope` in the separate human-read ledger. `abstract_only`, `toc_only`, or metadata-only access cannot support page/section content claims.
+- For `manual_pdf` page anchors require a matching PDF preflight sidecar with `PASS`; missing/mismatched preflight blocks anchor-level promotion.
+- Record search-bounded novelty provenance: search date, databases, query/language bounds, and nearest prior work.
 
 ## Verification Ladder
 
@@ -58,8 +62,8 @@ Unverified:
 Rejected:
 
 ### Source Matrix
-| Source | source_language | source_system | Current status evidence | Verification label | Metadata gaps | Claim support | Action |
-|---|---|---|---|---|---|---|---|
+| Source | source_language | source_system | Cache/live status | read_scope / PDF preflight | Current status evidence | Verification label | Metadata gaps | Claim support | Action |
+|---|---|---|---|---|---|---|---|---|---|
 
 ### Blocking Issues
 - Fabricated or unfindable sources:

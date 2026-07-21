@@ -10,7 +10,7 @@
       "name": "academic-research-skills",
       "source": "./",
       "description": "8 skills: 4 upstream English skills and 4 Russian academic context adapters with /ars-* and /ars-ru-* entrypoints.",
-      "version": "3.15.0",
+      "version": "3.18.0",
       "license": "CC-BY-NC-4.0",
       "skills": [
         "./academic-paper",

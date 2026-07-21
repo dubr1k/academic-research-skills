@@ -1,8 +1,8 @@
 # Двуязычный форк Academic Research Skills
 
 [![Upstream](https://img.shields.io/badge/upstream-Imbad0202%2Facademic--research--skills-blue)](https://github.com/Imbad0202/academic-research-skills)
-[![Version](https://img.shields.io/badge/version-v3.15.0-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.15.0)
-[![Snapshot](https://img.shields.io/badge/snapshot-v3.15.0%20%2F%20ad0a775-lightgrey)](https://github.com/Imbad0202/academic-research-skills/commit/ad0a7759cee9e7d2db5ca7ea1666096dea8e5d3c)
+[![Version](https://img.shields.io/badge/version-v3.18.0-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.18.0)
+[![Snapshot](https://img.shields.io/badge/snapshot-v3.18.0%20%2F%20f5402b1-lightgrey)](https://github.com/Imbad0202/academic-research-skills/commit/f5402b114d5c997ac00505d0fb9285cd392ae313)
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20696614-blue)](https://doi.org/10.5281/zenodo.20696614)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
 
@@ -40,13 +40,14 @@
 
 Подробности: [bilingual routing](docs/bilingual-routing.md), [skill parity matrix](docs/skill-parity-matrix.md), [Russian academic context](docs/russian-academic-context.md).
 
-## Что синхронизировано с upstream v3.15.0
+## Что синхронизировано с upstream v3.18.0
 
-- Socratic adjacent-framing probe для расширения соседних исследовательских рамок;
-- deterministic write-scope guard и Windows/Python graceful degradation;
-- OpenAlex API-key authentication, budget-aware handling `429` и arXiv ToU-aligned backoff;
-- явные plugin skill paths, setup parity и новые release/command invariant gates;
-- `THIRD_PARTY.md`, Korean README и актуальные release/attribution surfaces.
+- модельное разделение judgment/execution, opt-in tiering и усиленные cross-model checkpoints;
+- риск-стратифицированная проверка утверждений, scope bindings и классификация novelty claims;
+- независимый re-review judge и фиксированная пятикомпонентная reviewer panel;
+- staleness advisory для citation cache с opt-in live re-validation;
+- PDF read-integrity preflight, anchor-aware finalization и attestation фактического `read_scope`;
+- canonical cross-model handoff, degradation registry и уточнённые границы Stage 5/6.
 
 Русские adapters переносят эти механизмы содержательно: сохраняют российский venue/source context, не ослабляют integrity gates и различают optional hook hardening от обязательной проверки содержания.
 
