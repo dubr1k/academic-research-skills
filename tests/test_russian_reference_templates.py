@@ -26,6 +26,21 @@ EXPECTED_ASSETS = {
             "Nearest prior work",
             "ref_retrieval_method",
         ],
+        "references/russian-legal-regulatory-research.md": [
+            "publication.pravo.gov.ru",
+            "консолидированную",
+            "Росстата",
+        ],
+        "references/media-expert-commentary.md": [
+            "комментарий для СМИ",
+            "первоисточник",
+            "репрезентативных",
+        ],
+        "references/population-biomarker-social-claims.md": [
+            "популяционный биомаркер",
+            "причинный мост",
+            "assay",
+        ],
     },
     "akademicheskaya-statya": {
         "references/gost-bibliography-guide.md": [

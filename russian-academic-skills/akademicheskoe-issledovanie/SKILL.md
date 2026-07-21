@@ -24,7 +24,10 @@ Upstream snapshot: `f5402b114d5c997ac00505d0fb9285cd392ae313` (`v3.18.0`, 2026-0
 
 - `agents/russian_source_verifier_agent.md` - gatekeeper для eLIBRARY, РИНЦ, CyberLeninka, DOI и mixed RU/EN source verification.
 - `references/russian-source-verification.md` - правила проверки eLIBRARY, РИНЦ, CyberLeninka и mixed RU/EN источников.
+- `references/russian-legal-regulatory-research.md` - протокол исследования российских НПА: официальное опубликование против консолидированной редакции, точные цитаты, классификационные ловушки, процессные карты и актуальная отчетность.
 - `templates/literature-matrix-gost.md` - матрица литературы с source language/system и ГОСТ draft entry.
+- `references/media-expert-commentary.md` - workflow для короткого экспертного комментария СМИ: фактчек эффектного тезиса, баланс структуры и личной стратегии, проверка биологических объяснений, российская источниковая корзина и контроль объема.
+- `references/population-biomarker-social-claims.md` - протокол проверки перехода от временного тренда гормона/биомаркера к индивидуальному поведению и популяционному социальному объяснению, включая assay heterogeneity, обратную причинность и перенос на Россию.
 
 ## Когда использовать
 
