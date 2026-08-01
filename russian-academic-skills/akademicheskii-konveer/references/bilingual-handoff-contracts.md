@@ -164,6 +164,15 @@ Minimum acceptance:
 
 ### Revision -> Re-review
 
+Stage 3' contract markers and custody:
+
+- Phase 1 emits `[CONTRACT-ACKNOWLEDGED]` before revised manuscript or response letter is exposed; only Phase 1 may retry once.
+- Phase 2A emits `[EVIDENCE-COMMITTED]` after persuasion-blind comparison of original/revised manuscripts and the ordered patch/apply-report chain; no retry.
+- Phase 2B emits `[MATRIX-COMMITTED]` after response-letter claim matching; no retry.
+- Carry hash-bound input manifest, precommitment, verdict record, traceability sidecar, Roadmap, Decision Letter, Round-1 cards/findings, original/revised manuscripts, and every paired patch/apply report. Each exact patch has a SHA-256 `patch_digest` and ordered apply-chain witness.
+- Run `check_re_review_synthesis.py` before showing a decision. Invalid artifacts fail closed; unresolved normative conflict becomes `user_review_required`.
+- Outcomes: Accept/Minor → Stage 4.5; Major → Stage 4'; `reject_recommended`, `user_review_required`, or fail-closed abort do not silently transition. Frozen `previously_missed` and `indeterminate` issues carry into Stage 4.5.
+
 Deliver:
 
 - revised manuscript;
@@ -176,7 +185,7 @@ Deliver:
 
 Minimum acceptance:
 
-- closed concerns cite manuscript locations or response evidence;
+- closed concerns cite manuscript locations or evidence-backed rebuttal; author response alone is not evidence;
 - new claims or sources introduced during revision are marked for final integrity;
 - unresolved source risks carry into Stage 4.5 even if reviewers accept the revision.
 - single-family re-review keeps the correlated-blind-spot caveat visible.

@@ -44,7 +44,7 @@ Evaluate explicitly:
 ### Dissertation Council Review
 
 - Dissertation linkage: article contribution maps to dissertation topic, aim, tasks, and positions for defense.
-- Апробация/publications: visible only if provided; missing evidence is `needs_evidence`.
+- Апробация/publications: visible only if provided; missing evidence is evidence-state `evidence_missing`, а не re-review verdict.
 - Personal contribution: distinguish author contribution from group/project background.
 - Reliability and validity: evaluate data provenance, procedure, reproducibility, and limitation handling.
 - Specialty passport fit: claims and terminology match the provided specialty area.
@@ -72,10 +72,19 @@ Stable marker: international journal review.
 
 ## Decision Constraints
 
+- Machine decision contract uses only `Accept`, `Minor Revision`, `Major Revision`, or `Reject`; более свободные редакционные формулировки остаются пояснением, а не пятым token.
 - Fatal methodology or fabricated-source issues block `Accept`.
 - Unsupported novelty blocks strong recommendation.
 - A review must include issue location, severity, why it matters, and required fix.
 - In re-review, a comment cannot be marked resolved without page/section-level manuscript evidence.
+
+## Role-Scoped Finding Contract
+
+- D1 belongs to methodology; D2 to domain; D3 to Devil's Advocate plus methodology; D4 to perspective; D5/D6 to EIC.
+- ВАК/РИНЦ review is an overlay for D2/D6, not an additional panel seat.
+- Ineligible dimension: `score: not_assessed` without `abstain_reason`. Eligible but not applicable: `not_assessed` with `abstain_reason`.
+- Findings require `severity`, `confidence`, `competence_basis`, and typed anchor `text|table|figure|equation|dataset|absence`; `absence` records inspected scope.
+- Empty findings require a `Coverage Receipt`; `Top Blocking Issues` contains 0–3 evidence-backed items.
 
 ## Re-Review Status Taxonomy
 

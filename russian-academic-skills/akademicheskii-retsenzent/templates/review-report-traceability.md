@@ -2,7 +2,7 @@
 
 ## Краткое редакционное решение
 
-Decision: Accept / Minor Revision / Major Revision / Reject and Resubmit / Reject
+Decision: Accept / Minor Revision / Major Revision / Reject
 
 Review context: ВАК article / dissertation council / international journal / pre-submission
 
@@ -40,6 +40,10 @@ Integrity label: read_only_review; no invented metadata; author response is not 
 | International journal | fit/scope; originality; methods transparency; ethics/data availability; international literature |  |  |
 
 ## Issues
+
+Finding contract: `severity`, `confidence`, `competence_basis`, typed anchor `text|table|figure|equation|dataset|absence`. Для `absence` укажите просмотренную область. Critical/Major без достаточного anchor невалиден. `Top Blocking Issues`: 0–3.
+
+Role-scoped scoring: ineligible dimension → `not_assessed` без `abstain_reason`; eligible, но неприменимый → `not_assessed` с `abstain_reason`. Решение формирует только synthesizer.
 
 ### Issue M1: [short title]
 

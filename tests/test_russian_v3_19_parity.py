@@ -53,6 +53,28 @@ def test_russian_reviewer_adapter_carries_v3_19_review_contracts():
     assert "`needs_evidence`" not in text
 
 
+def test_russian_reviewer_adapter_preserves_role_scoped_semantics():
+    text = read_skill("akademicheskii-retsenzent")
+    assert "ineligible dimension" in text
+    assert "без `abstain_reason`" in text
+    assert "eligible, но неприменимый" in text
+    assert "с `abstain_reason`" in text
+    assert "явно abstain на остальных" not in text
+
+
+def test_russian_reviewer_adapter_defines_typed_finding_contract():
+    text = read_skill("akademicheskii-retsenzent")
+    for term in (
+        "text|table|figure|equation|dataset|absence",
+        "severity",
+        "confidence",
+        "competence_basis",
+        "Top Blocking Issues",
+    ):
+        assert term in text
+    assert "Reject and Resubmit" not in text
+
+
 def test_russian_pipeline_adapter_carries_revision_and_re_review_evidence():
     text = read_skill("akademicheskii-konveer")
     for term in (
@@ -64,3 +86,24 @@ def test_russian_pipeline_adapter_carries_revision_and_re_review_evidence():
         "user_review_required",
     ):
         assert term in text
+
+
+def test_russian_pipeline_supporting_assets_carry_stage_3_prime_contract():
+    root = ADAPTER_ROOT / "akademicheskii-konveer"
+    texts = {
+        name: (root / name).read_text(encoding="utf-8")
+        for name in (
+            "references/bilingual-handoff-contracts.md",
+            "agents/russian_pipeline_state_agent.md",
+            "templates/pipeline-dashboard.md",
+        )
+    }
+    for text in texts.values():
+        for term in (
+            "[CONTRACT-ACKNOWLEDGED]",
+            "[EVIDENCE-COMMITTED]",
+            "[MATRIX-COMMITTED]",
+            "patch_digest",
+            "user_review_required",
+        ):
+            assert term in text

@@ -32,6 +32,9 @@ You track state and handoffs. You do not perform research, write manuscript sect
 - Stable marker: source verification state must survive every stage handoff.
 - Checkpoint/gate carryover preserved: unresolved source risks, blocking integrity issues, and open reviewer concerns.
 - Reviewer concerns preserved through revision and re-review.
+- Stage 3' markers `[CONTRACT-ACKNOWLEDGED]`, `[EVIDENCE-COMMITTED]`, `[MATRIX-COMMITTED]` are sequential and immutable; only Phase 1 may retry once.
+- Stage 3' custody includes hash-bound manifest, precommitment, verdict/traceability records, original/revised manuscripts, Roadmap, Round-1 provenance, and ordered patch/apply-report pairs with exact `patch_digest`.
+- Invalid Stage 3' evidence aborts fail-closed; unresolved normative conflict is `user_review_required`. Accept/Minor routes to 4.5, Major to 4', while `reject_recommended` is not a transition.
 - User checkpoint needed before content-changing transitions.
 - Shared/global agent audit completed before delegation from a Russian adapter.
 - Stable marker: shared agent context audit is required before shared/global delegation.
@@ -89,6 +92,16 @@ You track state and handoffs. You do not perform research, write manuscript sect
 | Blocking source issues | open/closed |  |
 | Open reviewer concerns | open/closed |  |
 | User checkpoint | required/not_required |  |
+
+### Stage 3' Evidence Custody
+| Marker/artifact | Status/path/digest | Retry allowed | Blocking gap |
+|---|---|---|---|
+| `[CONTRACT-ACKNOWLEDGED]` |  | Phase 1 once |  |
+| `[EVIDENCE-COMMITTED]` |  | no |  |
+| `[MATRIX-COMMITTED]` |  | no |  |
+| manifest / precommitment / verdict / traceability |  | no |  |
+| ordered patch/apply reports and `patch_digest` |  | no |  |
+| synthesis verdict / `user_review_required` |  | no |  |
 
 ### Shared/Global Agent Audit
 | Audit item | Status | Notes |

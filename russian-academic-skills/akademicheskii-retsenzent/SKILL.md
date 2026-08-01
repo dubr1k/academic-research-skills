@@ -66,8 +66,8 @@ Upstream snapshot: `462b32bf32a7017ef62c55f7ee262a2642de325a` (`v3.19.0-24-g462b
 8. В re-review нельзя помечать замечание resolved без page/section-level evidence из новой версии рукописи.
 9. Deterministic write-scope guard в hook-enabled runtimes усиливает READ-ONLY, но не является единственным контролем: при его graceful degradation reviewer все равно возвращает только review artifacts и не изменяет рукопись.
 10. Ambiguous cross-phase input сначала маршрутизируется на уточнение; нельзя превращать review в скрытый revision только потому, что в запросе есть оба типа материалов.
-11. В sprint-contract review каждый dimension имеет `eligible_roles` и ровно один `owner_role`; reviewer выставляет score только по разрешенным dimensions и явно abstain на остальных.
-12. Findings следуют evidence без квот. Каждый finding несет **typed evidence anchor**; пустой список strengths/weaknesses допустим только с `Coverage Receipt` по просмотренным dimensions.
+11. В sprint-contract review каждый dimension имеет `eligible_roles` и ровно один `owner_role`. Для **ineligible dimension** reviewer ставит `score: not_assessed` без `abstain_reason`; для **eligible, но неприменимый** dimension — `score: not_assessed` с `abstain_reason`. Reviewer не выносит собственное editorial decision: решение формирует только synthesizer.
+12. Findings следуют evidence без квот. Каждый finding содержит `severity`, `confidence`, `competence_basis` и **typed evidence anchor** из закрытого набора `text|table|figure|equation|dataset|absence`. Для `absence` обязательно описывается просмотренная область; Critical/Major без достаточного anchor невалиден. Пустой список strengths/weaknesses допустим только с `Coverage Receipt` по просмотренным dimensions. `Top Blocking Issues` содержит от 0 до 3 подтвержденных findings.
 
 ## Opencode orchestration
 
@@ -216,7 +216,6 @@ Upstream snapshot: `462b32bf32a7017ef62c55f7ee262a2642de325a` (`v3.19.0-24-g462b
 | Accept | Нет major issues, только minor polish |
 | Minor Revision | Основной вклад силен, проблемы локальные |
 | Major Revision | Вклад потенциально есть, но нужны существенные изменения |
-| Reject and Resubmit | Нужна перестройка вопроса/метода/структуры |
 | Reject | Фатальная методология, недоказанный вклад, integrity failure |
 
 Для ВАК/РИНЦ-контекста отдельно отметьте:
@@ -270,6 +269,7 @@ Upstream snapshot: `462b32bf32a7017ef62c55f7ee262a2642de325a` (`v3.19.0-24-g462b
 ### Role-scoped scoring и трехфазный re-review (v3.19)
 
 - В `full` и `methodology-focus` сначала зафиксируйте paper-blind contract: для каждого dimension — `eligible_roles`, `owner_role`, mandatory-only fatal triggers и закрытый decision ladder `Accept|Minor Revision|Major Revision|Reject`. Итог нельзя получать средним баллом или свободным голосованием.
+- Каноническое ownership dimensions: D1 — methodology; D2 — domain; D3 — Devil's Advocate + methodology; D4 — perspective; D5/D6 — EIC. ВАК/РИНЦ-agent является overlay для D2/D6, а не шестым местом панели.
 - Phase 1 re-review — revision-blind criteria commitment: свяжите каждый исходный concern с критерием проверки до чтения новой версии и response letter.
 - Phase 2A — evidence verdict, **persuasion-blind**: сравните original manuscript, revised manuscript, versioned patch/apply report и location evidence, не раскрывая авторское объяснение. Закрытая taxonomy verdict: `FULLY_ADDRESSED|PARTIALLY_ADDRESSED|NOT_ADDRESSED|MADE_WORSE|CANNOT_VERIFY`. `indeterminate` допустим только как attribution нового issue, а не как item verdict.
 - Phase 2B — claim matching: только теперь раскройте response letter, сопоставьте заявления автора с Phase 2A evidence verdict и запишите typed **adjustment record**. Риторическая убедительность письма не может изменить evidence verdict без новой проверяемой опоры.

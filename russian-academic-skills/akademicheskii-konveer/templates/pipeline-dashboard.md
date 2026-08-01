@@ -7,7 +7,7 @@
 | 2.5 Integrity | pending/pass/fail | integrity check | claim/citation/data verification |  |
 | 3 Review | pending/done | akademicheskii-retsenzent | decision and roadmap |  |
 | 4 Revision | pending/done | akademicheskaya-statya | revised manuscript and response letter |  |
-| 3' Re-review | pending/done | akademicheskii-retsenzent | issue closure check |  |
+| 3' Re-review | pending/phase1/phase2a/phase2b/done/user_review_required/aborted | akademicheskii-retsenzent | three-gate evidence contract |  |
 | 4.5 Final integrity | pending/pass/fail | integrity check | final verification |  |
 | 5 Finalization | pending/done | akademicheskaya-statya | final package |  |
 | 6 Process summary | pending/done | akademicheskii-konveer | process record and AI disclosure summary |  |
@@ -52,6 +52,20 @@ Stable marker: Source verification state.
 | Open reviewer concerns | open/closed | yes/no |  |
 | User checkpoint | required/not_required | yes/no |  |
 
+## Stage 3' Contract And Evidence Custody
+
+| Gate/artifact | Status/path | Retry | Blocking? |
+|---|---|---|---|
+| `[CONTRACT-ACKNOWLEDGED]` |  | Phase 1 once | yes/no |
+| `[EVIDENCE-COMMITTED]` |  | no | yes/no |
+| `[MATRIX-COMMITTED]` |  | no | yes/no |
+| Hash-bound manifest, precommitment, verdict, traceability |  | no | yes/no |
+| Original/revised manuscripts, Roadmap, Round-1 cards |  | no | yes/no |
+| Ordered patch/apply-report pairs and exact `patch_digest` |  | no | yes/no |
+| Synthesis outcome / `user_review_required` |  | no | yes/no |
+
+Routing: Accept/Minor → 4.5; Major → 4'; `reject_recommended` is advisory; invalid evidence aborts fail-closed. Carry frozen `previously_missed` and `indeterminate` issues into 4.5.
+
 ## Handoff Checklist
 
 | Handoff | Required state carried forward | Present? | Gap |
@@ -60,7 +74,7 @@ Stable marker: Source verification state.
 | Writing -> Integrity | draft, claims, bibliography, source additions, checkpoint carryover | yes/no |  |
 | Integrity -> Review | Stage 2.5 verdict, unresolved source risks, gate carryover | yes/no |  |
 | Review -> Revision | decision, concern IDs, revision roadmap, source-risk carryover | yes/no |  |
-| Revision -> Re-review | revised manuscript, response, traceability table, changed claims/sources | yes/no |  |
+| Revision -> Re-review | original/revised manuscripts, Roadmap, Decision Letter, Round-1 cards, response, hash-bound manifest, precommitment, traceability, ordered patches/apply reports with `patch_digest` | yes/no |  |
 | Final Integrity -> Finalization | final verification state, package mode, manual checks | yes/no |  |
 
 ## Shared/Global Agent Audit
