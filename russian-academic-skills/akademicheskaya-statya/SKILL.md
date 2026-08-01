@@ -1,16 +1,16 @@
 ---
 name: akademicheskaya-statya
 description: "Русскоязычный academic paper writing skill для Opencode. Используйте для планирования, структуры, черновика, аннотации, литературного обзора, ревизии, ответа рецензентам, проверки цитирования, ГОСТ/APA/IEEE/Vancouver оформления и disclosure научной статьи. Адаптировано из imbad0202/academic-research-skills под русский язык и Opencode task()."
-version: "3.18.0-ru.1"
-last_updated: "2026-07-21"
+version: "3.19.0-ru.1"
+last_updated: "2026-08-01"
 status: "active-russian-adapter"
 data_access_level: "user_materials_and_verified_sources"
 task_type: "writing"
 depends_on:
   - "akademicheskoe-issledovanie"
-upstream_snapshot: "f5402b114d5c997ac00505d0fb9285cd392ae313"
-upstream_version: "v3.18.0"
-upstream_date: "2026-07-20"
+upstream_snapshot: "462b32bf32a7017ef62c55f7ee262a2642de325a"
+upstream_version: "v3.19.0-24-g462b32b"
+upstream_date: "2026-07-31"
 ---
 
 # Академическая статья
@@ -18,7 +18,7 @@ upstream_date: "2026-07-20"
 Русскоязычная адаптация идей `academic-paper` из `imbad0202/academic-research-skills` для Opencode. Skill помогает спланировать, написать, переработать и оформить научную статью или главу диссертации.
 
 Источник адаптации: https://github.com/imbad0202/academic-research-skills
-Upstream snapshot: `f5402b114d5c997ac00505d0fb9285cd392ae313` (`v3.18.0`, 2026-07-20).
+Upstream snapshot: `462b32bf32a7017ef62c55f7ee262a2642de325a` (`v3.19.0-24-g462b32b`, 2026-07-31).
 Лицензия источника: Creative Commons Attribution-NonCommercial 4.0 International, Copyright (c) 2026 Cheng-I Wu.
 
 Локальные материалы:
@@ -89,6 +89,14 @@ Upstream snapshot: `f5402b114d5c997ac00505d0fb9285cd392ae313` (`v3.18.0`, 2026-0
 В hook-enabled Claude Code runtime deterministic PreToolUse write-scope guard ограничивает single-phase agents разрешенными deliverables. На Windows он требует Git Bash и рабочий Python; отсутствие Python должно безопасно отключать optional guard, а не блокировать основную prompt-driven работу. В Opencode, Codex и других runtimes без hook сохраняйте те же границы в контракте `task()` и выполняйте post-task diff check после делегации. Guard - дополнительное hardening, а не замена citation/claim audit.
 
 Не разрешайте writing-agent менять review report, source-verification artifacts или pipeline state вне явно переданного write scope. При ambiguous cross-phase input сначала уточните режим.
+
+### Контроль силы утверждений при revision (v3.19)
+
+В режиме `revision` ведите явный **claim-strength ladder** для каждого изменяемого научного утверждения: от описательного/ассоциативного к предиктивному и причинному. Правило **No silent move** действует в обе стороны: нельзя усиливать или ослаблять эпистемический статус, убирать ограничения выборки, design caveats, null results или protected hedges, если конкретный roadmap item не разрешает это изменение.
+
+Для каждого измененного claim фиксируйте старую и новую ступень, основание, reviewer concern ID и evidence. Выполняйте **claim-strength token conservation**: qualifiers вроде `может`, `связано с`, `в этой выборке`, `предварительно` и их русские эквиваленты нельзя молча удалить, заменить или перенести так, чтобы итоговый тезис стал сильнее исходного без нового доказательства.
+
+Если revision применяется машинным patch workflow, сохраняйте versioned base, patch и apply report. `patch_digest` должен быть SHA-256 точного patch-файла, а apply report — однозначно связывать base draft, revised draft и измененные блоки. Эти artifacts обязательны для Stage 3' re-review и Stage 4.5 integrity gate; response letter не заменяет доказательство фактического изменения рукописи.
 
 ## Процесс full-режима
 

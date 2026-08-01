@@ -42,7 +42,7 @@ EXPECTED_AGENTS = {
             "journal-index status",
             "manuscript quality",
             "page/section-level",
-            "needs_evidence",
+            "CANNOT_VERIFY",
             "untrusted data",
             "Review Panel Provenance",
             "Judge Record",

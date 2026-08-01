@@ -1,8 +1,8 @@
 ---
 name: akademicheskii-konveer
 description: "Русскоязычный academic pipeline orchestrator skill для Opencode. Используйте для полного цикла research -> paper -> integrity check -> review -> revision -> re-review -> finalization. Координирует akademicheskoe-issledovanie, akademicheskaya-statya и akademicheskii-retsenzent. Адаптировано из imbad0202/academic-research-skills под русский язык и Opencode task()."
-version: "3.18.0-ru.1"
-last_updated: "2026-07-21"
+version: "3.19.0-ru.1"
+last_updated: "2026-08-01"
 status: "active-russian-adapter"
 data_access_level: "orchestrates_user_materials_and_verified_sources"
 task_type: "pipeline"
@@ -10,9 +10,9 @@ depends_on:
   - "akademicheskoe-issledovanie"
   - "akademicheskaya-statya"
   - "akademicheskii-retsenzent"
-upstream_snapshot: "f5402b114d5c997ac00505d0fb9285cd392ae313"
-upstream_version: "v3.18.0"
-upstream_date: "2026-07-20"
+upstream_snapshot: "462b32bf32a7017ef62c55f7ee262a2642de325a"
+upstream_version: "v3.19.0-24-g462b32b"
+upstream_date: "2026-07-31"
 ---
 
 # Академический конвейер
@@ -20,7 +20,7 @@ upstream_date: "2026-07-20"
 Русскоязычная адаптация идей `academic-pipeline` из `imbad0202/academic-research-skills` для Opencode. Skill не выполняет всю содержательную работу сам: он определяет стадию, выбирает режим, загружает нужные skills, управляет checkpoint-ами, integrity gates и bilingual handoff state.
 
 Источник адаптации: https://github.com/imbad0202/academic-research-skills
-Upstream snapshot: `f5402b114d5c997ac00505d0fb9285cd392ae313` (`v3.18.0`, 2026-07-20).
+Upstream snapshot: `462b32bf32a7017ef62c55f7ee262a2642de325a` (`v3.19.0-24-g462b32b`, 2026-07-31).
 Лицензия источника: Creative Commons Attribution-NonCommercial 4.0 International, Copyright (c) 2026 Cheng-I Wu.
 
 Локальные материалы:
@@ -294,6 +294,16 @@ Stage 4.5 проверяет с нуля, а не только старые пр
 7. **Re-review independence:** Stage 4 -> 3' передает Editorial Decision Letter с `Review Panel Provenance`; Stage 3' возвращает `Judge Record` и caveat, если независимую model-family проверку обеспечить нельзя.
 8. **Stage 5/6 semantics:** после Stage 4.5 PASS обязателен отдельный Stage 5 entry checkpoint; после доставки final paper — FULL completion checkpoint. Stage 6 пользователь может пропустить; если он запущен, `completed` наступает только после process record и terminal acknowledgement.
 9. **Model routing:** unset наследует session model; `economy` понижает только execution роли до установленного floor; `quality-boost` повышает judgment/checkpoint роли. Cross-model dispatch требует отдельного consent на внешний provider.
+
+## Upstream v3.19 revision/re-review evidence contract
+
+1. **Revision custody:** Stage 4/4' сохраняет original draft, versioned patch, apply report и `patch_digest`; apply report должен ссылаться на точные bytes patch и revised draft. Response letter не считается доказательством изменения.
+2. **Claim-drift control:** между стадиями переносится append-only **claim-strength ledger** с исходной/новой ступенью, qualifier changes, concern ID и evidence. Stage 4.5 проверяет claim-strength token conservation и не допускает молчаливого усиления тезиса.
+3. **Stage 3' Phase 1:** до revised manuscript и author response зафиксируйте criteria commitment по исходным concern IDs и Round-1 provenance.
+4. **Stage 3' Phase 2A:** выполните evidence verdict persuasion-blind по original/revised manuscripts, patch chain и location evidence.
+5. **Stage 3' Phase 2B:** раскройте response letter, выполните claim matching и сохраните adjustment records отдельно от evidence verdicts.
+6. **Fail-closed synthesis:** hash-bound manifest, precommitment, traceability и verdict records проходят deterministic checker до решения. Конфликт, который нельзя разрешить без нормативного выбора пользователя, дает `user_review_required`, а не усредненный verdict.
+7. **Reviewer contract carryover:** Stage 3 сохраняет role-scoped `eligible_roles`/`owner_role`, typed evidence anchors, Coverage Receipts и canonical decision record; Stage 4 не имеет права стереть эти artifacts.
 
 ## Global/shared agent audit before delegation
 

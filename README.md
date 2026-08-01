@@ -1,8 +1,8 @@
 # Двуязычный форк Academic Research Skills
 
 [![Upstream](https://img.shields.io/badge/upstream-Imbad0202%2Facademic--research--skills-blue)](https://github.com/Imbad0202/academic-research-skills)
-[![Version](https://img.shields.io/badge/version-v3.18.0-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.18.0)
-[![Snapshot](https://img.shields.io/badge/snapshot-v3.18.0%20%2F%20f5402b1-lightgrey)](https://github.com/Imbad0202/academic-research-skills/commit/f5402b114d5c997ac00505d0fb9285cd392ae313)
+[![Version](https://img.shields.io/badge/version-v3.19.0-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.19.0)
+[![Snapshot](https://img.shields.io/badge/snapshot-v3.19.0--24--g462b32b%20%2F%20462b32b-lightgrey)](https://github.com/Imbad0202/academic-research-skills/commit/462b32bf32a7017ef62c55f7ee262a2642de325a)
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20696614-blue)](https://doi.org/10.5281/zenodo.20696614)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
 
@@ -40,7 +40,7 @@
 
 Подробности: [bilingual routing](docs/bilingual-routing.md), [skill parity matrix](docs/skill-parity-matrix.md), [Russian academic context](docs/russian-academic-context.md).
 
-## Что синхронизировано с upstream v3.18.0
+## Что синхронизировано с upstream v3.19.0-24-g462b32b
 
 - модельное разделение judgment/execution, opt-in tiering и усиленные cross-model checkpoints;
 - риск-стратифицированная проверка утверждений, scope bindings и классификация novelty claims;
@@ -48,6 +48,9 @@
 - staleness advisory для citation cache с opt-in live re-validation;
 - PDF read-integrity preflight, anchor-aware finalization и attestation фактического `read_scope`;
 - canonical cross-model handoff, degradation registry и уточнённые границы Stage 5/6.
+- revision-round claim-drift guards: claim-strength ladder, token conservation и hash-bound patch/apply-report custody;
+- role-scoped reviewer scoring, typed evidence anchors, Coverage Receipts и canonical decision contract;
+- трехфазный Stage 3' re-review: revision-blind criteria commitment → persuasion-blind evidence verdict → response-letter claim matching.
 
 Русские adapters переносят эти механизмы содержательно: сохраняют российский venue/source context, не ослабляют integrity gates и различают optional hook hardening от обязательной проверки содержания.
 

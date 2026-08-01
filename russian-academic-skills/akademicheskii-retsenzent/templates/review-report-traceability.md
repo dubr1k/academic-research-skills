@@ -55,11 +55,11 @@ Required fix:
 
 ## Re-Review Traceability
 
-Status taxonomy: `addressed`, `partially_addressed`, `not_addressed`, `needs_evidence`.
+Verdict taxonomy: `FULLY_ADDRESSED`, `PARTIALLY_ADDRESSED`, `NOT_ADDRESSED`, `MADE_WORSE`, `CANNOT_VERIFY`.
 
-Resolution rule: mark `addressed` only when the revised manuscript evidence gives a concrete page, section, paragraph, table, figure, or quoted fragment. Stable marker: page/section evidence is required.
+Resolution rule: mark `FULLY_ADDRESSED` only when the revised manuscript evidence gives a concrete typed anchor to a page, section, paragraph, table, figure, or quoted fragment. The author response is withheld until Phase 2B and cannot itself close an item.
 Stable marker: Manuscript evidence is required before closure.
 
-| Original concern | Author response | Page/section evidence in revised manuscript | Status | Residual issue |
-|---|---|---|---|---|
-|  |  |  | addressed / partially_addressed / not_addressed / needs_evidence |  |
+| Original concern | Phase 1 criterion | Phase 2A verdict | Author response | Final verdict | Page/section evidence or typed adjustment | Residual issue |
+|---|---|---|---|---|---|---|
+|  |  | FULLY_ADDRESSED / PARTIALLY_ADDRESSED / NOT_ADDRESSED / MADE_WORSE / CANNOT_VERIFY |  |  |  |  |

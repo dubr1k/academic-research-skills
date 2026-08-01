@@ -526,6 +526,10 @@ See `references/claim_verification_protocol.md` § E4 (authority). Inputs from t
 
 See `references/claim_verification_protocol.md` § E5 (authority). E1 category-2 primacy assertions ("Y was the first to...") assert the absence of literature — E2/E3 cannot trace a source for an absence. Classify each against the documented Schema 2 `search_strategy`: `SUPPORTED_WITHIN_SEARCH` (search-bounded wording whose databases + date range match the documented search exactly AND `last_searched_at` recorded, nearest prior work acknowledged or its absence stated) or `UNRESOLVED` (absolute wording, mismatched bound, missing `last_searched_at`, or no documented search). Never "globally verified". Advisory-only, stable IDs `ADV-E5-<n>`, rows are not issues and may remain open on PASS; checkpoint options per row: proceed open (default) / user explicitly confirms the absolute form — both recorded in the checkpoint conversation, not in a report field. No reword route is defined and no downstream agent carries an obligation: a requested bounded reword is an ordinary revision instruction citing the ADV-E5 ID (rows are visible wherever the Integrity Report travels); rows still open at Stage 4.5 remain recorded in the Final Integrity Report deliverable.
 
+#### E6. Claim-Strength Drift (#569) — revision rounds only
+
+See `references/claim_verification_protocol.md` § E6 (authority). Runs ONLY when a prior draft of the same block-anchored paper exists (a revision-round Stage 4.5 or 2.5 re-verification); on a first-pass audit skip with `[E6-SKIPPED: no prior draft]`. This is the epistemic complement to the deterministic `scripts/check_revision_token_conservation.py` (#570): that script conserves numeric/citation tokens; E6 checks whether a touched claim's strength moved along the ladder (`shared/references/claim_strength_ladder.md`). For each claim whose block was touched this round, compare its rung and its load-bearing hedges / null results / limitations / causal caveats against the prior draft; a move (either direction, or a dropped qualifier) that no roadmap item authorized as a *strength change* is flagged `STRENGTH-DRIFTED` with stable ID `ADV-E6-<n>` (claim location, prior rung → current rung or dropped qualifier, the roadmap items the op claimed, direction). Advisory-only, not in the gate's issue count, may remain open on PASS; checkpoint options per row: proceed open (default) / accept the change with a justifying note — both recorded in the checkpoint conversation. No reword route, no downstream obligation; a requested restoration is an ordinary revision instruction citing the ADV-E6 ID; rows still open at Stage 4.5 remain recorded in the Final Integrity Report deliverable.
+
 ---
 
 ## Two Operating Modes
@@ -551,6 +555,7 @@ See `references/claim_verification_protocol.md` § E5 (authority). E1 category-2
 - **Phase C4 (Experiment Provenance & Claim Alignment, #260) runs the D7 declaration-anchored anti-skip on every passport and produces `experiment_alignment_results[]` for EVERY experiment-backed claim (full, not sampled, at Stage 4.5).** A treated-as-post-#260 passport with the `experiment_intake_declaration` absent is a **FAIL** (even a literature-only run needs `{status: no_experiments_declared}`); a passport referencing experiment results but omitting `experiment_provenance[]` is a **FAIL**, not the legacy advisory case. The full per-condition severity map + the four FAIL conditions are in Phase C4 above.
 - Special focus: Citations, data, and claims added or modified during the revision process
 - ADDITIONALLY: Compare with Stage 2.5 verification results to confirm all previous issues are resolved (this is a supplementary check, not a replacement for fresh verification)
+- **Input (#576 §8): the Stage 3' traceability sidecar's frozen `previously_missed` AND `indeterminate` new-issue records** — forwarded on both routes (Stage 3' → 4.5 direct on Accept/Minor; through 4' with the roadmap on Major). Consume BOTH attributions as integrity-check input, not just cargo: on the no-original-manuscript path EVERY new issue is `indeterminate`, so consuming only `previously_missed` would ignore the whole set. Each record is assessed during the relevant phase (a previously-missed citation problem joins Phase A/B scope; a previously-missed data/claim problem joins Phase C/E scope) and its disposition appears in the report. A contract-mode Stage 3' that ran with no sidecar forwarded is a visible degradation to note (a `[LEGACY-NO-CONTRACT]` legacy run legitimately produces none — note it, never block on it)
 - **Must PASS with zero issues to proceed to Stage 5 (FINALIZE)**
 
 ---
@@ -645,6 +650,16 @@ The following patterns are PROHIBITED in integrity reports:
 
 | ID | Citation key | Cache age (days) | Threshold | Re-verified live? |
 |----|-------------|------------------|-----------|-------------------|
+
+**Claim-strength drift advisory (#569, revision rounds)** — advisory-only, not counted in verdicts or the gate decision; empty / `[E6-SKIPPED: no revision evidence]` on a first-pass audit:
+
+| ID | Round | Claim location | Prior rung → current rung (or dropped qualifier) | Roadmap items the op claimed | Direction |
+|----|-------|----------------|--------------------------------------------------|------------------------------|-----------|
+
+**Token-conservation advisory (#570, revision rounds)** — the deterministic `ADV-REV-<n>` signal from `scripts/check_revision_token_conservation.py` (see `pipeline_orchestrator_agent.md` step 3a); advisory-only, not counted in verdicts, empty when every patch op conserved its numeric/citation/protected-term tokens:
+
+| ID | Op / block | Numeric delta | Citation delta | Protected-term delta | Roadmap items the op claimed |
+|----|-----------|---------------|----------------|----------------------|------------------------------|
 
 ## Issue List (Sorted by Severity)
 

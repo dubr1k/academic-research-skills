@@ -289,6 +289,22 @@ id = "510-panel-synthesis-checker"
 path = "scripts/test_check_panel_synthesis.py"
 
 [[pytest]]
+id = "574-schema-13-2-validator"
+path = "scripts/test_check_sprint_contract.py"
+
+[[pytest]]
+id = "574-phase-conformance-checker"
+path = "scripts/test_check_phase_conformance.py"
+
+[[pytest]]
+id = "574-role-scoped-contract-lint"
+path = "scripts/test_check_role_scoped_contract.py"
+
+[[pytest]]
+id = "574-decision-contract-lint"
+path = "scripts/test_check_decision_contract.py"
+
+[[pytest]]
 id = "528-pipeline-boundary-semantics"
 path = "scripts/test_check_pipeline_boundary_semantics.py"
 
@@ -303,3 +319,31 @@ path = "scripts/test_check_cross_model_handoff_contract.py"
 [[pytest]]
 id = "544-update-reminder"
 path = "scripts/test_ars_update_check.py"
+
+[[pytest]]
+id = "570-revision-token-conservation"
+path = "scripts/test_check_revision_token_conservation.py"
+
+[[pytest]]
+id = "574-seeded-defect-fixtures"
+path = "scripts/test_check_seeded_defect_fixtures.py"
+
+[[pytest]]
+id = "574-reviewer-data-fences"
+path = "scripts/test_check_reviewer_data_fences.py"
+
+[[pytest]]
+id = "574-reviewer-finding-contract"
+path = "scripts/test_check_reviewer_finding_contract.py"
+
+[[pytest]]
+id = "576-re-review-synthesis-checker"
+path = "scripts/test_check_re_review_synthesis.py"
+
+[[pytest]]
+id = "576-persuasion-invariance-fixtures"
+path = "scripts/test_check_persuasion_invariance_fixtures.py"
+
+[[pytest]]
+id = "608-e4-dispatch-harness"
+path = "scripts/test_dispatch_e4_panel.py"

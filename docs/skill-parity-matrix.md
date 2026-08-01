@@ -2,16 +2,16 @@
 
 This matrix tracks how the Russian adapter layer maps to the upstream Academic Research Skills package.
 
-Upstream snapshot for the current Russian layer: `f5402b114d5c997ac00505d0fb9285cd392ae313` (`v3.18.0`, 2026-07-20).
+Upstream snapshot for the current Russian layer: `462b32bf32a7017ef62c55f7ee262a2642de325a` (`v3.19.0-24-g462b32b`, 2026-07-31).
 
 ## Summary
 
-| Upstream skill | Russian adapter | Current status | v3.18 adaptation |
+| Upstream skill | Russian adapter | Current status | Current adaptation |
 |---|---|---|---|
 | `deep-research` | `akademicheskoe-issledovanie` | Active compact adapter | Per-sub-question scope bindings, search-bounded novelty, cache staleness/live re-validation and PDF `read_scope` fail-closed semantics adapted for RU sources and institutions. |
-| `academic-paper` | `akademicheskaya-statya` | Active compact adapter | CARS/title checks, search-bounded novelty, scope-preserving drafting and consent-aware model routing adapted to Russian academic prose. |
-| `academic-paper-reviewer` | `akademicheskii-retsenzent` | Active compact adapter | Fixed five-seat panel, panel provenance, consent-bound cross-model Reviewer 2 and independent re-review `Judge Record` preserved. |
-| `academic-pipeline` | `akademicheskii-konveer` | Active compact adapter | Risk-stratified Stage 2.5, full Stage 4.5, PDF/read attestation, Stage 5/6 boundaries, cache/scope/novelty carryover and model routing adapted. |
+| `academic-paper` | `akademicheskaya-statya` | Active compact adapter | CARS/title checks, search-bounded novelty, scope-preserving drafting, consent-aware model routing, claim-strength ladder/token conservation and patch custody adapted to Russian academic prose. |
+| `academic-paper-reviewer` | `akademicheskii-retsenzent` | Active compact adapter | Fixed five-seat panel, role-scoped scoring, typed evidence anchors, panel provenance and three-phase evidence-before-persuasion re-review preserved. |
+| `academic-pipeline` | `akademicheskii-konveer` | Active compact adapter | Risk-stratified Stage 2.5, full Stage 4.5, PDF/read attestation, Stage 5/6 boundaries, revision evidence custody and three-phase Stage 3' carryover adapted. |
 
 ## Preserved Upstream Core
 

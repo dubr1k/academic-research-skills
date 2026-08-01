@@ -83,7 +83,8 @@ Use only these status values:
 
 | Status | Definition | Evidence requirement |
 |---|---|---|
-| `addressed` | The revised manuscript closes the concern. | Page/section/paragraph evidence is present. |
-| `partially_addressed` | The revision closes part of the concern but leaves a residual issue. | Evidence and residual risk are both stated. |
-| `not_addressed` | The manuscript does not change or the change does not answer the concern. | Missing or contradictory manuscript evidence is stated. |
-| `needs_evidence` | The response claims a fix but the revised manuscript location is missing, inaccessible, or too vague. | Request exact page/section evidence before closure. |
+| `FULLY_ADDRESSED` | The revised manuscript closes the concern against the pre-committed criterion. | Typed page/section/paragraph evidence is present. |
+| `PARTIALLY_ADDRESSED` | The revision closes part of the concern but leaves a residual issue. | Evidence, `residual_gap`, and residual magnitude are stated. |
+| `NOT_ADDRESSED` | The manuscript does not change or the change does not answer the criterion. | Missing or contradictory manuscript evidence is stated. |
+| `MADE_WORSE` | The revision degrades the concern's subject relative to the original manuscript. | Evidence anchors in the original and revised manuscripts are stated. |
+| `CANNOT_VERIFY` | Evidence or comparison base is insufficient. | Record a concrete reason and remain fail-closed. |

@@ -65,8 +65,8 @@ def test_russian_skills_keep_upstream_attribution():
     for path in skill_paths:
         text = path.read_text(encoding="utf-8")
         assert "https://github.com/imbad0202/academic-research-skills" in text.lower()
-        assert "f5402b114d5c997ac00505d0fb9285cd392ae313" in text
-        assert "v3.18.0" in text
+        assert "462b32bf32a7017ef62c55f7ee262a2642de325a" in text
+        assert "v3.19.0-24-g462b32b" in text
         assert "Creative Commons Attribution-NonCommercial 4.0 International" in text
 
 

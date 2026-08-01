@@ -1,15 +1,15 @@
 ---
 name: akademicheskii-retsenzent
 description: "Русскоязычный peer-review skill для Opencode. Используйте для независимой рецензии научной статьи, методологической проверки, pre-submission review, ВАК/журнальной оценки, re-review после правок и калибровки качества рецензирования. Адаптировано из imbad0202/academic-research-skills под русский язык и Opencode task()."
-version: "3.18.0-ru.1"
-last_updated: "2026-07-21"
+version: "3.19.0-ru.1"
+last_updated: "2026-08-01"
 status: "active-russian-adapter"
 data_access_level: "user_materials_with_optional_source_verification"
 task_type: "review"
 depends_on: []
-upstream_snapshot: "f5402b114d5c997ac00505d0fb9285cd392ae313"
-upstream_version: "v3.18.0"
-upstream_date: "2026-07-20"
+upstream_snapshot: "462b32bf32a7017ef62c55f7ee262a2642de325a"
+upstream_version: "v3.19.0-24-g462b32b"
+upstream_date: "2026-07-31"
 ---
 
 # Академический рецензент
@@ -17,7 +17,7 @@ upstream_date: "2026-07-20"
 Русскоязычная адаптация идей `academic-paper-reviewer` из `imbad0202/academic-research-skills` для Opencode. Skill имитирует независимую многоракурсную рецензию научной статьи и выдает редакционное решение с roadmap правок.
 
 Источник адаптации: https://github.com/imbad0202/academic-research-skills
-Upstream snapshot: `f5402b114d5c997ac00505d0fb9285cd392ae313` (`v3.18.0`, 2026-07-20).
+Upstream snapshot: `462b32bf32a7017ef62c55f7ee262a2642de325a` (`v3.19.0-24-g462b32b`, 2026-07-31).
 Лицензия источника: Creative Commons Attribution-NonCommercial 4.0 International, Copyright (c) 2026 Cheng-I Wu.
 
 Локальные материалы:
@@ -66,6 +66,8 @@ Upstream snapshot: `f5402b114d5c997ac00505d0fb9285cd392ae313` (`v3.18.0`, 2026-0
 8. В re-review нельзя помечать замечание resolved без page/section-level evidence из новой версии рукописи.
 9. Deterministic write-scope guard в hook-enabled runtimes усиливает READ-ONLY, но не является единственным контролем: при его graceful degradation reviewer все равно возвращает только review artifacts и не изменяет рукопись.
 10. Ambiguous cross-phase input сначала маршрутизируется на уточнение; нельзя превращать review в скрытый revision только потому, что в запросе есть оба типа материалов.
+11. В sprint-contract review каждый dimension имеет `eligible_roles` и ровно один `owner_role`; reviewer выставляет score только по разрешенным dimensions и явно abstain на остальных.
+12. Findings следуют evidence без квот. Каждый finding несет **typed evidence anchor**; пустой список strengths/weaknesses допустим только с `Coverage Receipt` по просмотренным dimensions.
 
 ## Opencode orchestration
 
@@ -238,20 +240,22 @@ Upstream snapshot: `f5402b114d5c997ac00505d0fb9285cd392ae313` (`v3.18.0`, 2026-0
 Вход:
 
 - original review comments;
+- original manuscript, если доступен;
 - revised manuscript;
 - response to reviewers, если есть.
 
 Выход:
 
-| Original concern | Author response | Manuscript evidence | Verified? | Residual issue |
-|---|---|---|---|---|
+| Original concern | Phase 1 criterion | Phase 2A evidence verdict | Author response | Final verdict | Manuscript evidence / adjustment | Residual issue |
+|---|---|---|---|---|---|---|
 
 Вердикты:
 
-- `addressed` - исправление подтверждено в конкретной странице/разделе revised manuscript;
-- `partially_addressed` - часть требования закрыта, но остаточный риск или missing evidence сохраняется;
-- `not_addressed` - текст рукописи не изменен или изменение не отвечает замечанию;
-- `needs_evidence` - response обещает правку, но page/section evidence отсутствует или недоступно.
+- `FULLY_ADDRESSED` — исправление полностью подтверждено typed anchor в revised manuscript или допустимым evidence-backed rebuttal;
+- `PARTIALLY_ADDRESSED` — часть критерия закрыта, но обязательны `residual_gap` и его magnitude;
+- `NOT_ADDRESSED` — изменение не отвечает заранее зафиксированному критерию;
+- `MADE_WORSE` — по сравнению с original manuscript состояние ухудшилось;
+- `CANNOT_VERIFY` — доказательств или comparison base недостаточно для положительного вывода; это fail-closed статус, а не синоним исправления.
 
 Не принимайте авторский response как факт. Проверяйте текст рукописи.
 
@@ -262,6 +266,14 @@ Upstream snapshot: `f5402b114d5c997ac00505d0fb9285cd392ae313` (`v3.18.0`, 2026-0
 - В `re-review` сформируйте `Judge Record`: кто вынес исходное решение, кто проверяет закрытие замечаний, model family/provider и доступную provenance. Judge не должен просто воспроизводить исходный panel synthesis; при невозможности независимого judge явно укажите correlated-blind-spot caveat.
 - Статус concern определяется revised manuscript и location evidence, а не response letter. Новый judge сначала проверяет traceability, затем residual/new issues и только потом выносит новое решение.
 - Model tiering не может понижать judgment surfaces. `economy` относится к execution-задачам, `quality-boost` может повысить reviewer/judge checkpoint; unset сохраняет session model.
+
+### Role-scoped scoring и трехфазный re-review (v3.19)
+
+- В `full` и `methodology-focus` сначала зафиксируйте paper-blind contract: для каждого dimension — `eligible_roles`, `owner_role`, mandatory-only fatal triggers и закрытый decision ladder `Accept|Minor Revision|Major Revision|Reject`. Итог нельзя получать средним баллом или свободным голосованием.
+- Phase 1 re-review — revision-blind criteria commitment: свяжите каждый исходный concern с критерием проверки до чтения новой версии и response letter.
+- Phase 2A — evidence verdict, **persuasion-blind**: сравните original manuscript, revised manuscript, versioned patch/apply report и location evidence, не раскрывая авторское объяснение. Закрытая taxonomy verdict: `FULLY_ADDRESSED|PARTIALLY_ADDRESSED|NOT_ADDRESSED|MADE_WORSE|CANNOT_VERIFY`. `indeterminate` допустим только как attribution нового issue, а не как item verdict.
+- Phase 2B — claim matching: только теперь раскройте response letter, сопоставьте заявления автора с Phase 2A evidence verdict и запишите typed **adjustment record**. Риторическая убедительность письма не может изменить evidence verdict без новой проверяемой опоры.
+- Хэш-связанный input manifest, precommitment, traceability, verdict records и synthesis checker должны пройти до показа решения. При конфликте критериев/доказательств используйте `user_review_required`; при невалидных artifacts завершайте fail-closed, а не синтезируйте правдоподобный verdict.
 
 ## Структура отчета
 

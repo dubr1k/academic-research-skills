@@ -36,7 +36,7 @@ Keep journal-index status separate from manuscript quality. Venue/index facts ca
 - РИНЦ/eLIBRARY/ВАК conflation.
 - Journal-index status: `current_vak`, `rinc_indexed`, `elibrary_record`, `international_indexed`, `not_verified`, `not_applicable`.
 - Review context: ВАК article, dissertation council, or international journal.
-- Re-review status: `addressed`, `partially_addressed`, `not_addressed`, `needs_evidence`.
+- Re-review verdict: `FULLY_ADDRESSED`, `PARTIALLY_ADDRESSED`, `NOT_ADDRESSED`, `MADE_WORSE`, `CANNOT_VERIFY`.
 - Page/section-level traceability before marking any reviewer comment resolved; page/section-level evidence is mandatory.
 - Full review uses the fixed five-seat panel; preserve `Review Panel Provenance` and never call persona diversity model diversity.
 - Cross-model Reviewer 2 is allowed only in full mode after explicit external-provider consent; record single-family fallback.
@@ -89,10 +89,12 @@ Accept / Minor Revision / Major Revision / Reject and Resubmit / Reject
 |---|---|---|---|---|
 
 ### Traceability For Re-Review
-| Original concern | Author response | Page/section evidence in revised manuscript | Status | Residual risk |
-|---|---|---|---|---|
+Run three sequential gates: revision-blind criteria commitment, persuasion-blind evidence verdict, then response-letter claim matching.
 
-Allowed status values: `addressed`, `partially_addressed`, `not_addressed`, `needs_evidence`.
+| Original concern | Phase 1 criterion | Phase 2A verdict | Author response | Final verdict | Page/section evidence or typed adjustment | Residual risk |
+|---|---|---|---|---|---|---|
+
+Allowed verdict values: `FULLY_ADDRESSED`, `PARTIALLY_ADDRESSED`, `NOT_ADDRESSED`, `MADE_WORSE`, `CANNOT_VERIFY`. The author response is withheld until Phase 2B and cannot change a Phase 2A verdict without a typed, evidence-bound adjustment record.
 
 ### Review Panel Provenance / Judge Record
 Round-1 panel family/provider:

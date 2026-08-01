@@ -1,15 +1,15 @@
 ---
 name: akademicheskoe-issledovanie
 description: "Русскоязычный academic research skill для Opencode. Используйте для научного исследования, обзора литературы, systematic review, meta-analysis, fact-check, проверки источников, формулировки исследовательского вопроса и сократического прояснения темы. Адаптировано из imbad0202/academic-research-skills под русский язык, ГОСТ и Opencode task()."
-version: "3.18.0-ru.1"
-last_updated: "2026-07-21"
+version: "3.19.0-ru.1"
+last_updated: "2026-08-01"
 status: "active-russian-adapter"
 data_access_level: "external_sources_with_verification"
 task_type: "research"
 depends_on: []
-upstream_snapshot: "f5402b114d5c997ac00505d0fb9285cd392ae313"
-upstream_version: "v3.18.0"
-upstream_date: "2026-07-20"
+upstream_snapshot: "462b32bf32a7017ef62c55f7ee262a2642de325a"
+upstream_version: "v3.19.0-24-g462b32b"
+upstream_date: "2026-07-31"
 ---
 
 # Академическое исследование
@@ -17,7 +17,7 @@ upstream_date: "2026-07-20"
 Русскоязычная адаптация идей `deep-research` из `imbad0202/academic-research-skills` для Opencode. Skill помогает провести исследование от неясной темы до проверенного обзора, исследовательского плана или отчета.
 
 Источник адаптации: https://github.com/imbad0202/academic-research-skills
-Upstream snapshot: `f5402b114d5c997ac00505d0fb9285cd392ae313` (`v3.18.0`, 2026-07-20).
+Upstream snapshot: `462b32bf32a7017ef62c55f7ee262a2642de325a` (`v3.19.0-24-g462b32b`, 2026-07-31).
 Лицензия источника: Creative Commons Attribution-NonCommercial 4.0 International, Copyright (c) 2026 Cheng-I Wu.
 
 Локальные материалы:

@@ -1,7 +1,7 @@
 # Русские академические навыки для Claude Code и Opencode
 
 [![Исходный проект](https://img.shields.io/badge/upstream-Imbad0202%2Facademic--research--skills-blue)](https://github.com/Imbad0202/academic-research-skills)
-[![Снимок](https://img.shields.io/badge/snapshot-v3.18.0%20%2F%20f5402b1-lightgrey)](https://github.com/Imbad0202/academic-research-skills/commit/f5402b114d5c997ac00505d0fb9285cd392ae313)
+[![Снимок](https://img.shields.io/badge/snapshot-v3.19.0--24--g462b32b%20%2F%20462b32b-lightgrey)](https://github.com/Imbad0202/academic-research-skills/commit/462b32bf32a7017ef62c55f7ee262a2642de325a)
 [![Лицензия: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
 
 Русскоязычная адаптация идей из проекта [`Imbad0202/academic-research-skills`](https://github.com/Imbad0202/academic-research-skills) для научной работы в Claude Code и Opencode.
@@ -283,8 +283,8 @@ cp -R russian-academic-skills/* ~/.config/opencode/skills/
 Адаптация основана на снимке:
 
 ```text
-175f79bcca4467949fa94e410c25823bd574f687
-v3.12.0, 2026-06-08
+462b32bf32a7017ef62c55f7ee262a2642de325a
+v3.19.0-24-g462b32b, 2026-07-31
 ```
 
 Если исходный проект обновился:
