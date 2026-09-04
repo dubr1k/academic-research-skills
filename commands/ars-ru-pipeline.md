@@ -1,4 +1,5 @@
 ---
+name: ars-ru-pipeline
 description: ARS RU pipeline entrypoint — русский research → paper → review → revision workflow
 ---
 

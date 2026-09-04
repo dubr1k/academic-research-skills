@@ -1,8 +1,8 @@
 # Двуязычный форк Academic Research Skills
 
 [![Upstream](https://img.shields.io/badge/upstream-Imbad0202%2Facademic--research--skills-blue)](https://github.com/Imbad0202/academic-research-skills)
-[![Version](https://img.shields.io/badge/version-v3.19.0-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.19.0)
-[![Snapshot](https://img.shields.io/badge/snapshot-v3.19.0--24--g462b32b%20%2F%20462b32b-lightgrey)](https://github.com/Imbad0202/academic-research-skills/commit/462b32bf32a7017ef62c55f7ee262a2642de325a)
+[![Version](https://img.shields.io/badge/version-v3.21.1-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.21.1)
+[![Snapshot](https://img.shields.io/badge/snapshot-v3.21.1--8--g9443623%20%2F%209443623-lightgrey)](https://github.com/Imbad0202/academic-research-skills/commit/94436237913091d4739870159d241660527e8338)
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20696614-blue)](https://doi.org/10.5281/zenodo.20696614)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
 
@@ -40,7 +40,7 @@
 
 Подробности: [bilingual routing](docs/bilingual-routing.md), [skill parity matrix](docs/skill-parity-matrix.md), [Russian academic context](docs/russian-academic-context.md).
 
-## Что синхронизировано с upstream v3.19.0-24-g462b32b
+## Что синхронизировано с upstream v3.21.1-8-g9443623
 
 - модельное разделение judgment/execution, opt-in tiering и усиленные cross-model checkpoints;
 - риск-стратифицированная проверка утверждений, scope bindings и классификация novelty claims;
@@ -51,10 +51,25 @@
 - revision-round claim-drift guards: claim-strength ladder, token conservation и hash-bound patch/apply-report custody;
 - role-scoped reviewer scoring, typed evidence anchors, Coverage Receipts и canonical decision contract;
 - трехфазный Stage 3' re-review: revision-blind criteria commitment → persuasion-blind evidence verdict → response-letter claim matching.
+- bounded research-workflow profiles с `profile_binding`, field-general fail-closed fallback и явной фиксацией unresolved discipline fit;
+- Stage Capability Matrix, Risk Register, Data Flows и Control Availability: проверяемые границы доказательств, сетевых вызовов и механизмов по каналам установки;
+- consent-bound Claim-Standing Probe как advisory-only слой вне Phase E integrity result, с freshness и transmission ledger;
+- process-isolated optional PDF text/OCR advisory и защищённый Codex subscription transport для citation-integrity без расширения scope на manuscript review.
 
 Русские adapters переносят эти механизмы содержательно: сохраняют российский venue/source context, не ослабляют integrity gates и различают optional hook hardening от обязательной проверки содержания.
 
 Сохранены и более ранние upstream integrity contracts: Stage 1 фиксирует `experiment_intake_declaration` как для experiment-backed, так и для literature-only runs; opt-in Socratic reading-check включается только через `ARS_SOCRATIC_READING_PROBE=1`. Русский слой не меняет их семантику.
+
+## Проверяемые upstream-контракты
+
+- Reviewer panel: `(Journal-Fit Reviewer + 3 dynamic reviewers + Devil's Advocate)`; full mode (Journal-Fit Reviewer + R1/R2/R3 + Devil's Advocate).
+- First-round review panel vs. contract-governed re-review dispatch boundary: повторная проверка использует отдельный contract-governed dispatch, а не автоматически восстанавливает состав первого раунда.
+- Current live reviews remain `NOT_CALIBRATED`; the typed trajectory carrier is deferred. Confidence остаётся disclosure uncertainty/scope, а не весом или баллом.
+- Citation integrity использует a deterministic citation-existence verification gate; revision integrity — a deterministic numeric/citation token-conservation checker.
+- Зафиксированное измерение wording advisory: held-out miss rate 0.34–0.38 → 0.094 with false-fire 0/16 preserved. Это ограниченное историческое measurement, не универсальная гарантия эффективности.
+- Optional write-scope guard: if no real Python is found it cleanly no-ops and the guard is simply inactive. Если поставляемый Python найден, но повреждён, the guard is inactive and the `PreToolUse` hook will log an error per call rather than no-op quietly.
+- Нормативные карты: [docs/STAGE_CAPABILITY_MATRIX.md](docs/STAGE_CAPABILITY_MATRIX.md), [docs/RISK_REGISTER.md](docs/RISK_REGISTER.md), [docs/DATA_FLOWS.md](docs/DATA_FLOWS.md), [docs/CONTROL_AVAILABILITY.md](docs/CONTROL_AVAILABILITY.md).
+- Venue disclosure selector различает ACL, BMJ, Chinese Nursing Journals Publishing House, EMNLP, Frontiers, ICLR, ICMJE, International Eye Science, JAMA, Nature, NEJM, NeurIPS, PLOS, Science и The Lancet; актуальная policy страницы venue имеет приоритет над встроенным профилем.
 
 ## Установка и требования
 

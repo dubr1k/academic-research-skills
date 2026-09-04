@@ -108,8 +108,8 @@
 
 - `vak-rinc-review-criteria.md` разделяет `journal-index status` и `manuscript quality`.
 - Добавлены отдельные критерии для ВАК article, dissertation council и international journal review.
-- `review-report-traceability.md` и `vak_rinc_reviewer_agent.md` закрепляют статусы `addressed`, `partially_addressed`, `not_addressed`, `needs_evidence`.
-- Page/section-level manuscript evidence стало обязательным перед закрытием замечания как `addressed`.
+- `review-report-traceability.md` и `vak_rinc_reviewer_agent.md` закрепляют закрытую Phase 2A taxonomy `FULLY_ADDRESSED`, `PARTIALLY_ADDRESSED`, `NOT_ADDRESSED`, `MADE_WORSE`, `CANNOT_VERIFY`.
+- Page/section-level manuscript evidence стало обязательным перед `FULLY_ADDRESSED`; response letter сопоставляется с evidence verdict только в Phase 2B.
 - Добавлен пример `examples/ru/reviewer-rereview-traceability.md`.
 
 ### Выполнено в P3e — bilingual pipeline handoff и global shared agents

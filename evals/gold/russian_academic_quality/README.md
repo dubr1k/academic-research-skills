@@ -8,7 +8,7 @@ This gold set captures Russian academic quality risks that the bilingual adapter
 - ВАК/РИНЦ separation, including eLIBRARY presence that does not prove ВАК status and journal-index status that does not prove manuscript quality.
 - Source verification for DOI, eLIBRARY, РИНЦ/ВАК status claims, CyberLeninka access copies, incomplete Russian records, and mixed RU/EN corpora.
 - Russian academic style checks for vague relevance statements and AI-like cliches.
-- Revision-response traceability for reviewer replies, page/section manuscript evidence, and `needs_evidence` re-review status.
+- Revision-response traceability for reviewer replies, page/section manuscript evidence, and fail-closed `CANNOT_VERIFY` re-review status.
 - Mixed-language routing where source_language, output_language, final_package_mode, and router decisions must be preserved.
 
 ## Labels

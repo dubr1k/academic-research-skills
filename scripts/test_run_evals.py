@@ -2,12 +2,14 @@
 from __future__ import annotations
 
 import json
+import shutil
 from pathlib import Path
 
 import pytest
 import yaml
 from jsonschema import Draft202012Validator
 
+from scripts import capture_russian_academic_quality_outputs as capture
 from scripts import run_evals
 from scripts import _eval_threshold_gate as gate
 
@@ -289,6 +291,57 @@ def test_russian_academic_quality_judged_dispatch_shape(validator):
     }
     report = run_evals.build_report(["russian_academic_quality_judged"])
     assert sorted(validator.iter_errors(report), key=lambda e: e.path) == []
+
+
+def test_russian_academic_quality_judged_rejects_stale_candidate_capture(tmp_path):
+    source = REPO_ROOT / "evals" / "gold" / "russian_academic_quality_judged"
+    gold_root = tmp_path / "gold"
+    task_dir = gold_root / "russian_academic_quality_judged"
+    shutil.copytree(source, task_dir)
+
+    gold_path = task_dir / "gold_set.json"
+    gold = json.loads(gold_path.read_text(encoding="utf-8"))
+    gold["items"][0]["model_output"] += "\nMUTATED AFTER CACHED VERDICT"
+    gold_path.write_text(
+        json.dumps(gold, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    capture.write_capture(
+        gold_path,
+        task_dir / "candidate_outputs" / "baseline",
+    )
+
+    with pytest.raises(run_evals.TaskExecutionError, match="candidate_sha256 drift"):
+        run_evals.run_task("russian_academic_quality_judged", gold_root)
+
+
+def test_russian_academic_quality_judged_rejects_missing_cached_verdict(tmp_path):
+    source = REPO_ROOT / "evals" / "gold" / "russian_academic_quality_judged"
+    gold_root = tmp_path / "gold"
+    task_dir = gold_root / "russian_academic_quality_judged"
+    shutil.copytree(source, task_dir)
+
+    verdicts = sorted((task_dir / "judge_verdicts" / "baseline").glob("*.json"))
+    verdicts[0].unlink()
+
+    with pytest.raises(run_evals.TaskExecutionError, match="verdict coverage drift"):
+        run_evals.run_task("russian_academic_quality_judged", gold_root)
+
+
+def test_russian_academic_quality_judged_rejects_duplicate_cached_verdict_case_id(
+    tmp_path,
+):
+    source = REPO_ROOT / "evals" / "gold" / "russian_academic_quality_judged"
+    gold_root = tmp_path / "gold"
+    task_dir = gold_root / "russian_academic_quality_judged"
+    shutil.copytree(source, task_dir)
+
+    verdict_dir = task_dir / "judge_verdicts" / "baseline"
+    original = sorted(verdict_dir.glob("*.json"))[0]
+    shutil.copy2(original, verdict_dir / "duplicate-case-id.json")
+
+    with pytest.raises(run_evals.TaskExecutionError, match="duplicate cached judge case_id"):
+        run_evals.run_task("russian_academic_quality_judged", gold_root)
 
 
 # ---------------------------------------------------------------------------

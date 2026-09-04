@@ -21,4 +21,3 @@ Expected checks:
 - mark unresolved DOI, pages, issue, journal status, or source match as `metadata_missing` or `not_verified`;
 - state which sources can support claims now and which need more evidence before synthesis;
 - do not silently translate Russian titles, merge similar citations, or treat index presence as claim support.
-

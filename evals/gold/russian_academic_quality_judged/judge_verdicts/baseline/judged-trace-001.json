@@ -1,7 +1,7 @@
 {
   "case_id": "judged-trace-001",
   "candidate_path": "judged-trace-001.md",
-  "candidate_sha256": "196e0d015657b76520a5c187e75320e850bc42d77634b6dc3d6bb3a4d8225d82",
+  "candidate_sha256": "a7db5829051d3eaae906316a8b0a778d3da34e084d96e1536cc647364c366d37",
   "verdict": "pass",
   "dimension_results": {
     "traceability": "pass",
@@ -12,7 +12,7 @@
   "rationale": "The output preserves concern IDs and requires page/section evidence before closing reviewer concerns.",
   "evidence_quotes": [
     "traceability table",
-    "needs_evidence",
+    "CANNOT_VERIFY",
     "page/section evidence"
   ]
 }

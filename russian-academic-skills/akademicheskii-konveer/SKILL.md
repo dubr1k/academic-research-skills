@@ -1,8 +1,8 @@
 ---
 name: akademicheskii-konveer
 description: "Русскоязычный academic pipeline orchestrator skill для Opencode. Используйте для полного цикла research -> paper -> integrity check -> review -> revision -> re-review -> finalization. Координирует akademicheskoe-issledovanie, akademicheskaya-statya и akademicheskii-retsenzent. Адаптировано из imbad0202/academic-research-skills под русский язык и Opencode task()."
-version: "3.19.0-ru.1"
-last_updated: "2026-08-01"
+version: "3.21.1-ru.1"
+last_updated: "2026-09-04"
 status: "active-russian-adapter"
 data_access_level: "orchestrates_user_materials_and_verified_sources"
 task_type: "pipeline"
@@ -10,9 +10,9 @@ depends_on:
   - "akademicheskoe-issledovanie"
   - "akademicheskaya-statya"
   - "akademicheskii-retsenzent"
-upstream_snapshot: "462b32bf32a7017ef62c55f7ee262a2642de325a"
-upstream_version: "v3.19.0-24-g462b32b"
-upstream_date: "2026-07-31"
+upstream_snapshot: "94436237913091d4739870159d241660527e8338"
+upstream_version: "v3.21.1-8-g9443623"
+upstream_date: "2026-09-02"
 ---
 
 # Академический конвейер
@@ -20,7 +20,7 @@ upstream_date: "2026-07-31"
 Русскоязычная адаптация идей `academic-pipeline` из `imbad0202/academic-research-skills` для Opencode. Skill не выполняет всю содержательную работу сам: он определяет стадию, выбирает режим, загружает нужные skills, управляет checkpoint-ами, integrity gates и bilingual handoff state.
 
 Источник адаптации: https://github.com/imbad0202/academic-research-skills
-Upstream snapshot: `462b32bf32a7017ef62c55f7ee262a2642de325a` (`v3.19.0-24-g462b32b`, 2026-07-31).
+Upstream snapshot: `94436237913091d4739870159d241660527e8338` (`v3.21.1-8-g9443623`, 2026-09-02).
 Лицензия источника: Creative Commons Attribution-NonCommercial 4.0 International, Copyright (c) 2026 Cheng-I Wu.
 
 Локальные материалы:
@@ -111,6 +111,11 @@ pipeline_state:
   venue_context: "vak|rinc|elibrary|scopus|wos|dissertation_council|journal_specific|mixed"
   citation_style: "gost|apa|ieee|vancouver|journal_override"
   final_package_mode: "RU|EN|bilingual"
+  research_workflow_profile_schema: "research-workflow-profile/1.0"
+  profile_binding:
+    profile_id: "field_general|user_defined_slug"
+    profile_version: "semver"
+    content_sha256: "64 lowercase hex chars"
   source_verification_state:
     status: "not_started|in_progress|partial|pass|pass_with_notes|fail"
     per_source:
@@ -143,6 +148,7 @@ pipeline_state:
 
 - `output_language` описывает язык рукописи/deliverables, `source_language` описывает язык корпуса источников.
 - `final_package_mode` фиксируется до Stage 5: `RU`, `EN` или `bilingual`.
+- `profile_binding` неизменно переносится между стадиями; `field_general` сохраняет `unresolved_fit`, а смена профиля требует нового hash binding и повторной проверки зависимых решений.
 - `source_verification_state` переносится из Stage 1 в Stage 2, затем обновляется на Stage 2.5 и Stage 4.5.
 - `gate_carryover.blocking_issues` нельзя очищать без evidence из текста, bibliography или verification report.
 - При bilingual режиме сохраняйте оригинальные названия русских источников; перевод можно добавить отдельным полем, но не заменять оригинал.
@@ -304,6 +310,15 @@ Stage 4.5 проверяет с нуля, а не только старые пр
 5. **Stage 3' Phase 2B:** раскройте response letter, выполните claim matching и сохраните adjustment records отдельно от evidence verdicts.
 6. **Fail-closed synthesis:** hash-bound manifest, precommitment, traceability и verdict records проходят deterministic checker до решения. Конфликт, который нельзя разрешить без нормативного выбора пользователя, дает `user_review_required`, а не усредненный verdict.
 7. **Reviewer contract carryover:** Stage 3 сохраняет role-scoped `eligible_roles`/`owner_role`, typed evidence anchors, Coverage Receipts и canonical decision record; Stage 4 не имеет права стереть эти artifacts.
+
+## Upstream v3.20-v3.21 bounded workflow и прозрачность
+
+1. **Workflow profile:** run использует `research-workflow-profile/1.0`; `profile_binding` содержит `profile_id`, `profile_version`, `content_sha256`. Единственный shipped fallback `field_general` оставляет discipline fit как `unresolved_fit`. Профиль не является quality/venue-fit verdict.
+2. **Branches:** сохраняйте `branch_budget`; overflow policy — только `ask_merge_park_archive`. `authority_points`, alternative categories и known exclusions нельзя достраивать молча из русского или международного контекста.
+3. **Claim-Standing Probe:** после Claim Registry в Stage 2.5/4.5 можно предложить отдельный **advisory-only** `Claim-Standing Probe`. Он не является Phase E verification и **не входит в integrity result**. Любой live retrieval требует explicit consent, freshness metadata и per-transmission **transmission ledger**; stance выполняется лишь при consent decision `retrieval_plus_stance` с точной provider/model/retention disclosure.
+4. **PDF advisory:** `--classify-content` запускает optional **process-isolated** text/OCR worker над уже хэшированными bytes; verdict scope всегда `STRUCTURE_ONLY`, а page claim по-прежнему требует matching `read_scope`.
+5. **Codex transport:** `ARS_CROSS_MODEL_TRANSPORT=codex` разрешает только consent-gated `citation-integrity` через локальный Codex CLI/ChatGPT subscription — **не для manuscript review**, Devil's Advocate или Reviewer-2. Отсутствие/ошибка transport не должна создавать тихий fallback на другой provider.
+6. **Disclosure surfaces:** перед обещанием конкретного контроля проверьте `docs/CONTROL_AVAILABILITY.md`; сетевые payloads, recipients, credentials, consent/off-switch и local stores сверяйте с `docs/DATA_FLOWS.md`. Plugin, skills-copy, repo clone, Cowork, claude.ai Project, Claude Science и Pi не имеют одинаковых runtime guarantees.
 
 ## Global/shared agent audit before delegation
 

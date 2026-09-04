@@ -1,4 +1,5 @@
 ---
+name: ars-ru-reviewer
 description: ARS RU reviewer entrypoint — русская peer review, ВАК/РИНЦ, re-review
 ---
 

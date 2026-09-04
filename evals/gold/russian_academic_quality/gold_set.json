@@ -313,16 +313,16 @@
       "prompt": "Ответ рецензенту: замечание учтено. Можно отметить resolved без указания страницы?",
       "expected_skill": "akademicheskii-retsenzent",
       "expected_guards": [
-        "require manuscript location before marking addressed",
+        "require manuscript location before marking FULLY_ADDRESSED",
         "use traceability table with comment, action, location, and status",
-        "mark unresolved or needs_evidence if no location is provided"
+        "mark CANNOT_VERIFY if no location is provided"
       ],
       "must_preserve": [
         "traceability",
         "reviewer comment status"
       ],
       "must_not_do": [
-        "mark addressed without manuscript evidence",
+        "mark FULLY_ADDRESSED without manuscript evidence",
         "hide unresolved reviewer concern"
       ]
     },
@@ -351,34 +351,35 @@
       "prompt": "Автор пишет в ответе рецензенту 'исправлено', но не указывает страницу или раздел рукописи. Можно закрыть замечание?",
       "expected_skill": "akademicheskii-retsenzent",
       "expected_guards": [
-        "require page/section-level manuscript evidence before status addressed",
-        "mark the item as needs_evidence when location is absent",
+        "require page/section-level manuscript evidence before status FULLY_ADDRESSED",
+        "mark the item as CANNOT_VERIFY when location is absent",
         "keep original concern, author response, manuscript evidence, and residual issue in traceability table"
       ],
       "must_preserve": [
         "page/section-level",
-        "needs_evidence",
+        "CANNOT_VERIFY",
         "status"
       ],
       "must_not_do": [
-        "mark addressed from author response alone",
+        "mark FULLY_ADDRESSED from author response alone",
         "drop unresolved reviewer concern"
       ]
     },
     {
-      "id": "trace-004-needs-evidence-taxonomy",
+      "id": "trace-004-closed-verdict-taxonomy",
       "label": "revision_traceability",
       "prompt": "Сделай re-review: часть замечаний устранена частично, одно не устранено, по одному нет доказательств в тексте.",
       "expected_skill": "akademicheskii-retsenzent",
       "expected_guards": [
-        "use status taxonomy addressed, partially_addressed, not_addressed, and needs_evidence",
+        "use closed status taxonomy FULLY_ADDRESSED, PARTIALLY_ADDRESSED, NOT_ADDRESSED, MADE_WORSE, and CANNOT_VERIFY",
         "separate partial fixes from unresolved issues",
         "require manuscript location and evidence for every status"
       ],
       "must_preserve": [
-        "partially_addressed",
-        "not_addressed",
-        "needs_evidence"
+        "PARTIALLY_ADDRESSED",
+        "NOT_ADDRESSED",
+        "MADE_WORSE",
+        "CANNOT_VERIFY"
       ],
       "must_not_do": [
         "collapse all statuses into resolved",

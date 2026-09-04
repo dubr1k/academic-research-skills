@@ -1,4 +1,4 @@
-# Reviewer Seeded-Defect Set (#574 E4, v0.1)
+# Reviewer Seeded-Defect Set (#574 E4 / #610, v0.2 prospective)
 
 Held-out acceptance instrument for reviewer-prompt changes: synthetic manuscripts with
 planted, ground-truthed quality defects plus a clean control, so that any change to the
@@ -8,10 +8,16 @@ baseline instead of shipped on intuition. Same discipline as
 `evals/heldout/revision_claim_drift/` (#569/#570): measure the CURRENT model first,
 then change the prompt, then measure again.
 
+**Version boundary:** v0.2 is the prospective #610 measurement foundation. It
+adds one GRIMMER case and a checked statistical-procedure projection before a
+new baseline is collected. Every committed 2026-07-24/25/27 run below remains a
+v0.1 artifact tied to its historical `suite_commit`; no historical denominator,
+verdict, or table value is retroactively recomputed.
+
 ## Epistemic status
 
 This is a **directional smoke tier, not a calibration set** (the #574 rescope's scaled
-form of the E5 decision). n = 2 defective manuscripts (19 seeded defects) + 1 clean
+form of the E5 decision). n = 2 defective manuscripts (20 seeded defects) + 1 clean
 control, labels adjudicated by the maintainer, not a blinded expert panel. It supports
 "recall did not regress / clean-paper false findings did not increase" statements about
 a specific model + prompt pair; it makes NO distributional FNR/FPR claim. Scope per
@@ -21,7 +27,7 @@ repo convention: state what was measured, nothing more.
 
 | Fixture | File | Ground truth |
 |---------|------|--------------|
-| MS01 — quantitative (educational technology, cross-sectional survey + LMS logs) | `manuscripts/ms01_quant_defective.md` | `manifests/ms01_quant.defects.json` (10 defects) |
+| MS01 — quantitative (educational technology, cross-sectional survey + LMS logs) | `manuscripts/ms01_quant_defective.md` | `manifests/ms01_quant.defects.json` (11 defects; v0.2 adds prospective GRIMMER SD-11) |
 | MS02 — qualitative/mixed (higher-education policy, interviews + small survey) | `manuscripts/ms02_qual_defective.md` | `manifests/ms02_qual.defects.json` (9 defects) |
 | MS00 — clean control (educational technology survey, deliberately sound at its scale) | `manuscripts/ms00_clean_control.md` | none — zero planted defects; findings against it are scored per protocol step 5 (only factually-false assertions count as false findings) |
 
@@ -30,6 +36,21 @@ reserved-prefix DOIs. Defect classes: `statistical`, `inference`,
 `citation_claim_mismatch`, `methods`, `ethics`, `internal_consistency`, `overclaim`,
 `qual_rigor`. Each manifest row carries a verbatim `anchor_quote` (unique in its
 manuscript) so adjudication is anchored, not vibes.
+
+### #610 statistical projection (v0.2)
+
+Every `statistical` row carries a closed `statistical_kind`. The #610
+recomputation denominator is exactly MS01 SD-01 `grim`, SD-02 `n_from_df`,
+SD-03 `p_from_test_statistic`, and SD-11 `grimmer`. MS02 SD-07 is
+`reporting_only`: it tests whether an unsupported significance claim is noticed,
+not whether arithmetic is recomputed, so it appears only in class-wide
+statistical recall. The checker pins this mapping and independently exhausts the
+small integer-scale state space behind SD-11; a coordinated relabel, deletion,
+or reachable replacement SD fails CI.
+
+The architecture decision, arithmetic-receipt shape, undecidable boundaries,
+and cohort order are frozen in
+`docs/design/2026-08-02-610-statistical-recompute-baseline-spec.md`.
 
 ## Measurement protocol
 
@@ -224,6 +245,37 @@ mean clean-control false-finding count does not increase; mean severity-agreemen
 score does not regress. "Stricter" alone is not an improvement (#574 rescope,
 product outcome).
 
+**#610 v0.2 extension:** retain all three gates and separately adjudicate each
+of the four MS01 recompute cases as `VERIFIED`, `CLAIM_ONLY`, `MISCOMPUTED`, or
+`MISSED`. Receipt-backed strict recompute recall is `VERIFIED / 4`: ordinary
+`per_defect: DETECTED` credit does not enter this numerator unless the raw output
+also supplies the reported inputs, assumptions, derivation, derived value/range,
+comparison rule, and correct arithmetic. Baseline prose may satisfy those
+logical fields without the not-yet-shipped `AR<n>` wrapper; post output must use
+the formal receipt grammar. Record the closed verdict, procedure id, raw evidence
+location, field presence, supported-assumption verdict, procedure-application
+verdict, arithmetic correctness, and comparison correctness under
+`recompute_adjudication`. `MISCOMPUTED` covers an arithmetic error, unsupported
+assumption/procedure, or wrong comparison/tolerance; a numerically correct line
+with an invalid test identity is not `VERIFIED`.
+
+Also report each procedure separately; class-wide statistical recall including
+MS02's reporting-only row; numeric clean-control false findings (especially a
+mis-recomputed statistic) separate from narrative false findings; and
+conformance-abort rate. The #610 delta cannot pass if receipt-backed recall
+regresses or numeric false findings increase, and every computable seeded case
+must be `VERIFIED` in each score-eligible post MS01 replicate (receipt coverage
+and arithmetic correctness both 1.00). A conspicuous-value claim without its
+arithmetic cannot pass. A procedure-specific row is one seeded case, a
+directional witness, not a calibrated per-procedure rate.
+
+The v0.2 baseline is the 2026-08-04/05 corrected cohort at the frozen post-#638
+SHA 112a869, collected with the #608 harness and adjudicated by the maintainer
+(see its run-history row below). Only now may the receipt/prompt behavior
+change land, followed by the same-model, same-harness 2 x 3 post fleet.
+The `condition` CLI argument is a record label, not a prompt selector: baseline
+and post must come from their respective clean checkouts.
+
 ## Baseline
 
 The 2026-07-24 and 2026-07-25 table rows are the closed grandfathered set
@@ -239,6 +291,9 @@ events would be eligible under `reviewer-e4/2026-07-27`.
 | 2026-07-25 | ad81b2e (#581 behavior batch A1/A2/A3/B1) | claude-opus-5 (same dispatch) | 2 per fixture (6) | **1.00** (10/10 both replicates; critical band 1.00 — SD-01 GRIM detected with the full achievability arithmetic in BOTH replicates, by R1 and the DA independently) | **1.00** (9/9 both replicates; critical band 1.00) | **2 / 1** (mean 1.5 vs baseline 3.0; the baseline's logical-foreclosure / inoculation / recruitment-channel-as-fact fabrications do not recur — the dedup-vs-anonymity invented incompatibility is the one concept surviving in both post replicates (r1 adds one DA mis-absence claim); r1 is the ONLY run of all twelve whose clean-control decision avoided reject_or_major_revision: major_revision, no F1 fired) | **0.536** (per-run 0.600 / 0.600 / 0.500 / 0.444) — a REGRESSION on the frozen highest-tagged-seat ladder | **Gate verdicts vs the 2026-07-25 baseline row**: strict recall PASS (improved, overall and critical band); clean-control false findings PASS (decreased); severity agreement FAIL as frozen-measured. Diagnostic decomposition (recorded, not a gate substitute): DA-only agreement is flat-to-up (0.621 → 0.644; post MS02-r2's 0.75 is the best of all twelve runs), letter-fallback cells drop 4 → 0, and per-finding tag coverage goes 0 → 100% on the non-DA formal registers (A3's transport goal achieved) — the frozen max rule now aggregates four newly-tagged seats whose tag distributions skew critical (one Domain seat tagged 7/7 critical), i.e. the metric can now SEE cross-seat band inflation the baseline could not express. Open residual: seat-level severity-band anchoring (#574 B1 follow-up). Records in `runs/2026-07-25-*-post-r*.json` + `runs/raw/` |
 | 2026-07-27 | 19bc872 (Spec A implementation, including terminal DA-contract correction) | claude-opus-5 (effort xhigh, thinking enabled; same isolated per-seat two-phase dispatch) | **BLOCKED:** 2 clean panels launched; r1 reached synthesis but has incomplete retry provenance; r2 has incomplete Phase 1 retry evidence and conformance-aborted; **0 score-eligible runs**; MS01/MS02 not launched | **NOT COMPUTABLE** | **NOT COMPUTABLE** | r1 unscored observation: **1**, panel decision `major_revision`; replicate mean **NOT COMPUTABLE** | **NOT COMPUTABLE** | Formal Spec-A E4 attempt produced no score-eligible run. r1's first malformed methodology Phase 1 response was overwritten by its permitted structural retry, so the completed final panel cannot prove paper blindness or retry eligibility and is namespaced under `runs/blocked/`. r2's first malformed Methodology and Perspective Phase 1 responses were also overwritten; their exact checker diagnostics survive, but the rejected responses do not, so r2 is independently provenance-invalid. Its Perspective Phase 2 then emitted an empty `## Scoring Plan Dissent` section and failed `[DISSENT-GRAMMAR: dissent section must name dimension_id]`; Phase 2 retry is permitted only for multi-dissent, so DA and synthesis were not run. Observed clean-cohort provenance-invalid rate **2/2 = 1.00** and conformance-abort rate **1/2 = 0.50**, the latter versus the Spec-A diagnostic expectation of approximately zero. Required 2 × 3 fleet and all acceptance gates are **BLOCKED / NOT COMPUTABLE**, not pass or fail. No replacement draw, missing-value imputation, or reconstruction of missing retry output was used. |
 | pending (corrective iteration) | — | — | — | — | — | — | — | A future full 2 × 3 measurement must start as a new cohort after the conformance-abort cause is corrected; compare with the newest same-model baseline and re-run both conditions after model upgrades |
+| 2026-08-03 | b97628f (frozen v0.2 merge SHA; fixtures v0.2) | claude-opus-5 (effort xhigh, thinking enabled; #608-harness isolated per-seat two-phase dispatch via `claude -p --bare`, `--tools ""`, API-key auth) | **3/6 score-eligible** (MS00 r1/r2, MS02 r2); MS01 r1/r2 and MS02 r1 blocked; smoke panel ms00 r99 score-eligible | NOT COMPUTABLE (MS01 has zero score-eligible runs) | NOT COMPUTABLE (single replicate; fleet not score-complete) | not adjudicated (fleet cannot serve as the v0.2 baseline without MS01) | NOT COMPUTABLE | First authorized #610 §7 step-2 attempt. Conformance-abort rate 3/6 = 0.50; provenance valid on all seven panels (the #608 evidence contract held end-to-end). **Every panel that reached synthesis (6/6, smoke included) failed its first attempt with `[SYNTHESIS-PARSE: found 0]`** — the model fenced the four mechanical audit lines; four panels recovered on the plain-text a2 retry, ms02_qual r1 re-fenced and ms01_quant r2 inline-code-wrapped the a2 and aborted. ms01_quant r1 aborted earlier at `domain.phase2` on a self-superseding double Severity declaration (`[FINDING-GRAMMAR]`, panel shrunk 4/5). Root cause and verbatim diagnostics: #637; checker-tolerance fix: #638. Blocked panels are recorded, not replaced. Records in `runs/2026-08-03-*.json` + `runs/blocked/` + `runs/raw/`. |
+| 2026-08-04 (+ 2026-08-05 supplementary replicates) | 112a869 (frozen v0.2 corrected-cohort SHA, post-#638; fixtures v0.2) | claude-opus-5 (effort xhigh, thinking enabled; #608-harness isolated per-seat two-phase dispatch via `claude -p --bare`, `--tools ""`, API-key auth) | **7/9 score-eligible** — smoke ms00 r99 + 2 × 3 fleet on 2026-08-04 (eligible: MS00 r1/r2, MS01 r1, MS02 r2; blocked: MS01 r2, MS02 r1), plus two authorized supplementary replicates on 2026-08-05 (MS01 r3, MS02 r3, both eligible) to satisfy the two-replicate rule | **1.00** (11/11 both replicates, prospective SD-11 GRIMMER included; critical band 1.00; receipt-backed strict recompute recall **3/4 (r1) / 2/4 (r3)** — SD-02 `n_from_df` and SD-11 `grimmer` VERIFIED in both replicates; SD-01 `grim` VERIFIED in r1 but MISCOMPUTED in r3 (integer-product argument without the rounding-interval reachability check §5.2 requires); SD-03 `p_from_test_statistic` MISCOMPUTED in both (two-tailed-only comparison where §5.1 requires both tails shown when the paper states none) — content-level detection is unaffected, prose receipts per the baseline provision, recorded under `recompute_adjudication` in both MS01 records) | **1.00** (9/9 both replicates; critical band 1.00) | **0** (all three clean panels — 0 numeric / 0 narrative; decisions major_revision / major_revision, smoke r99 reject) | **0.672** (per-run MS01 r1 0.682 / MS01 r3 0.727 / MS02 r2 0.611 / MS02 r3 0.667) | **This row is the adjudicated #610 v0.2 baseline.** Class-wide statistical recall 5/5 in both replicates (the four MS01 recompute rows plus MS02 SD-07 `reporting_only`). Conformance-abort rate 2/6 = 0.33 (attempt fleet: 0.50). The #637 Markdown-decoration family did not recur: zero `[SYNTHESIS-PARSE: found 0]` events fleet-wide (attempt fleet: 6/6 first-attempt failures); the only two synthesis retries were `[DELIVERABLE-MISSING]` with a2 convergence — the #638 tolerance fix held. Residual aborts are a different, single-seat content-grammar family, both in non-retryable Phase 2 segments (panel shrunk 4/5): MS01 r2 `domain.phase2` `[ANCHOR-INVALID]` (absence anchor missing `<where>`), MS02 r1 `da.phase2` `[DA-MAJOR-PARSE]` (table not outer-piped). Supplementary panels take fresh replicate numbers (r3); blocked panels are recorded, not replaced. Provenance valid on all nine panels. Adjudicated 2026-08-04/05 by the maintainer against the held-out manifests outside any session. Records in `runs/2026-08-04-*.json` + `runs/2026-08-05-*.json` + `runs/blocked/` + `runs/raw/`. |
+| 2026-08-05 (+ 2026-08-06 completions) | 305884b (#644 formal `AR<n>` receipt-grammar behavior SHA; fixtures v0.2) | claude-opus-5 (effort xhigh, thinking enabled; #608-harness isolated per-seat two-phase dispatch via `claude -p --bare`, `--tools ""`, API-key auth) | **6/7 score-eligible** — smoke ms00 r99 + 2 × 3 fleet (eligible: MS00 r2, MS01 r1/r2, MS02 r1/r2; MS00 r1 blocked at synthesis dispatch by `[TRANSPORT: exit 1]` with all five seats complete — a transport failure recorded under `runs/blocked/`, not a conformance abort) | **1.00** (11/11 both replicates; critical band 1.00; **receipt-backed strict recompute recall 4/4 in BOTH replicates** — SD-01 `grim`, SD-02 `n_from_df`, SD-03 `p_from_test_statistic`, SD-11 `grimmer` all `VERIFIED` under the mandatory formal `AR<n>` grammar, receipt coverage and arithmetic correctness 1.00 per replicate; baseline was 3/4 / 2/4 on prose receipts) | **1.00** (9/9 both replicates; critical band 1.00) | **0** (both eligible clean panels — 0 numeric / 0 narrative; decisions reject (smoke r99) / major_revision (r2), no worse than the baseline panels') | **0.607** (per-run MS01 r1 0.682 / MS01 r2 0.636 / MS02 r1 0.556 / MS02 r2 0.556) — a REGRESSION as frozen-measured | **First #610 post row (§7 steps 4-5).** Gate verdicts vs the 2026-08-04/05 baseline row: strict recall PASS (1.00 flat, overall and critical band); clean-control false findings PASS (0, unchanged); **#610 recompute gate PASS — every computable seeded case `VERIFIED` in each score-eligible post MS01 replicate; the two adjudicated baseline drop points (SD-03's both-tails display; SD-01's rounding-interval reachability) are now carried in the raw output, and SD-11 carries its required formal reachability fields as well**; severity agreement FAIL as frozen-measured (0.672 → 0.607), so the #610 delta does not clear the full pre-existing gate set. Adjudication-consistency note: first-pass post scoring gave MS01 SD-01 a 1.0 on the same highest-tag-Major evidence the baseline had scored 0.5; the pre-merge cross-review caught the inconsistency and the maintainer re-scored SD-01 to 0.5 in both post replicates before promotion, matching the baseline application of the frozen ladder. Decomposition (recorded, not a gate substitute): MS01 drops 0.705 → 0.659 (its movement is SD-08 and SD-09, one band in one replicate each) and MS02 drops 0.639 → 0.556 (the MS02 movement is one band each on its SD-03/SD-04/SD-08/SD-09 with SD-07 improving one band); the MS02 receipts yield no computable mismatch signal (predominantly `not_computable`), so no direct receipt-verdict linkage is evident, but causal attribution for the severity drop remains unresolved — the pattern is consistent with the open #574 A3/B1 band-scatter residual. Class-wide statistical recall 5/5 both replicates. Conformance-abort rate **0/6 with zero retries fleet-wide** (baseline 2/6) — the mandatory Phase 2 receipt grammar cost no abort rate. The clean condition carries two eligible panels (r99 + r2) against the baseline's three: the smoke panel is a full-shape clean panel under the same dispatch contract (it counted in the baseline row's clean cells too), and the transport-blocked r1 — `[TRANSPORT: exit 1]` at synthesis dispatch with all five seats complete and the severed partial preserved as `synthesis.partial-response.md` — is recorded, not replaced; accepted by the maintainer. Adjudicated 2026-08-06 by the maintainer against the held-out manifests outside any session. Records in `runs/2026-08-05-*.json` + `runs/2026-08-06-*.json` + `runs/blocked/` + `runs/raw/`. |
 
 ## Dispatch harness (#608)
 
@@ -318,10 +373,23 @@ What it changes, and why each is a property rather than a step:
   an aborted panel, with every `*_location` already record-relative. Nothing
   has to be rewritten at commit time — that rewrite is what previously turned
   a verbatim diagnostic into a paraphrase.
+- **Every emission freezes a recovery event ledger before installing the
+  record.** `recovery-state.json` stays inside the raw bundle, never enters a
+  model sandbox or prompt, and contains no closed status field. It records the
+  invocation context, the dispatch/retry/abort event ledger, and a path/type/
+  SHA-256 manifest of the preserved bundle. Normal emission and recovery both
+  feed that ledger back through the same status derivation and record builder.
 - **A completed panel carries `adjudication.status: "pending"`.** The harness
   cannot adjudicate `per_defect` — that needs the held-out manifest, which must
   never enter a session — so the maintainer fills the verdicts before the
-  record is committed.
+  record is committed when the record enters the scored run history. An
+  attempt-documentation cohort recorded under the corrective-iteration rule —
+  one whose run-history row is marked not adjudicated / NOT COMPUTABLE and
+  whose panels are never reused as baseline replicates (the 2026-08-03
+  attempt) — commits with the pending status and its explanatory note intact:
+  filling verdicts for panels that will never enter baseline/gate scoring
+  would blur the boundary between dispatch facts and maintainer
+  adjudication.
 - **The delivered prompts are dispatched whole where the protocol does not
   narrow them.** §2 names a subsection only for the five seats; the field
   analyst and the synthesizer get their full agent files. Sending the
@@ -358,6 +426,40 @@ What it changes, and why each is a property rather than a step:
 Records and bundles land in the work directory, never straight into the repo;
 committing them stays a deliberate step.
 
+### #610 step 5: three-call methodology shape (`reviewer-e4/2026-08-06`)
+
+From the step-5 merge SHA onward the harness dispatches the methodology seat
+as three calls — Phase 1, a paper-visible **numeric extraction** call, and
+Phase 2 — under the successor contract `reviewer-e4/2026-08-06`, which
+preserves every `reviewer-e4/2026-07-27` obligation and adds:
+
+- **The extraction call is gated** (`--extraction` stage of
+  `scripts/check_phase_conformance.py`: exactly one `## Recompute Extraction`
+  section of typed machine lines, or the attestation) **and carries one
+  structural retry** of the Phase 1 evidence class, recorded under its own
+  `extraction_retries` list with the rejected response and gate log
+  preserved.
+- **Arithmetic is computed by the harness, not the model.**
+  `scripts/recompute_receipts.py` — deterministic, stdlib-only, tested
+  against the #610 spec's worked cases — turns the gated extraction into the
+  `## Arithmetic Receipts` section (`methodology.receipts.md` +
+  `methodology.recompute.log` in the bundle). A calculator refusal of a
+  gate-passed extraction is a harness infra fault: the panel blocks
+  (exit-2 class), it is never a conformance abort and never retried.
+- **The methodology Phase 2 receives the computed receipts** as a
+  `<computed_receipts>` block and must reproduce them verbatim, adding only
+  the `finding_ref:` linkage lines on mismatch receipts; the
+  `--injected-receipts` identity gate fails the seat on any other edit.
+  Extraction fidelity — whether the transcribed numbers are the manuscript's
+  — remains a maintainer-adjudicated question against the held-out manifest,
+  exactly like the attestation's truth.
+
+`condition` remains a record label: a `script_adapter` cohort must be
+dispatched from a frozen clean checkout at or after the step-5 merge SHA and
+compared against the newest same-model post row, because the measured
+condition (dispatch shape + prompt state) differs from both the baseline and
+the post rows. Fleet execution stays a separately authorized step.
+
 **Comparability:** the harness changes the dispatched condition relative to
 the 2026-07-24/25 hand-dispatched rows — `--bare` removes the operator's
 user-level context, each seat receives only its own configuration card,
@@ -380,17 +482,64 @@ fault after the panel completes leaves one of two recoverable states,
 neither of them silent. (1) Any staged-write or install failure: the
 staged temp file is removed, the bundle is rolled back into the work
 directory, no record exists, and the identity is NOT consumed — the
-evidence is intact on disk, but re-emitting it needs a fresh dispatch
-(a fresh work directory re-runs the panel; there is no
-resume-from-bundle CLI in this version, a declared bound). (2) Rollback
-failure on top of (1): the bundle stays under `runs/raw/<stem>` with no
-record beside it; the console names the fault, and the bundle is the
-complete account of the attempt for manual reconstruction.
+evidence is intact at `<work-dir>/bundle`. (2) Rollback failure on top
+of (1): the bundle stays under its canonical `runs/raw/<stem>` or
+`runs/raw/blocked/<stem>` path with no record beside it; the console
+names the fault. In either state, re-emit without a model call:
+
+```bash
+python3 scripts/resume_e4_record.py \
+  --work-dir /tmp/e4-run \
+  --bundle /tmp/e4-run/bundle
+```
+
+For state (2), pass that canonical raw-bundle path to `--bundle` instead.
+The command accepts no fixture, condition, replicate, status, diagnostic, or
+provenance override: it reads them from `recovery-state.json`, verifies the
+bundle manifest, the append-only completion/retry/abort journal witnesses, and
+the already-preserved checker PASS markers, then calls the original atomic
+emission path. It refuses missing, inserted, changed, symlinked, ambiguous,
+already-recorded, non-canonical, or internally inconsistent evidence. It is
+record re-emission after a completed dispatch/abort only — never continuation
+of an interrupted panel, transport retry, checker re-run, or manual
+reconstruction. Bundles created before `recovery-state.json` shipped are not
+recoverable by this command and fail closed.
+
+**Promotion-time copy check.** After copying the one record and its raw bundle
+from a work directory into this set, verify the copy before staging it:
+
+```bash
+python3 scripts/check_e4_promotion.py \
+  --source-root /tmp/e4-run \
+  --destination-root evals/heldout/reviewer_seeded_defects \
+  --stem 2026-08-01-ms00_clean-post-r1
+```
+
+The checker requires the canonical scored/blocked layout, exactly one record
+namespace, a complete and identical relative path/type set, SHA-256 identity
+for the record and every raw file, and safe record-relative resolution of
+`raw_bundle` plus every `*_location`. It rejects missing, extra, changed,
+redirected, symlinked, or unresolved promoted artifacts. It validates only the
+copy boundary; it never reinterprets model output, checker verdicts,
+adjudication, or closed status fields.
 
 ## Integrity checking
 
 `scripts/check_seeded_defect_fixtures.py` validates structure only (manifest schema,
 closed enums, defect-count agreement, every `anchor_quote` present verbatim exactly
-once in its manuscript, clean control free of manifest references). It is a fixture
+once in its manuscript, clean control free of manifest references, the exact v0.2
+statistical-kind projection, and the prospective GRIMMER oracle). It is a fixture
 integrity gate, NOT a behavioral measurer — `run_evals` has no native task for this
 set; the behavioral measurement is the manual protocol above.
+
+## Measurement contract (#654)
+
+New scored rows opt into the `heldout-measurement/1.1` envelope
+(`evals/heldout/MEASUREMENT_CONTRACT.md`, `suite_class: seeded_manifest_adjudicated`
+per `evals/heldout/suite_registry.json`). The E4 machinery in this README — the
+`reviewer-e4/*` evidence contract, blocked-run separation, closed record status
+fields, replicate discipline, raw-output preservation — remains the normative layer
+and is unchanged. The adoption surface is the **cohort roll-up row**: a
+`measurement-<date>.json` summary in envelope form whose `raw_outputs.paths`
+reference the per-run records under `runs/`; per-run record shapes emitted by
+`dispatch_e4_panel.py` do not change. Existing rows are never retrofitted.

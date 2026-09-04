@@ -75,13 +75,13 @@
       "id": "judged-trace-001",
       "label": "revision_traceability",
       "prompt": "Оцени ответ модели на re-review после правок.",
-      "model_output": "Ответ требует traceability table, сохраняет concern IDs и присваивает needs_evidence, если нет page/section evidence в рукописи; addressed допустим только после проверки текста и response letter.",
+      "model_output": "Ответ требует traceability table, сохраняет concern IDs и присваивает CANNOT_VERIFY, если нет page/section evidence в рукописи; FULLY_ADDRESSED допустим только после проверки текста, а response letter раскрывается лишь на Phase 2B.",
       "rubric": {
         "must_include": [
           "traceability",
-          "needs_evidence",
+          "CANNOT_VERIFY",
           "page/section evidence",
-          "addressed"
+          "FULLY_ADDRESSED"
         ],
         "must_avoid": [
           "закрыть замечание без evidence",

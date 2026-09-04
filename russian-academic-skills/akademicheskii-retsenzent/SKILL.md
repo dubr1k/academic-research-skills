@@ -1,15 +1,15 @@
 ---
 name: akademicheskii-retsenzent
 description: "Русскоязычный peer-review skill для Opencode. Используйте для независимой рецензии научной статьи, методологической проверки, pre-submission review, ВАК/журнальной оценки, re-review после правок и калибровки качества рецензирования. Адаптировано из imbad0202/academic-research-skills под русский язык и Opencode task()."
-version: "3.19.0-ru.1"
-last_updated: "2026-08-01"
+version: "3.21.1-ru.1"
+last_updated: "2026-09-04"
 status: "active-russian-adapter"
 data_access_level: "user_materials_with_optional_source_verification"
 task_type: "review"
 depends_on: []
-upstream_snapshot: "462b32bf32a7017ef62c55f7ee262a2642de325a"
-upstream_version: "v3.19.0-24-g462b32b"
-upstream_date: "2026-07-31"
+upstream_snapshot: "94436237913091d4739870159d241660527e8338"
+upstream_version: "v3.21.1-8-g9443623"
+upstream_date: "2026-09-02"
 ---
 
 # Академический рецензент
@@ -17,7 +17,7 @@ upstream_date: "2026-07-31"
 Русскоязычная адаптация идей `academic-paper-reviewer` из `imbad0202/academic-research-skills` для Opencode. Skill имитирует независимую многоракурсную рецензию научной статьи и выдает редакционное решение с roadmap правок.
 
 Источник адаптации: https://github.com/imbad0202/academic-research-skills
-Upstream snapshot: `462b32bf32a7017ef62c55f7ee262a2642de325a` (`v3.19.0-24-g462b32b`, 2026-07-31).
+Upstream snapshot: `94436237913091d4739870159d241660527e8338` (`v3.21.1-8-g9443623`, 2026-09-02).
 Лицензия источника: Creative Commons Attribution-NonCommercial 4.0 International, Copyright (c) 2026 Cheng-I Wu.
 
 Локальные материалы:
@@ -274,6 +274,12 @@ Upstream snapshot: `462b32bf32a7017ef62c55f7ee262a2642de325a` (`v3.19.0-24-g462b
 - Phase 2A — evidence verdict, **persuasion-blind**: сравните original manuscript, revised manuscript, versioned patch/apply report и location evidence, не раскрывая авторское объяснение. Закрытая taxonomy verdict: `FULLY_ADDRESSED|PARTIALLY_ADDRESSED|NOT_ADDRESSED|MADE_WORSE|CANNOT_VERIFY`. `indeterminate` допустим только как attribution нового issue, а не как item verdict.
 - Phase 2B — claim matching: только теперь раскройте response letter, сопоставьте заявления автора с Phase 2A evidence verdict и запишите typed **adjustment record**. Риторическая убедительность письма не может изменить evidence verdict без новой проверяемой опоры.
 - Хэш-связанный input manifest, precommitment, traceability, verdict records и synthesis checker должны пройти до показа решения. При конфликте критериев/доказательств используйте `user_review_required`; при невалидных artifacts завершайте fail-closed, а не синтезируйте правдоподобный verdict.
+
+### Workflow profile binding (v3.20-v3.21)
+
+- Рецензия наследует `research-workflow-profile/1.0` как неизменный `profile_binding` (`profile_id`, `profile_version`, `content_sha256`). Профиль определяет applicability/authority vocabulary, но не editorial decision и не оценку качества.
+- При `field_general` или `unresolved_fit` reviewer обязан раскрыть неустановленный discipline fit и запросить недостающие criteria; нельзя выдавать универсальную рубрику, ВАК/РИНЦ visibility или journal indexing за подтвержденный field standard.
+- `authority_points` и known exclusions применяются только из связанного хэшем профиля или явного user-approved update. Изменение профиля делает старые профиль-зависимые judgments требующими повторной проверки.
 
 ## Структура отчета
 

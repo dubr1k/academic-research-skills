@@ -1,4 +1,5 @@
 ---
+name: ars-ru-paper
 description: ARS RU paper entrypoint — русская научная статья, аннотация, revision, ГОСТ
 ---
 

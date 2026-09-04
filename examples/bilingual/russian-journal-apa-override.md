@@ -21,4 +21,3 @@ Expected checks:
 - preserve Russian manuscript requirements: title, abstract, keywords, ВАК/РИНЦ checks, disclosure placeholders;
 - ask for the author guidelines before final formatting if they are not provided;
 - do not silently convert the bibliography back to ГОСТ.
-

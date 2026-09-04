@@ -1,15 +1,15 @@
 ---
 name: akademicheskoe-issledovanie
 description: "Русскоязычный academic research skill для Opencode. Используйте для научного исследования, обзора литературы, systematic review, meta-analysis, fact-check, проверки источников, формулировки исследовательского вопроса и сократического прояснения темы. Адаптировано из imbad0202/academic-research-skills под русский язык, ГОСТ и Opencode task()."
-version: "3.19.0-ru.1"
-last_updated: "2026-08-01"
+version: "3.21.1-ru.1"
+last_updated: "2026-09-04"
 status: "active-russian-adapter"
 data_access_level: "external_sources_with_verification"
 task_type: "research"
 depends_on: []
-upstream_snapshot: "462b32bf32a7017ef62c55f7ee262a2642de325a"
-upstream_version: "v3.19.0-24-g462b32b"
-upstream_date: "2026-07-31"
+upstream_snapshot: "94436237913091d4739870159d241660527e8338"
+upstream_version: "v3.21.1-8-g9443623"
+upstream_date: "2026-09-02"
 ---
 
 # Академическое исследование
@@ -17,7 +17,7 @@ upstream_date: "2026-07-31"
 Русскоязычная адаптация идей `deep-research` из `imbad0202/academic-research-skills` для Opencode. Skill помогает провести исследование от неясной темы до проверенного обзора, исследовательского плана или отчета.
 
 Источник адаптации: https://github.com/imbad0202/academic-research-skills
-Upstream snapshot: `462b32bf32a7017ef62c55f7ee262a2642de325a` (`v3.19.0-24-g462b32b`, 2026-07-31).
+Upstream snapshot: `94436237913091d4739870159d241660527e8338` (`v3.21.1-8-g9443623`, 2026-09-02).
 Лицензия источника: Creative Commons Attribution-NonCommercial 4.0 International, Copyright (c) 2026 Cheng-I Wu.
 
 Локальные материалы:
@@ -266,6 +266,18 @@ Integrity floor: если есть явный undisclosed conflict или фал
 - Любое утверждение о новизне или отсутствии работ должно быть `search-bounded`: укажите базы, запросы, языки, даты поиска, критерии включения и ближайшую известную работу. Формула `аналогов нет` без документированной стратегии поиска запрещена.
 - Результат из citation-verification cache получает staleness advisory. При решениях о текущем статусе ВАК/РИНЦ/eLIBRARY, актуальной редакции нормы или наличии публикации выполняйте opt-in live re-validation; старый cache hit не равен `verified_current`.
 - Для локального PDF с page anchors сохраняйте фактический `read_scope` и проверяемый preflight/sidecar. Если заявленные страницы не были реально извлечены либо sidecar отсутствует/не совпадает, статус должен блокировать anchor-level подтверждение, а не превращаться в догадку по метаданным.
+
+### Bounded workflow profile и ветвление исследования (v3.20-v3.21)
+
+- До детализации стадий свяжите run с закрытым контрактом `research-workflow-profile/1.0`. `profile_binding` содержит ровно `profile_id`, `profile_version` и `content_sha256`; binding переносится в downstream handoff без ручного переименования полей.
+- В поставке есть только безопасный fallback `field_general`. Он оставляет discipline fit как `unresolved_fit`: не объявляйте методы, evidence hierarchy, обязательные authority sources или неприменимость стадии установленными, пока пользователь либо проверенный профиль этого не подтвердил.
+- Для российского контекста разрешен отдельный `user_authored`/`user_modified` профиль, но его `authority_points` должны называть конкретные источники полномочий (например, официальный перечень ВАК, паспорт специальности, требования журнала), а не смешивать индексирование с качеством исследования.
+- Уважайте `branch_budget`. При переполнении используйте только `ask_merge_park_archive`: спросить пользователя, объединить, отложить или архивировать ветку; молча расширять scope нельзя.
+- Профиль задает применимость стадий и словарь альтернатив, но не является verdict о качестве, соответствии журналу или вероятности принятия. `alternative_categories` и known exclusions сохраняются как структурные ограничения, а не как творческая подсказка.
+
+### PDF content advisory (v3.20)
+
+Опция `--classify-content` запускает optional **process-isolated** text/OCR advisory над уже хэшированными bytes. Даже при успешной классификации verdict scope остается `STRUCTURE_ONLY`: это не доказательство фактического чтения и не разрешение page/section claims без matching `read_scope`. Если worker недоступен или возвращает неполный sidecar, сохраните базовый preflight verdict и явно зафиксируйте degraded state.
 
 ### Model routing (optional)
 

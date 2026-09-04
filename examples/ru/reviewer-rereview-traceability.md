@@ -16,8 +16,8 @@ Routing:
 
 Expected checks:
 
-- classify every comment as `addressed`, `partially_addressed`, `not_addressed`, or `needs_evidence`;
-- require page/section-level evidence before marking any comment `addressed`;
-- keep residual risks visible for `partially_addressed` items;
-- mark promised but unlocated fixes as `needs_evidence`;
+- classify every comment in persuasion-blind Phase 2A as `FULLY_ADDRESSED`, `PARTIALLY_ADDRESSED`, `NOT_ADDRESSED`, `MADE_WORSE`, or `CANNOT_VERIFY`;
+- require page/section-level manuscript evidence before marking any comment `FULLY_ADDRESSED`;
+- keep `residual_gap` and its magnitude visible for `PARTIALLY_ADDRESSED` items;
+- mark promised but unlocated fixes as `CANNOT_VERIFY`, then compare the response letter only in Phase 2B;
 - keep journal-index status separate from manuscript quality if venue claims appear in the response.

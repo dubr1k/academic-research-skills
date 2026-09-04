@@ -1,7 +1,7 @@
 # Русские академические навыки для Claude Code и Opencode
 
 [![Исходный проект](https://img.shields.io/badge/upstream-Imbad0202%2Facademic--research--skills-blue)](https://github.com/Imbad0202/academic-research-skills)
-[![Снимок](https://img.shields.io/badge/snapshot-v3.19.0--24--g462b32b%20%2F%20462b32b-lightgrey)](https://github.com/Imbad0202/academic-research-skills/commit/462b32bf32a7017ef62c55f7ee262a2642de325a)
+[![Снимок](https://img.shields.io/badge/snapshot-v3.21.1--8--g9443623%20%2F%209443623-lightgrey)](https://github.com/Imbad0202/academic-research-skills/commit/94436237913091d4739870159d241660527e8338)
 [![Лицензия: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
 
 Русскоязычная адаптация идей из проекта [`Imbad0202/academic-research-skills`](https://github.com/Imbad0202/academic-research-skills) для научной работы в Claude Code и Opencode.
@@ -275,6 +275,10 @@ cp -R russian-academic-skills/* ~/.config/opencode/skills/
 - учет ГОСТ, ВАК, РИНЦ, eLIBRARY и CyberLeninka;
 - проверку русских канцелярских ИИ-клише;
 - отдельный навык полного конвейера для перехода между исследованием, письмом и рецензией.
+- hash-bound `research-workflow-profile/1.0` с безопасным `field_general` fallback и явным `unresolved_fit`;
+- consent-gated Claim-Standing Probe, который остается advisory и не подменяет integrity result;
+- прозрачные карты сетевых потоков и доступности контролей по способам установки;
+- process-isolated PDF content advisory, не превращающий structural preflight в доказательство чтения.
 
 ---
 
@@ -283,8 +287,8 @@ cp -R russian-academic-skills/* ~/.config/opencode/skills/
 Адаптация основана на снимке:
 
 ```text
-462b32bf32a7017ef62c55f7ee262a2642de325a
-v3.19.0-24-g462b32b, 2026-07-31
+94436237913091d4739870159d241660527e8338
+v3.21.1-8-g9443623, 2026-09-02
 ```
 
 Если исходный проект обновился:

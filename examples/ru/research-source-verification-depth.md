@@ -21,4 +21,3 @@ Expected checks:
 - classify every source as `verified_current`, `partially_verified`, `not_verified`, `inaccessible`, or `rejected`;
 - mark missing issue, pages, DOI, city, publisher, or journal status as `metadata_missing`;
 - keep unresolved `not_verified` fields visible in the handoff and final caveats.
-

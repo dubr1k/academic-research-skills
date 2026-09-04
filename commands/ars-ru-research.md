@@ -1,4 +1,5 @@
 ---
+name: ars-ru-research
 description: ARS RU research entrypoint — русское исследование, обзор литературы, fact-check
 ---
 

@@ -78,7 +78,7 @@ def test_russian_academic_quality_gold_set_covers_local_risks():
         "source-004-incomplete-russian-record",
         "source-005-mixed-source-language",
         "trace-003-rereview-page-section-evidence",
-        "trace-004-needs-evidence-taxonomy",
+        "trace-004-closed-verdict-taxonomy",
         "mixed-003-pipeline-final-package-mode",
     } <= ids
 
@@ -92,7 +92,7 @@ def test_russian_academic_quality_gold_set_covers_local_risks():
         "metadata_missing",
         "journal override",
         "journal-index status",
-        "needs_evidence",
+        "CANNOT_VERIFY",
         "final_package_mode",
         "verified_current",
         "not_verified",
@@ -113,6 +113,41 @@ def test_russian_academic_quality_eval_is_documented():
         "traceability",
     ):
         assert required_term in readme
+
+
+def test_russian_re_review_surfaces_use_closed_phase_2a_taxonomy():
+    taxonomy_roots = (
+        EVAL_DIR,
+        JUDGED_EVAL_DIR,
+        ROOT / "russian-academic-skills",
+        ROOT / "examples" / "ru",
+    )
+    taxonomy_files = [
+        path
+        for root in taxonomy_roots
+        for path in sorted(root.rglob("*"))
+        if path.is_file() and path.suffix in {".json", ".md", ".yaml", ".yml"}
+    ]
+    taxonomy_files.extend(
+        (
+            ROOT / "docs" / "russian-academic-context.md",
+            ROOT / "docs" / "context-adaptation-audit.md",
+            ROOT / "PLAN.md",
+        )
+    )
+    surface_text = "\n".join(read_text(path) for path in taxonomy_files)
+
+    for legacy_status in ("needs_evidence", "partially_addressed", "not_addressed"):
+        assert legacy_status not in surface_text
+
+    for canonical_status in (
+        "FULLY_ADDRESSED",
+        "PARTIALLY_ADDRESSED",
+        "NOT_ADDRESSED",
+        "MADE_WORSE",
+        "CANNOT_VERIFY",
+    ):
+        assert canonical_status in surface_text
 
 
 def test_russian_academic_quality_judged_eval_manifest_declares_scope():
@@ -164,7 +199,7 @@ def test_russian_academic_quality_judged_gold_set_scores_outputs():
         "ГОСТ",
         "journal-index status",
         "source_verification_state",
-        "needs_evidence",
+        "CANNOT_VERIFY",
         "output_language",
     ):
         assert required_term in serialized

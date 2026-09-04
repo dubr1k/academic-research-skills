@@ -83,12 +83,12 @@ The reviewer adapter now has deeper assets for:
 
 - separating journal-index status from manuscript quality;
 - review criteria for ВАК article, dissertation council, and international journal review;
-- re-review status taxonomy: addressed, partially addressed, not addressed, needs evidence;
+- closed Phase 2A re-review taxonomy: `FULLY_ADDRESSED`, `PARTIALLY_ADDRESSED`, `NOT_ADDRESSED`, `MADE_WORSE`, `CANNOT_VERIFY`;
 - page/section-level traceability before marking reviewer comments resolved.
 
 Primary surfaces: `russian-academic-skills/akademicheskii-retsenzent/`, `examples/ru/reviewer-rereview-traceability.md`, `evals/gold/russian_academic_quality/`.
 
-Stable markers: `journal-index status`, `manuscript quality`, `needs_evidence`.
+Stable markers: `journal-index status`, `manuscript quality`, `CANNOT_VERIFY`, persuasion-blind Phase 2A, response-aware Phase 2B.
 
 ### P3e: Bilingual Pipeline Handoff and Global Shared Agents
 

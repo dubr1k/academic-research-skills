@@ -34,7 +34,7 @@ Recommended Pipeline Configuration:
 
   Stage 1 RESEARCH: socratic -- First time doing research, Socratic guidance to help you think through
   Stage 2 WRITE:    plan     -- Chapter-by-chapter guidance to plan your paper structure
-  Stage 3 REVIEW:   full     -- Complete 4-person review, simulating real submission experience
+  Stage 3 REVIEW:   full     -- Complete 5-person review (Journal-Fit Reviewer + R1/R2/R3 + Devil's Advocate), simulating real submission experience
   Stage 4 REVISE:   revision -- Item-by-item revision based on review comments
   Stage 5 FINALIZE: format   -- Convert to your desired format (LaTeX/DOCX via Pandoc/PDF)
 
@@ -194,7 +194,7 @@ Deliverables:
   - References: 22 entries (APA 7.0)
 
 Next step is Stage 3 (REVIEW).
-Using full mode, simulating a complete review process with 4 reviewers.
+Using full mode, simulating a complete five-seat review process: four configured scoring identities plus the fixed Devil's Advocate.
 After review, an Editorial Decision and Revision Roadmap will be produced.
 
 Continue?
@@ -223,13 +223,15 @@ Research paradigm: Pragmatism (mixed methods)
 Method type: Quantitative (secondary data analysis) + Qualitative (interviews)
 
 Reviewer Configuration:
-  EIC:        Journal of Education Policy Editor, specializing in economics of education
+  Journal-Fit Reviewer (serialized source ID EIC):
+              Journal of Education Policy Editor, specializing in economics of education
   Reviewer 1: Quantitative methods expert, specializing in education statistics and large database analysis
   Reviewer 2: Higher education management scholar, specializing in university governance and enrollment policy
   Reviewer 3: Demographer, specializing in declining birthrate and labor market, interdisciplinary perspective
+  Fixed seat: Devil's Advocate, challenging the core argument and strongest counter-explanations
 ```
 
-*(4 reviewers review in parallel... editorial_synthesizer_agent compiles...)*
+*(All 5 role-separated seats review without peer-output access before commitment... editorial_synthesizer_agent compiles...)*
 
 **Editorial Decision: Major Revision**
 
@@ -248,7 +250,8 @@ R5: [Introduction] Research gap argumentation not sharp enough, needs more speci
 ```
 
 **Stage 3 Deliverables:**
-- 4 independent review reports
+- 5 role-separated review reports (Journal-Fit Reviewer + R1/R2/R3 + Devil's Advocate)
+- Typed six-axis Review Panel Provenance receipt; no binary independence claim
 - Editorial Decision Letter: Major Revision
 - Revision Roadmap (5 required items + 3 suggested modifications)
 
@@ -338,7 +341,7 @@ Entering Stage 3' (RE-REVIEW) -- Loop 1/2
 
 Loading academic-paper-reviewer SKILL.md (re-review mode)...
 Passing Revised Draft + Response to Reviewers + Editorial Decision Letter (#539 Judge Record input) + Round-1 Revision Roadmap + apply report(s) (#390) + Round-1 Reviewer Configuration Cards (yardstick continuity)...
-EIC verifying each roadmap item (Round-1 reviewer configuration reused — field_analyst not re-run)...
+Journal-Fit Reviewer verifying each roadmap item (Round-1 reviewer configuration reused — field_analyst not re-run)...
 ```
 
 **Editorial Decision: Minor Revision**

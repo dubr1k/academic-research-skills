@@ -1,16 +1,16 @@
 ---
 name: akademicheskaya-statya
 description: "Русскоязычный academic paper writing skill для Opencode. Используйте для планирования, структуры, черновика, аннотации, литературного обзора, ревизии, ответа рецензентам, проверки цитирования, ГОСТ/APA/IEEE/Vancouver оформления и disclosure научной статьи. Адаптировано из imbad0202/academic-research-skills под русский язык и Opencode task()."
-version: "3.19.0-ru.1"
-last_updated: "2026-08-01"
+version: "3.21.1-ru.1"
+last_updated: "2026-09-04"
 status: "active-russian-adapter"
 data_access_level: "user_materials_and_verified_sources"
 task_type: "writing"
 depends_on:
   - "akademicheskoe-issledovanie"
-upstream_snapshot: "462b32bf32a7017ef62c55f7ee262a2642de325a"
-upstream_version: "v3.19.0-24-g462b32b"
-upstream_date: "2026-07-31"
+upstream_snapshot: "94436237913091d4739870159d241660527e8338"
+upstream_version: "v3.21.1-8-g9443623"
+upstream_date: "2026-09-02"
 ---
 
 # Академическая статья
@@ -18,7 +18,7 @@ upstream_date: "2026-07-31"
 Русскоязычная адаптация идей `academic-paper` из `imbad0202/academic-research-skills` для Opencode. Skill помогает спланировать, написать, переработать и оформить научную статью или главу диссертации.
 
 Источник адаптации: https://github.com/imbad0202/academic-research-skills
-Upstream snapshot: `462b32bf32a7017ef62c55f7ee262a2642de325a` (`v3.19.0-24-g462b32b`, 2026-07-31).
+Upstream snapshot: `94436237913091d4739870159d241660527e8338` (`v3.21.1-8-g9443623`, 2026-09-02).
 Лицензия источника: Creative Commons Attribution-NonCommercial 4.0 International, Copyright (c) 2026 Cheng-I Wu.
 
 Локальные материалы:
@@ -254,6 +254,13 @@ style и источник требования.
 - При переносе claims из research brief сохраняйте per-sub-question scope bindings. Текст статьи не должен незаметно расширять регион, период, образовательный уровень, выборку или паспорт специальности.
 - Если runtime поддерживает `ARS_MODEL_TIERING`, execution и judgment роли маршрутизируются отдельно: unset наследует session model, `economy` не понижает judgment-задачи, `quality-boost` повышает только checkpoint/judgment surfaces. Не фиксируйте конкретные model IDs в skill.
 - Cross-model проверка рукописи допускается только после явного согласия на передачу текста внешнему provider; переменная окружения означает настройку, но не consent.
+
+### Workflow profile и PDF provenance (v3.20-v3.21)
+
+- Каждый research handoff должен сохранять `research-workflow-profile/1.0` через неизменный `profile_binding` (`profile_id`, `profile_version`, `content_sha256`). Письменный этап не вправе самостоятельно менять stage applicability, `authority_points`, known exclusions или unresolved discipline fit.
+- Если binding указывает на `field_general`/`unresolved_fit`, сначала запросите у пользователя дисциплинарные и venue-specific правила; не подменяйте их универсальным IMRaD, ГОСТ или англоязычной evidence hierarchy.
+- Для локальных PDF опция `--classify-content` является optional **process-isolated** advisory с verdict scope `STRUCTURE_ONLY`. Она не подтверждает чтение страницы: citation/page claim требует совпадающих preflight bytes и `read_scope`.
+- Перенос в текст ограничен `branch_budget`; overflow разрешается только по политике `ask_merge_park_archive`, без молчаливого добавления альтернативных разделов и claims.
 
 ## Качество письма
 

@@ -57,13 +57,18 @@ def _load_candidate_manifest(path: Path = DEFAULT_CANDIDATE_MANIFEST) -> dict[st
     return {entry["id"]: entry for entry in outputs}
 
 
-def _load_cached_verdicts(verdict_dir: Path | None) -> dict[str, dict[str, Any]]:
+def _load_cached_verdicts(
+    verdict_dir: Path | None,
+    candidate_manifest_path: Path | None = None,
+) -> dict[str, dict[str, Any]]:
     if verdict_dir is None:
         return {}
     if not verdict_dir.is_dir():
         raise ValueError(f"judge verdict directory not found: {verdict_dir}")
 
-    candidate_by_id = _load_candidate_manifest()
+    candidate_by_id = _load_candidate_manifest(
+        candidate_manifest_path or DEFAULT_CANDIDATE_MANIFEST
+    )
     verdicts: dict[str, dict[str, Any]] = {}
     for path in sorted(verdict_dir.glob("*.json")):
         verdict = json.loads(path.read_text(encoding="utf-8"))
@@ -73,8 +78,22 @@ def _load_cached_verdicts(verdict_dir: Path | None) -> dict[str, dict[str, Any]]
         candidate = candidate_by_id.get(case_id)
         if candidate is None:
             raise ValueError(f"{path.name}: case_id {case_id!r} not found in candidate manifest")
+        if case_id in verdicts:
+            raise ValueError(
+                f"{path.name}: duplicate cached judge case_id {case_id!r}"
+            )
         verdict["_expected_candidate"] = candidate
         verdicts[case_id] = verdict
+
+    candidate_ids = set(candidate_by_id)
+    verdict_ids = set(verdicts)
+    if verdict_ids != candidate_ids:
+        missing = sorted(candidate_ids - verdict_ids)
+        unexpected = sorted(verdict_ids - candidate_ids)
+        raise ValueError(
+            "verdict coverage drift: "
+            f"missing={missing}, unexpected={unexpected}"
+        )
     return verdicts
 
 
@@ -280,9 +299,14 @@ def evaluate_items(items: list[dict[str, Any]],
 
 
 def validate_gold_set(path: Path = DEFAULT_GOLD_SET,
-                      verdict_dir: Path | None = None) -> dict[str, Any]:
+                      verdict_dir: Path | None = None,
+                      candidate_manifest_path: Path | None = None) -> dict[str, Any]:
     data = _load_gold_set(path)
-    verdicts = _load_cached_verdicts(verdict_dir) if verdict_dir is not None else {}
+    verdicts = (
+        _load_cached_verdicts(verdict_dir, candidate_manifest_path)
+        if verdict_dir is not None
+        else {}
+    )
     return evaluate_items(data["items"], verdicts)
 
 
@@ -290,9 +314,14 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("gold_set", nargs="?", type=Path, default=DEFAULT_GOLD_SET)
     parser.add_argument("--verdict-dir", type=Path, default=None)
+    parser.add_argument("--candidate-manifest", type=Path, default=None)
     args = parser.parse_args(argv)
 
-    result = validate_gold_set(args.gold_set, args.verdict_dir)
+    result = validate_gold_set(
+        args.gold_set,
+        args.verdict_dir,
+        args.candidate_manifest,
+    )
     metrics = result["metrics"]
     print(
         "russian_academic_quality_judged: "

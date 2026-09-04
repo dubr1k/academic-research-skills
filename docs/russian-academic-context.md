@@ -118,9 +118,9 @@ For reviewer response and re-review, maintain a traceability table:
 
 | Reviewer comment | Author response | Manuscript location | Status | Residual risk |
 |---|---|---|---|---|
-| Required change or concern. | What changed or why not. | Section/page/paragraph. | `addressed`, `partially_addressed`, `not_addressed`, `unverifiable`. | Remaining issue. |
+| Required change or concern. | What changed or why not. | Section/page/paragraph. | `FULLY_ADDRESSED`, `PARTIALLY_ADDRESSED`, `NOT_ADDRESSED`, `MADE_WORSE`, or `CANNOT_VERIFY`. | Remaining issue or typed `residual_gap`. |
 
-Do not accept author response as proof. Verify the revised manuscript text.
+Determine the evidence verdict in persuasion-blind Phase 2A from the original and revised manuscript plus typed location evidence. Do not accept the author response as proof; disclose and compare it only in Phase 2B.
 
 ## Quality Fixture Coverage
 

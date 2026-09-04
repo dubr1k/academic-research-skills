@@ -392,13 +392,28 @@ def measure_russian_academic_quality(task_dir: Path, manifest: dict[str, Any]) -
 
 
 def measure_russian_academic_quality_judged(task_dir: Path, manifest: dict[str, Any]) -> dict[str, Any]:
-    """Dispatch to scripts.check_russian_academic_quality_judged and adapt metrics."""
+    """Dispatch to the judged checker after binding all cached artifacts to output bytes."""
+    from scripts import capture_russian_academic_quality_outputs as capture
     from scripts import check_russian_academic_quality_judged as judged
 
     target = manifest.get("target", {})
     gold_path = task_dir / target.get("gold_set_path", "gold_set.json")
+    candidate_dir = task_dir / target.get(
+        "candidate_output_dir", "candidate_outputs/baseline"
+    )
+    capture_validation = capture.validate_capture(gold_path, candidate_dir)
+    if capture_validation["errors"]:
+        raise ValueError(
+            "candidate capture validation failed: "
+            + "; ".join(capture_validation["errors"])
+        )
+
     verdict_dir = task_dir / target["judge_verdict_dir"] if "judge_verdict_dir" in target else None
-    evaluation = judged.validate_gold_set(gold_path, verdict_dir)
+    evaluation = judged.validate_gold_set(
+        gold_path,
+        verdict_dir,
+        candidate_dir / "manifest.json",
+    )
     if evaluation["errors"]:
         raise ValueError("; ".join(evaluation["errors"]))
 

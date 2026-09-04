@@ -21,4 +21,3 @@ Expected checks:
 - mark missing pages, issue, city, publisher, institution, page count, DOI, URL, or access date as `metadata_missing`;
 - keep Russian and English titles in their source language unless the journal requires translation or transliteration;
 - do not invent bibliographic fields to make the list look complete.
-

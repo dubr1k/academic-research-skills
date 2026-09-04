@@ -20,5 +20,5 @@ Expected checks:
 - evaluate dissertation council criteria: novelty, defended propositions, methodological validity, reliability, theoretical/practical significance, and publication alignment;
 - distinguish comments on the dissertation text, автореферат, and publication package;
 - require traceability for every reviewer concern and preserve concern IDs through revision;
-- require page/section evidence before marking any issue `addressed`;
-- use `needs_evidence` when the response letter claims a fix but the manuscript location is missing.
+- require page/section evidence before marking any issue `FULLY_ADDRESSED`;
+- use `CANNOT_VERIFY` when the response letter claims a fix but the manuscript location is missing; disclose the response letter only in Phase 2B.

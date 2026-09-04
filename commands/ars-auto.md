@@ -1,4 +1,5 @@
 ---
+name: ars-auto
 description: ARS auto router — choose EN/RU academic skill from task context
 ---
 
