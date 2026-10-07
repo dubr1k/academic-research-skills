@@ -3,7 +3,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 ADAPTER_ROOT = ROOT / "russian-academic-skills"
-SNAPSHOT = "94436237913091d4739870159d241660527e8338"
+SNAPSHOT = "6ab4b03bf70a118a1b3ee7f3263ed9f19031061b"
 
 
 def read_skill(name: str) -> str:
@@ -18,11 +18,11 @@ def test_all_russian_adapters_point_to_current_upstream_snapshot():
         "akademicheskii-konveer",
     ):
         text = read_skill(name)
-        assert 'version: "3.21.1-ru.1"' in text
-        assert 'last_updated: "2026-09-04"' in text
+        assert 'version: "3.23.0-ru.1"' in text
+        assert 'last_updated: "2026-10-07"' in text
         assert f'upstream_snapshot: "{SNAPSHOT}"' in text
-        assert 'upstream_version: "v3.21.1-8-g9443623"' in text
-        assert 'upstream_date: "2026-09-02"' in text
+        assert 'upstream_version: "v3.23.0"' in text
+        assert 'upstream_date: "2026-10-03"' in text
 
 
 def test_russian_writing_adapter_preserves_claim_strength_during_revision():

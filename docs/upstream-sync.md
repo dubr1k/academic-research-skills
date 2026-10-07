@@ -44,7 +44,7 @@ git fetch upstream
    - update the visible `Upstream snapshot:` line in every Russian `SKILL.md`;
    - refresh `README.en.md` from the same upstream commit;
    - update root/Russian snapshot badges and both plugin manifest versions;
-   - preserve explicit marketplace paths for all four English and four Russian skills;
+   - preserve explicit marketplace paths for all five English and four Russian skills (including `sr-screener`);
    - update `docs/skill-parity-matrix.md` with a feature-by-feature adaptation decision.
 
 ## Russian Adapter Review

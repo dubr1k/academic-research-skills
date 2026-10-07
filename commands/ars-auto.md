@@ -1,4 +1,5 @@
 ---
+disable-model-invocation: true
 name: ars-auto
 description: ARS auto router — choose EN/RU academic skill from task context
 ---
@@ -7,9 +8,9 @@ Route the request to an existing ARS skill; do not do heavy academic work inside
 
 Use this entrypoint when the user provides an academic task without choosing an English `/ars-*` or Russian `/ars-ru-*` command.
 
-Do not use this entrypoint when the user explicitly invoked `/ars-*` or `/ars-ru-*`, named a specific skill, or asked to bypass routing. In those cases, honor the selected command/skill and apply `docs/bilingual-routing.md` only for language, venue, citation, and source-language constraints inside that skill.
+Do not use this entrypoint when the user explicitly invoked `/ars-*` or `/ars-ru-*`, named a specific skill, or asked to bypass routing. In those cases, honor the selected command/skill and apply `${CLAUDE_PLUGIN_ROOT}/docs/bilingual-routing.md` only for language, venue, citation, and source-language constraints inside that skill.
 
-Apply `docs/bilingual-routing.md` deterministically:
+Apply `${CLAUDE_PLUGIN_ROOT}/docs/bilingual-routing.md` deterministically:
 
 1. Classify the task as `research`, `paper`, `review`, or `pipeline`.
 2. Detect request language: `en`, `ru`, or `mixed`.
@@ -48,11 +49,16 @@ Warn when routing detects citation/venue conflicts:
 
 Skill entries:
 
-- `deep-research/SKILL.md`
-- `academic-paper/SKILL.md`
-- `academic-paper-reviewer/SKILL.md`
-- `academic-pipeline/SKILL.md`
-- `russian-academic-skills/akademicheskoe-issledovanie/SKILL.md`
-- `russian-academic-skills/akademicheskaya-statya/SKILL.md`
-- `russian-academic-skills/akademicheskii-retsenzent/SKILL.md`
-- `russian-academic-skills/akademicheskii-konveer/SKILL.md`
+- `${CLAUDE_PLUGIN_ROOT}/deep-research/SKILL.md`
+- `${CLAUDE_PLUGIN_ROOT}/academic-paper/SKILL.md`
+- `${CLAUDE_PLUGIN_ROOT}/academic-paper-reviewer/SKILL.md`
+- `${CLAUDE_PLUGIN_ROOT}/academic-pipeline/SKILL.md`
+- `${CLAUDE_PLUGIN_ROOT}/russian-academic-skills/akademicheskoe-issledovanie/SKILL.md`
+- `${CLAUDE_PLUGIN_ROOT}/russian-academic-skills/akademicheskaya-statya/SKILL.md`
+- `${CLAUDE_PLUGIN_ROOT}/russian-academic-skills/akademicheskii-retsenzent/SKILL.md`
+- `${CLAUDE_PLUGIN_ROOT}/russian-academic-skills/akademicheskii-konveer/SKILL.md`
+
+After selecting exactly one skill, use its plugin namespace and basename, not its directory path. First invoke the Skill tool with `skill: "academic-research-skills:<selected_skill>"`. Pass the original request and routing constraints as arguments.
+
+Mode reference: `${CLAUDE_PLUGIN_ROOT}/MODE_REGISTRY.md`.
+Resolve resources from `${CLAUDE_PLUGIN_ROOT}`, not the manuscript working directory. If a required skill/file cannot be loaded, report the failure and stop; do not replace it with this command summary.

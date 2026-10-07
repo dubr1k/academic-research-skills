@@ -9,14 +9,15 @@
     {
       "name": "academic-research-skills",
       "source": "./",
-      "description": "8 skills: 4 upstream English skills and 4 Russian academic context adapters with /ars-* and /ars-ru-* entrypoints.",
-      "version": "3.21.1",
+      "description": "9 skills: 5 upstream English skills (including protocol-driven sr-screener) and 4 Russian academic context adapters with /ars-* and /ars-ru-* entrypoints.",
+      "version": "3.23.0",
       "license": "CC-BY-NC-4.0",
       "skills": [
         "./academic-paper",
         "./academic-paper-reviewer",
         "./academic-pipeline",
         "./deep-research",
+        "./sr-screener",
         "./russian-academic-skills/akademicheskaya-statya",
         "./russian-academic-skills/akademicheskii-konveer",
         "./russian-academic-skills/akademicheskii-retsenzent",

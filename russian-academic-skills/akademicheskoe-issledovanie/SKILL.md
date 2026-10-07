@@ -1,15 +1,15 @@
 ---
 name: akademicheskoe-issledovanie
 description: "Русскоязычный academic research skill для Opencode. Используйте для научного исследования, обзора литературы, systematic review, meta-analysis, fact-check, проверки источников, формулировки исследовательского вопроса и сократического прояснения темы. Адаптировано из imbad0202/academic-research-skills под русский язык, ГОСТ и Opencode task()."
-version: "3.21.1-ru.1"
-last_updated: "2026-09-04"
+version: "3.23.0-ru.1"
+last_updated: "2026-10-07"
 status: "active-russian-adapter"
 data_access_level: "external_sources_with_verification"
 task_type: "research"
 depends_on: []
-upstream_snapshot: "94436237913091d4739870159d241660527e8338"
-upstream_version: "v3.21.1-8-g9443623"
-upstream_date: "2026-09-02"
+upstream_snapshot: "6ab4b03bf70a118a1b3ee7f3263ed9f19031061b"
+upstream_version: "v3.23.0"
+upstream_date: "2026-10-03"
 ---
 
 # Академическое исследование
@@ -17,7 +17,7 @@ upstream_date: "2026-09-02"
 Русскоязычная адаптация идей `deep-research` из `imbad0202/academic-research-skills` для Opencode. Skill помогает провести исследование от неясной темы до проверенного обзора, исследовательского плана или отчета.
 
 Источник адаптации: https://github.com/imbad0202/academic-research-skills
-Upstream snapshot: `94436237913091d4739870159d241660527e8338` (`v3.21.1-8-g9443623`, 2026-09-02).
+Upstream snapshot: `6ab4b03bf70a118a1b3ee7f3263ed9f19031061b` (`v3.23.0`, 2026-10-03).
 Лицензия источника: Creative Commons Attribution-NonCommercial 4.0 International, Copyright (c) 2026 Cheng-I Wu.
 
 Локальные материалы:
@@ -365,3 +365,13 @@ Integrity floor: если есть явный undisclosed conflict или фал
 ## Выводы
 ## Список литературы
 ```
+
+## Протокольный отбор RU/EN исследований (v3.23)
+
+Для явного запроса на screening, критерии включения/исключения, разбор конфликтов или PRISMA используйте `../../sr-screener/SKILL.md`; один запрос «систематический обзор» сам по себе не запускает screening и не разрешает автоматический переход к написанию статьи. Сначала согласуйте протокол, eligibility rules, порядок exclusion codes и стоимость/model choices перед fan-out по upstream-контракту. Две AI-роли не заменяют итоговое решение исследователя.
+
+Русские экспорты eLIBRARY/CyberLeninka не объявляйте поддержанным форматом напрямую: преобразуйте их метаданные в документированный CSV/RIS input, сохранив исходный файл, идентификаторы, `source_language` и provenance. Используйте upstream deduplication script; bilingual заголовок или транслитерация — повод проверить дубль, не основание молча объединить две публикации. Сохраните оригинальный заголовок; перевод храните отдельно. Результаты каждой стадии, решения и причины исключения храните в screening workspace согласно upstream scripts/contracts, а не только в чат-сводке.
+
+Если пользователь требует full text, abstract-only запись не попадает в итоговый included corpus. Недоступный полный текст учитывайте как `not retrieved` в PRISMA, а не как прочитанный `full-text excluded`; статус доступа `inaccessible`/`UNVERIFIABLE_ACCESS` не означает fabricated source. Не обходите paywall и не выдавайте чтение abstract за full-text `read_scope`. Вручную проверяйте спорные RU/EN дубли и сохраняйте решение; не меняйте eligibility ради роста включённых записей.
+
+После screening передавайте только согласованный `literature_corpus`; включение по eligibility не является проверкой citation existence/claim faithfulness. Ограничение «без автоматического написания рукописи» сохраняется при handoff и завершает работу на заказанном screening/report package.

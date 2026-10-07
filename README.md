@@ -1,8 +1,8 @@
 # Двуязычный форк Academic Research Skills
 
 [![Upstream](https://img.shields.io/badge/upstream-Imbad0202%2Facademic--research--skills-blue)](https://github.com/Imbad0202/academic-research-skills)
-[![Version](https://img.shields.io/badge/version-v3.21.1-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.21.1)
-[![Snapshot](https://img.shields.io/badge/snapshot-v3.21.1--8--g9443623%20%2F%209443623-lightgrey)](https://github.com/Imbad0202/academic-research-skills/commit/94436237913091d4739870159d241660527e8338)
+[![Version](https://img.shields.io/badge/version-v3.23.0-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.23.0)
+[![Snapshot](https://img.shields.io/badge/snapshot-v3.23.0%20%2F%206ab4b03-lightgrey)](https://github.com/Imbad0202/academic-research-skills/commit/6ab4b03bf70a118a1b3ee7f3263ed9f19031061b)
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20696614-blue)](https://doi.org/10.5281/zenodo.20696614)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
 
@@ -10,7 +10,7 @@
 
 ## Выбор языка
 
-[Русская документация](README.ru.md) | [English/upstream documentation](README.en.md) | [简体中文](README.zh-CN.md) | [繁體中文](README.zh-TW.md) | [日本語](README.ja-JP.md) | [한국어](README.ko-KR.md)
+[Русская документация](README.ru.md) | [English/upstream documentation](README.en.md) | [简体中文](README.zh-CN.md) | [繁體中文](README.zh-TW.md) | [日本語](README.ja-JP.md) | [한국어](README.ko-KR.md) | [Español](README.es-ES.md)
 
 ## Наборы навыков
 
@@ -20,6 +20,7 @@
 - `academic-paper`
 - `academic-paper-reviewer`
 - `academic-pipeline`
+- `sr-screener` — протокольный отбор исследований для систематических обзоров
 
 Русскоязычные adapter skills:
 
@@ -28,7 +29,7 @@
 - `akademicheskii-retsenzent`
 - `akademicheskii-konveer`
 
-Единый bilingual plugin bundle публикует все восемь skills. Для international workflows используйте `/ars-*`, для российского академического контекста — `/ars-ru-*`.
+Единый bilingual plugin bundle публикует все девять skills. Для international workflows используйте `/ars-*`, для российского академического контекста — `/ars-ru-*`.
 
 ## Правило маршрутизации
 
@@ -40,7 +41,7 @@
 
 Подробности: [bilingual routing](docs/bilingual-routing.md), [skill parity matrix](docs/skill-parity-matrix.md), [Russian academic context](docs/russian-academic-context.md).
 
-## Что синхронизировано с upstream v3.21.1-8-g9443623
+## Что синхронизировано с upstream v3.23.0
 
 - модельное разделение judgment/execution, opt-in tiering и усиленные cross-model checkpoints;
 - риск-стратифицированная проверка утверждений, scope bindings и классификация novelty claims;
@@ -55,6 +56,8 @@
 - Stage Capability Matrix, Risk Register, Data Flows и Control Availability: проверяемые границы доказательств, сетевых вызовов и механизмов по каналам установки;
 - consent-bound Claim-Standing Probe как advisory-only слой вне Phase E integrity result, с freshness и transmission ledger;
 - process-isolated optional PDF text/OCR advisory и защищённый Codex subscription transport для citation-integrity без расширения scope на manuscript review.
+
+Новые возможности v3.22–v3.23: протокольный `sr-screener` (dual review, QC, PRISMA), run ledger/handoff с сохранением пользовательских ограничений, language-pair contract, acronym check и исправления Windows/Pi/экспорта CSV. Русский слой поясняет RU/EN screening и восстановление выбора пользователя; Phase-1 registry пока не поддерживает `ru-en`, готовый русский locale pack не заявляется.
 
 Русские adapters переносят эти механизмы содержательно: сохраняют российский venue/source context, не ослабляют integrity gates и различают optional hook hardening от обязательной проверки содержания.
 

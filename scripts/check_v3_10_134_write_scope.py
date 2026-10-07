@@ -9,13 +9,13 @@ equals the agent's frontmatter `name`. If the manifest key, the classification-t
 Bucket A roster, and the on-disk frontmatter `name` ever drift apart (a rename, a
 manifest typo, a table edit), the hook silently FAILS OPEN for that agent — it would
 treat the agent as "not in the manifest" and allow every write. This lint catches that
-drift before it can happen, mirroring check_v3_9_2_phase_boundary.py's 23/20 split.
+drift before it can happen, mirroring check_v3_9_2_phase_boundary.py's 23/24 split.
 
 Three invariants:
 
-  I1 — Roster size. The Bucket A roster is exactly 23 agents (20 B/C/D exempt = 43
-       records / 42 unique names per the classification table plus Russian adapters; the manifest covers the
-       23 Bucket A names only).
+  I1 — Roster size. The Bucket A roster is exactly 23 agents (24 B/C/D exempt = 47
+       records / 46 unique names per the classification table, sr-screener's four and the four Russian adapter Bucket C
+       agents included; the manifest covers the 23 Bucket A names only).
 
   I2 — Three-way name set equality. The set of:
          (a) Bucket A agent file paths (the classification-table roster, single-sourced
@@ -24,7 +24,7 @@ Three invariants:
          (c) on-disk frontmatter `name` fields read from each (a) file,
        must be IDENTICAL. Any element in one but not the others is a fail-open risk.
 
-  I3 — Bucket B/C/D exclusion. None of the 20 exempt agents' frontmatter `name` may
+  I3 — Bucket B/C/D exclusion. None of the 24 exempt agents' frontmatter `name` may
        appear as a manifest key (a Bucket B/C/D agent in the manifest would impose a
        single-phase fence on a legitimately multi-phase agent).
 
@@ -75,7 +75,7 @@ BUCKET_A_AGENT_FILES = [
     "academic-paper-reviewer/agents/editorial_synthesizer_agent.md",
 ]
 
-# The 20 Bucket B/C/D agents that MUST NOT appear in the manifest.
+# The 24 Bucket B/C/D agents that MUST NOT appear in the manifest.
 BUCKET_BCD_AGENT_FILES = [
     "deep-research/agents/devils_advocate_agent.md",
     "deep-research/agents/report_compiler_agent.md",
@@ -98,7 +98,19 @@ BUCKET_BCD_AGENT_FILES = [
     "russian-academic-skills/akademicheskaya-statya/agents/gost_citation_agent.md",
     "russian-academic-skills/akademicheskii-retsenzent/agents/vak_rinc_reviewer_agent.md",
     "russian-academic-skills/akademicheskii-konveer/agents/russian_pipeline_state_agent.md",
+    # Bucket C — sr-screener (screening phases outside the numbered phase-dir axis).
+    "sr-screener/agents/protocol_architect_agent.md",
+    "sr-screener/agents/screening_reviewer_agent.md",
+    "sr-screener/agents/qc_auditor_agent.md",
+    "sr-screener/agents/reporter_agent.md",
 ]
+
+# Plugin-root agents/ mirrors whose source is NOT deep-research/agents/<same name>.
+# Keep in lockstep with MIRRORS in check_agents_mirror_sync.py; every name absent
+# here still maps to deep-research/agents/ and fails closed when unrostered.
+MIRROR_SOURCE_OVERRIDES = {
+    "screening_reviewer_agent.md": "sr-screener/agents/screening_reviewer_agent.md",
+}
 
 _NAME_RE = re.compile(r"^name:\s*(.+?)\s*$", re.MULTILINE)
 # Line-anchored fence so a literal `---` inside a description value can't split the
@@ -148,9 +160,9 @@ def run_checks() -> list[str]:
             f"I1: BUCKET_A_AGENT_FILES has {len(BUCKET_A_AGENT_FILES)} entries, expected 23 "
             "(classification doc: A=23). Update in lockstep with check_v3_9_2_phase_boundary.py."
         )
-    if len(BUCKET_BCD_AGENT_FILES) != 20:
+    if len(BUCKET_BCD_AGENT_FILES) != 24:
         errors.append(
-            f"I1: BUCKET_BCD_AGENT_FILES has {len(BUCKET_BCD_AGENT_FILES)} entries, expected 20."
+            f"I1: BUCKET_BCD_AGENT_FILES has {len(BUCKET_BCD_AGENT_FILES)} entries, expected 24."
         )
 
     # I5 — roster exhaustiveness (NON-VACUOUS guard). Glob the actual filesystem for every
@@ -169,12 +181,13 @@ def run_checks() -> list[str]:
     #     NAME to its `deep-research/agents/...` source and check THAT against the roster.
     #     A name with no rostered source still falls through to undeclared — the mapping
     #     is not an allowlist for anything dropped into `agents/`. LOAD-BEARING
-    #     assumption: every mirror sources from `deep-research/agents/<same name>`. If a
-    #     mirror of an agent living elsewhere (e.g. `academic-paper/agents/`) is ever
-    #     added, this rule and the MIRRORS roster in check_agents_mirror_sync.py would
-    #     silently disagree — extend BOTH in lockstep (deliberately re-derived here, not
-    #     imported: one-lint-one-invariant; the disagreement today fails CLOSED, pinned
-    #     by the non-deep-research-source negative test).
+    #     assumption: every mirror sources from `deep-research/agents/<same name>`,
+    #     except the names listed in MIRROR_SOURCE_OVERRIDES (sr-screener's reviewer).
+    #     If a mirror of an agent living elsewhere is ever added, this rule and the
+    #     MIRRORS roster in check_agents_mirror_sync.py would silently disagree — extend
+    #     BOTH in lockstep (deliberately re-derived here, not imported:
+    #     one-lint-one-invariant; the disagreement today fails CLOSED, pinned by the
+    #     non-deep-research-source negative test).
     #   * Anything else compares on the CANONICAL (resolved) workspace-relative path: a
     #     leftover symlink resolves to its rostered target (the pre-#413 shape, kept for
     #     generality), while a genuinely NEW standalone .md at any depth resolves to
@@ -196,7 +209,7 @@ def run_checks() -> list[str]:
             # agents/sub/agents/x.md is NOT a mirror (codex P2: remapping it
             # would fail open when its name collides with a rostered agent);
             # it falls through to the resolve path and flags as undeclared.
-            canon = f"deep-research/agents/{md.name}"
+            canon = MIRROR_SOURCE_OVERRIDES.get(md.name, f"deep-research/agents/{md.name}")
         else:
             try:
                 canon = md.resolve().relative_to(REPO_ROOT).as_posix()

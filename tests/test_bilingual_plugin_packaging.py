@@ -9,6 +9,7 @@ EXPECTED_SKILLS = {
     "academic-paper",
     "academic-paper-reviewer",
     "academic-pipeline",
+    "sr-screener",
     "akademicheskoe-issledovanie",
     "akademicheskaya-statya",
     "akademicheskii-retsenzent",
@@ -35,7 +36,7 @@ def test_claude_plugin_metadata_describes_bilingual_bundle():
     marketplace = read_json(".claude-plugin/marketplace.json")
 
     assert plugin["name"] == "academic-research-skills"
-    assert plugin["version"] == "3.21.1"
+    assert plugin["version"] == "3.23.0"
     assert "Bilingual" in plugin["description"]
     assert "ГОСТ" in plugin["description"]
     assert "ВАК" in plugin["description"]
@@ -44,10 +45,10 @@ def test_claude_plugin_metadata_describes_bilingual_bundle():
     [entry] = marketplace["plugins"]
     assert entry["name"] == plugin["name"]
     assert entry["version"] == plugin["version"]
-    assert "8 skills" in entry["description"]
+    assert "9 skills" in entry["description"]
     assert "/ars-ru-*" in entry["description"]
     assert {Path(path).name for path in entry["skills"]} == EXPECTED_SKILLS
-    assert len(entry["skills"]) == 8
+    assert len(entry["skills"]) == 9
 
 
 def test_codex_plugin_manifest_points_to_bilingual_skills():
@@ -56,7 +57,7 @@ def test_codex_plugin_manifest_points_to_bilingual_skills():
 
     assert plugin["name"] == "academic-research-skills"
     assert plugin["skills"] == "./skills/"
-    assert plugin["version"] == "3.21.1"
+    assert plugin["version"] == "3.23.0"
     assert "bilingual" in plugin["keywords"]
     assert "ГОСТ" in plugin["description"]
     assert "ВАК" in interface["longDescription"]

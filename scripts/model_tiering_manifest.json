@@ -45,6 +45,10 @@
     {"path": "russian-academic-skills/akademicheskoe-issledovanie/agents/russian_source_verifier_agent.md", "tier": "judgment"},
     {"path": "russian-academic-skills/akademicheskaya-statya/agents/gost_citation_agent.md", "tier": "judgment"},
     {"path": "russian-academic-skills/akademicheskii-retsenzent/agents/vak_rinc_reviewer_agent.md", "tier": "judgment"},
-    {"path": "russian-academic-skills/akademicheskii-konveer/agents/russian_pipeline_state_agent.md", "tier": "execution"}
+    {"path": "russian-academic-skills/akademicheskii-konveer/agents/russian_pipeline_state_agent.md", "tier": "execution"},
+    {"path": "sr-screener/agents/protocol_architect_agent.md", "tier": "judgment"},
+    {"path": "sr-screener/agents/screening_reviewer_agent.md", "tier": "judgment"},
+    {"path": "sr-screener/agents/qc_auditor_agent.md", "tier": "judgment"},
+    {"path": "sr-screener/agents/reporter_agent.md", "tier": "execution"}
   ]
 }

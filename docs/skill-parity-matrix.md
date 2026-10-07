@@ -2,7 +2,7 @@
 
 This matrix tracks how the Russian adapter layer maps to the upstream Academic Research Skills package.
 
-Upstream snapshot for the current Russian layer: `94436237913091d4739870159d241660527e8338` (`v3.21.1-8-g9443623`, 2026-09-02).
+Upstream snapshot for the current Russian layer: `6ab4b03bf70a118a1b3ee7f3263ed9f19031061b` (`v3.23.0`, 2026-10-03).
 
 ## Summary
 
@@ -42,7 +42,7 @@ The Russian adapters add context-specific behavior rather than translating every
 | Socratic adjacent-framing probe | Preserved verbatim upstream | Adapted in research skill with Russian federal/regional, normative/practice and venue-quality distinctions | Adapted |
 | Deterministic PreToolUse write-scope guard | Preserved, including Windows graceful degradation | Writing, reviewer and pipeline skills define equivalent task allowlists and post-task checks outside hook-enabled Claude | Adapted |
 | OpenAlex API-key + budget-aware 429; arXiv ToU backoff | Preserved in clients/protocols | Research skill maps budget exhaustion to partial/inaccessible verification, never false verified status | Adapted |
-| Explicit marketplace skill paths | Preserved and extended | Manifest explicitly lists all four English and all four Russian skills | Extended |
+| Explicit marketplace skill paths | Preserved and extended | Manifest explicitly lists all five English and all four Russian skills | Extended |
 | SETUP/command/release invariant gates | Preserved | Bilingual metadata/version tests and sync checklist run alongside upstream validators | Extended |
 | `THIRD_PARTY.md` and Korean README | Preserved | Root bilingual README links both without changing attribution/endorsement semantics | Documented |
 
@@ -64,7 +64,7 @@ The Russian adapters add context-specific behavior rather than translating every
 | Area | Gap | Priority |
 |---|---|---|
 | Routing | No executable bilingual router; rules live in docs, commands, examples, and tests. | P2 |
-| Commands/frontmatter/plugin metadata | Four `/ars-ru-*` commands, common metadata schema and one explicit 8-skill bundle exist. | Done |
+| Commands/frontmatter/plugin metadata | Four `/ars-ru-*` commands, common metadata schema and one explicit 9-skill bundle exist. | Done |
 | References/templates/agents | Every Russian skill has local context assets; deeper v3.15 feature-specific agent fixtures can still be expanded. | P2 |
 | Evals | Russian fixture and judged-quality suites exist; live API behavior remains covered primarily by upstream client tests. | P2 |
 | Runtime parity | Opencode/Codex cannot use Claude PreToolUse hooks; explicit task scopes and post-task diff checks are the documented fallback. | Accepted |
@@ -78,8 +78,22 @@ Review before adaptation: complex agent contracts, calibration and claim-audit e
 
 1. Fetch upstream and compare against the snapshot above.
 2. Merge English core without translating it in place.
-3. Review changed behavior across all four skill families.
+3. Review changed behavior across the four adapter families and upstream `sr-screener`.
 4. Adapt relevant ideas under `russian-academic-skills/`.
 5. Update all four snapshot/version/date blocks, README surfaces and plugin manifests.
 6. Update this matrix and feature-specific assertions.
 7. Run bilingual tests, all upstream validators and the full pytest suite.
+
+## v3.22–v3.23 Capability Review
+
+| Upstream change | Russian adapter action | Evidence / boundary |
+|---|---|---|
+| Fifth skill `sr-screener`: protocol, dual screening, adjudication, QC, PRISMA and corpus handoff | Package the original fifth skill; research adapter points to it only for explicit screening intent, preserving RU/EN source metadata and manual ambiguous-duplicate review | No new fifth Russian skill or untested native eLIBRARY importer claimed |
+| Rooted command Skill dispatch and user-only entrypoints | Extend canonical fail-closed lint to the four RU commands and explicit auto-router; root all plugin paths, keeping arbitrary new commands rejected | Mutation regressions plus unrelated-CWD baseline |
+| Per-run `output_language_pair` | Keep Phase-1 registry validation; carry RU body / EN abstract as exact adapter constraints, not an invented `ru-en` token | RU locale-pack loader remains deferred upstream |
+| Run ledger + standing constraints + requested-files finalization | Pipeline adapter uses canonical schemas/script reads, hash-bound receipts and fail-closed compaction; retains requested output and prohibitions | Prompt-level behavior, not independent enforcement |
+| Instruction/data boundary, excluded-source revision protection and abstract/body checks | Preserve upstream core; RU pipeline retains source exclusions and claim strength | Source text and imports cannot become user authority |
+| Deterministic acronym checker, reviewer appendix, method weaknesses with provenance | Preserve upstream implementation; use with its documented linguistic limits | Not advertised as a Russian morphology/style validator |
+| Windows locks, Pi array-system prompts, CSV/XLSX formula injection repairs | Merge unchanged; run upstream regression suite | Runtime and exported-data security fixes apply across languages |
+
+Behavioral baseline on the pre-adaptation research/pipeline instructions found missing persistent screening records/deduplication handoff and exact language/user-constraint recovery. The compact adapter sections address those gaps by reusing canonical upstream tooling; they do not invent schemas or silently enable optional mechanisms.
