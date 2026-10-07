@@ -159,3 +159,28 @@ def test_russian_adapters_disclose_install_and_transport_boundaries():
     for term in ("ARS_CROSS_MODEL_TRANSPORT=codex", "citation-integrity"):
         assert term in pipeline
     assert "не для manuscript review" in pipeline
+
+
+def test_russian_research_keeps_generic_prisma_outside_screening():
+    """Guard the routing contract, not execution by a consuming LLM."""
+    text = read_skill("akademicheskoe-issledovanie")
+    section = text.split("## Протокольный отбор RU/EN исследований", 1)[1]
+    assert "конфликтов или PRISMA используйте" not in section
+    assert "отчёт PRISMA сами по себе не маршрутизируются в `sr-screener`" in section
+    assert "уже завершённого screening" in section
+    assert "`report`" in section
+
+
+def test_russian_pipeline_persists_events_before_ledger_recovery():
+    """Guard standalone lifecycle obligations; not an LLM-write guarantee."""
+    text = read_skill("akademicheskii-konveer")
+    section = text.split("## Сохранение выбора пользователя и языка", 1)[1]
+    assert "Run ledger and handoff check" in section
+    assert "append --passport-path <passport> --entry-file <file>" in section
+    for event in ("initial_instructions", "checkpoint_opened", "checkpoint_closed", "tool_receipt"):
+        assert event in section
+    assert "в момент события" in section
+    assert "expected_steps" in section
+    assert "Material Gap Detection" in section
+    assert "установленного репозитория" in section
+    assert "не из CWD рукописи" in section
