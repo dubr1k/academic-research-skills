@@ -22,6 +22,10 @@ error, not permission to emulate methods or use an unrelated profile.
 
 ## Test
 
+Use a project virtual environment with `pyyaml` installed (declared in
+`requirements-dev.txt`); the installed ledger CLI smoke test imports it.
+The integration CI installs this dependency explicitly before running tests.
+
     python -m unittest discover -s integrations/hermes/tests -v
 
 These offline tests exercise packaging and adapter contracts, not model compliance,
