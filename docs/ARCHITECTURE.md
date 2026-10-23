@@ -310,6 +310,9 @@ exactly like the three tag-only workflows.
 | Workflow | Trigger | What it checks | Class | Bypass |
 |---|---|---|---|---|
 | `spec-consistency.yml` | push (all branches **and tags**) + PR | the full lint/pytest battery: spec surfaces, contracts, content locks, the pytest manifest | Blocking | none |
+| `codex-integration.yml` | push to main + PR targeting main | Codex bundle resources, links, hashes, invocation policy and overwrite refusal | Blocking | none |
+| `dsh-integration.yml` | push (all branches and tags) + PR | DSH packaging and selected role-scoped/revision-patch contracts | Blocking | none |
+| `hermes-integration.yml` | push to main + PR targeting main | Hermes package installation, routing and run-ledger smoke checks | Blocking | none |
 | `pytest.yml` | PR + push to main, both path-filtered (scripts/tests/contracts/config, adapter references, `bibliography_agent`) | adapter + script test suite | Blocking | none |
 | `command-invariants.yml` | push (path-filtered for branch pushes; **also every tag push**) + PR (all) | SessionStart announce list matches the command inventory; plugin-version ↔ CHANGELOG lockstep; command frontmatter `name` validation | Blocking | none |
 | `repository-hygiene.yml` | PR targeting main + push to main | gitleaks secret scan | Blocking | none |
@@ -324,7 +327,7 @@ exactly like the three tag-only workflows.
 | `release-cooldown.yml` | tag push `v*` | paces consecutive release tags | Post-push detection | `[skip-cooldown]` in the commit/tag message |
 | `tag-version-match.yml` | tag push `v*` | re-runs the full version-consistency lint at the tag | Post-push detection | none |
 
-Count, honestly stated: **14 workflows — 8 blocking on at least one event class, 2
+Count, honestly stated: **17 workflows — 11 blocking on at least one event class, 2
 advisory, 1 administrative, 3 post-push detection.**
 
 Inventory sync, the count line, and the bypass tokens are pinned by
