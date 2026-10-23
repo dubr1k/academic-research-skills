@@ -137,7 +137,7 @@ def test_yaml_extension_workflow_fires(repo: Path) -> None:
 
 
 def test_count_line_drift_fires(repo: Path) -> None:
-    _mutate_doc(repo, "11 blocking", "12 blocking")
+    _mutate_doc(repo, "12 blocking", "13 blocking")
     errors = run_all_checks(repo)
     assert any("WC-3" in e and "count line" in e for e in errors)
 
