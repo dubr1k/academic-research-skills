@@ -129,7 +129,7 @@ Status: covered in the first venue-specific pass.
 
 The examples layer now has dedicated venue fixtures for:
 
-- ВАК submission package with ГОСТ default and journal override decision;
+- ВАК submission package with verified citation-style requirements and journal override decision;
 - РИНЦ/eLIBRARY current status evidence and journal-index status separation;
 - dissertation council review, автореферат, traceability, and page/section evidence;
 - Scopus/WoS English article planning with Russian sources and preserved `source_language`;

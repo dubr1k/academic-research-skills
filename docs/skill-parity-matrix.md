@@ -28,7 +28,7 @@ The fork does not translate these files in place. `README.en.md` mirrors the tra
 The Russian adapters add context-specific behavior rather than translating every upstream file:
 
 - Russian trigger phrases and task descriptions;
-- ГОСТ Р 7.0.5-2008 defaults and journal-style overrides;
+- explicit ГОСТ Р 7.0.5-2008 requirements and verified journal-style choices;
 - ВАК/РИНЦ/eLIBRARY/CyberLeninka context;
 - Russian dissertation, ВКР and local journal signals;
 - Russian academic style and AI-cliche checks;

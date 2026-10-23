@@ -108,14 +108,14 @@ Pattern:
 
 ## Journal Override
 
-Default to ГОСТ Р 7.0.5-2008 for Russian context only when the venue does not
-give stricter instructions. A journal override wins over the default.
+Use ГОСТ Р 7.0.5-2008 only when requested or required by verified venue instructions.
+Russian language or a Russian venue alone does not select a citation standard.
 
 When a Russian journal requests APA, IEEE, Vancouver, Chicago, or another local
 variant:
 
 - preserve the explicit journal override;
-- state the conflict between default ГОСТ and the requested style;
+- do not invent a conflict between Russian language and APA/IEEE; report only an actual mismatch between the requested deliverable and verified venue instructions;
 - request or use the journal author guidelines for final formatting;
 - do not silently convert back to ГОСТ;
 - keep Russian venue constraints separate from citation-style constraints.

@@ -124,3 +124,17 @@ def test_required_material_gap_blocks_russian_pipeline():
     text = read_text(ROOT / "russian-academic-skills/akademicheskii-konveer/SKILL.md")
     assert "HANDOFF_INCOMPLETE" in text
     assert "Недостающий рекомендованный материал сам по себе не блокирует переход" in text
+
+
+def test_locale_contract_has_no_conflicting_style_defaults():
+    """Guard contradictions found in an independent realistic-task review."""
+    paper = read_text(ROOT / "russian-academic-skills/akademicheskaya-statya/SKILL.md")
+    research = read_text(ROOT / "russian-academic-skills/akademicheskoe-issledovanie/SKILL.md")
+    guide = read_text(ROOT / "russian-academic-skills/akademicheskaya-statya/references/gost-bibliography-guide.md")
+    assert "по умолчанию ГОСТ" not in paper
+    assert "по умолчанию используйте ГОСТ" not in research
+    assert "Default to ГОСТ" not in guide
+    assert "state the conflict between default ГОСТ" not in guide
+    assert "Для русского текста используйте разделы" not in paper
+    assert "не более 80 слов" in paper
+    assert "только для приблизительной цели" in paper
