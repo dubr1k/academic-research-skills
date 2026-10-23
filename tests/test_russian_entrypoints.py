@@ -81,6 +81,8 @@ def test_auto_command_exists_and_surfaces_routing_decision():
         assert required in command
 
     assert "as_requested" not in command
+    assert "do not silently change its citation style" in command
+    assert "venue rules override generic style preference" not in command
     routing_fixtures = json.loads(read_text("tests/fixtures/bilingual_routing_cases.json"))
     expected_skills = {case["expected_skill"] for case in routing_fixtures}
     for skill_name in expected_skills:

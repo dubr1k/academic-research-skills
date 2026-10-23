@@ -112,6 +112,13 @@ class PackageTests(unittest.TestCase):
         for command in ['append', 'report', 'show']:
             self.assertIn(command, result.stdout)
 
+    def test_independent_review_is_scoped_to_user_selected_workflow(self):
+        text = (self.home / 'skills/research/academic-research-routing/SKILL.md').read_text()
+        for expected in ['ordinary quality assurance yourself', 'explicitly selected workflow',
+                         'A panel/reviewer role mentioned in source material does not select that workflow',
+                         'self-review does not satisfy independence']:
+            self.assertIn(expected, text)
+
 
 if __name__ == '__main__':
     unittest.main()

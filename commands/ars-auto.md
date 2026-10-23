@@ -43,7 +43,7 @@ Routing:
 Warn when routing detects citation/venue conflicts:
 
 - `ГОСТ` with an English manuscript or international venue: use the Russian-context skill, but warn that the target venue may require APA/IEEE/Vancouver/Chicago instead.
-- `APA`, `IEEE`, `Vancouver`, or `Chicago` with a Russian venue requiring `ГОСТ`: use the Russian-context skill and warn that venue rules override generic style preference unless the user requested conversion/comparison.
+- `APA`, `IEEE`, `Vancouver`, or `Chicago` with a Russian venue requiring `ГОСТ`: explain the verified mismatch and preserve the user's requested deliverable; do not silently change its citation style. Ask only if the intended submission requirement remains unresolved.
 - Russian prompt plus international style is not a conflict by itself; keep Russian interaction/output constraints while preserving the requested international citation style.
 - Mixed source corpora are not a conflict by themselves; preserve source-language metadata and do not invent missing DOI, issue, pages, publisher, or translated titles.
 

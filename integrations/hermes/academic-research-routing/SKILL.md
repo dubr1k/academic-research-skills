@@ -1,7 +1,7 @@
 ---
 name: academic-research-routing
 description: "Use when routing RU/EN academic work or screening."
-version: 1.1.0
+version: 1.1.1
 license: CC-BY-NC-4.0
 author: Hermes Agent; academic methods by dubr1k/academic-research-skills contributors
 metadata:
@@ -19,6 +19,17 @@ metadata:
 ## Overview
 
 This is a thin Hermes-native router, not a substitute for the installed academic methods. It chooses one primary route, loads the exact matching skill with `skill_view`, then applies shared evidence and integrity gates. Never emulate a missing skill from memory.
+
+## Review scope
+
+Perform ordinary quality assurance yourself: check sources, calculations, documents,
+preservation of supplied facts and the requested scope. Use a separate reviewer or
+repeated review cycles only when directly requested or when an explicitly selected workflow
+requires independent assessment. A panel/reviewer role mentioned in source material does not select that workflow.
+For a selected workflow, explain its required independence before that stage. If the
+required reviewer is unavailable, pause at the gate, mark it incomplete and do not
+claim a full PASS; self-review does not satisfy independence. Other tasks retain
+substantive source-based checking and privacy without automatic delegation.
 
 ## When to Use
 
