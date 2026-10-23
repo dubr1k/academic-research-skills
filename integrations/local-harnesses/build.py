@@ -55,10 +55,13 @@ def command(text, root):
         raise ValueError('command lacks frontmatter')
     front, body = text[4:].split('\n---', 1)
     front = '\n'.join(line for line in front.splitlines()
-                      if not re.match(r'^(model|effort|allowed-tools|context|agent):', line))
+                      if not re.match(r'^(model|effort|allowed-tools|context|agent|disable-model-invocation):', line))
+    front += '\ndisable-model-invocation: true'
     body = body.replace('${CLAUDE_PLUGIN_ROOT}', str(root))
     body = re.sub(r'First invoke the Skill tool with `skill: "academic-research-skills:([^"]+)"`\.',
-                  r'First load the installed skill `\1` using this host\'s actual skill tool schema.', body)
+                  lambda m: (f'First load the installed skill `{m[1]}` using this host\'s actual skill tool schema. '
+                             f'If this explicit user command cannot invoke that skill because it is user-only, '
+                             f'read its scoped adapter at `{root / "host-skills/shared" / m[1] / "SKILL.md"}` directly.'), body)
     preface = (f'\n\nRead `{root / "host-runtime.md"}` before executing this command. '
                'Preserve the explicit mode and user scope; do not infer a full pipeline from multiple intentions. '
                'Use the user-requested output language and citation style; Russian does not imply ГОСТ.\n')

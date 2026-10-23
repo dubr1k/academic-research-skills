@@ -26,6 +26,9 @@ class AdapterTests(unittest.TestCase):
         self.assertNotIn('academic-research-skills:academic-paper', adapted)
         self.assertIn('Mode citation-check', adapted)
         self.assertIn('$ARGUMENTS', adapted)
+        self.assertIn('disable-model-invocation: true', adapted)
+        self.assertIn('/snapshot/host-skills/shared/academic-paper/SKILL.md', adapted)
+        self.assertIn('explicit user command', adapted)
 
     def test_build_preserves_committed_source_and_refuses_overwrite(self):
         with tempfile.TemporaryDirectory() as tmp:
