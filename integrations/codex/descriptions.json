@@ -1,0 +1,11 @@
+{
+  "academic-paper": "Write or revise an academic manuscript, abstract or response to reviewers; preserve the requested venue and citation style.",
+  "academic-paper-reviewer": "Review an academic manuscript or its methodology, or verify revisions after peer review.",
+  "academic-pipeline": "Run an explicitly requested complete research-to-publication workflow with integrity checks and independent review.",
+  "deep-research": "Conduct a substantive literature review, systematic review or evidence synthesis. Ordinary web lookup does not require this workflow.",
+  "akademicheskaya-statya": "Написание и переработка научной статьи, аннотации или ответа рецензентам на русском языке; ГОСТ и выбранный стиль цитирования.",
+  "akademicheskii-retsenzent": "Рецензирование научной рукописи, проверка методологии и повторная оценка после правок, включая ВАК и российские журналы.",
+  "akademicheskii-konveer": "Полный цикл от исследования до публикационного пакета по явному запросу пользователя; русская научная практика и ГОСТ.",
+  "akademicheskoe-issledovanie": "Содержательное научное исследование, обзор литературы или проверка научных источников на русском языке; не обычный короткий веб-поиск.",
+  "sr-screener": "Screen supplied study records against an explicit eligibility protocol; pilot, adjudicate, audit or report screening. Not literature search or review writing."
+}

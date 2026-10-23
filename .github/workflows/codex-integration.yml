@@ -1,0 +1,19 @@
+name: Codex integration
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m unittest discover -s integrations/codex -p 'test_*.py' -v
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
