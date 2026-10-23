@@ -15,6 +15,10 @@ Evaluate these signals before loading a skill:
 
 Explicit user instructions override automatic language detection.
 
+## Language is not jurisdiction
+
+A Russian-language request selects Russian interaction, not Russian Federation regulations or ГОСТ. Record country/institution separately from language and venue; Kazakhstan and Tajikistan retain their own requirements. Preserve APA/IEEE when requested, including for Russian journals. If current venue instructions conflict with the requested deliverable, explain the mismatch instead of silently changing the task. Unknown requirements stay unknown until needed and verified; a short edit does not need a jurisdiction interview.
+
 ## Skill Map
 
 | Task | English / international context | Russian context |

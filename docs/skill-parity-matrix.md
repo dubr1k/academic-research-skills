@@ -2,7 +2,7 @@
 
 This matrix tracks how the Russian adapter layer maps to the upstream Academic Research Skills package.
 
-Upstream snapshot for the current Russian layer: `6ab4b03bf70a118a1b3ee7f3263ed9f19031061b` (`v3.23.0`, 2026-10-03).
+Upstream snapshot for the current Russian layer: `5a1a5a687602c79c31b1ab8603ebcf8de65a9579` (`v3.23.1`, 2026-10-16).
 
 ## Summary
 
@@ -97,3 +97,15 @@ Review before adaptation: complex agent contracts, calibration and claim-audit e
 | Windows locks, Pi array-system prompts, CSV/XLSX formula injection repairs | Merge unchanged; run upstream regression suite | Runtime and exported-data security fixes apply across languages |
 
 Behavioral baseline on the pre-adaptation research/pipeline instructions found missing persistent screening records/deduplication handoff and exact language/user-constraint recovery. The compact adapter sections address those gaps by reusing canonical upstream tooling; they do not invent schemas or silently enable optional mechanisms.
+
+## v3.23.1 and upstream head 2026-10-23
+
+| Change | Adaptation | Boundary |
+|---|---|---|
+| Required material gaps (#990) | Russian pipeline explicitly blocks with HANDOFF_INCOMPLETE; recommended gaps remain advisory. | No bypass of integrity gates. |
+| SessionStart systemMessage and compact announce (#999) | Preserve 21 bilingual commands with upstream compact transport. | Claude hook only; Codex runtime unchanged. |
+| Write-scope repairs, CSV quoting, Pi structured prompts | Merge upstream implementation and synthetic regression checks. | No claim of scientific or screening accuracy. |
+| Language versus jurisdiction | One shared context guide linked by all four RU skills and short Codex wrappers; preserve Kazakhstan/Tajikistan/APA contexts. | Norms and educational requirements need actual sources; not inferred from language. |
+| Gemini 4 Argon provisional status | Preserve upstream table without activating a provider or changing the session model. | No external API calls or validation claim. |
+
+Upstream tag: v3.23.1 (2026-10-16); merged head includes post-release fixes. Packaging checks and prompt-contract checks are not empirical academic acceptance.

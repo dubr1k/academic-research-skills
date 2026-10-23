@@ -1,8 +1,8 @@
 # Двуязычный форк Academic Research Skills
 
 [![Upstream](https://img.shields.io/badge/upstream-Imbad0202%2Facademic--research--skills-blue)](https://github.com/Imbad0202/academic-research-skills)
-[![Version](https://img.shields.io/badge/version-v3.23.0-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.23.0)
-[![Snapshot](https://img.shields.io/badge/snapshot-v3.23.0%20%2F%206ab4b03-lightgrey)](https://github.com/Imbad0202/academic-research-skills/commit/6ab4b03bf70a118a1b3ee7f3263ed9f19031061b)
+[![Version](https://img.shields.io/badge/version-v3.23.1-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.23.1)
+[![Snapshot](https://img.shields.io/badge/snapshot-v3.23.1%20%2F%205a1a5a6-lightgrey)](https://github.com/Imbad0202/academic-research-skills/commit/5a1a5a687602c79c31b1ab8603ebcf8de65a9579)
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20696614-blue)](https://doi.org/10.5281/zenodo.20696614)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
 
@@ -41,7 +41,9 @@
 
 Подробности: [bilingual routing](docs/bilingual-routing.md), [skill parity matrix](docs/skill-parity-matrix.md), [Russian academic context](docs/russian-academic-context.md).
 
-## Что синхронизировано с upstream v3.23.0
+## Что синхронизировано с upstream v3.23.1
+
+Снимок `5a1a5a6` от 2026-10-23 включает исправления после выпуска: блокировку неполной передачи обязательных материалов, чтение CSV с корректными кавычками, ограничения записи и компактное объявление плагина. Русскоязычный слой отдельно сохраняет страну/организацию и стиль: русский запрос не назначает РФ или ГОСТ. Подробности — [контекст](docs/russian-academic-context.md) и [матрица соответствия](docs/skill-parity-matrix.md).
 
 - модельное разделение judgment/execution, opt-in tiering и усиленные cross-model checkpoints;
 - риск-стратифицированная проверка утверждений, scope bindings и классификация novelty claims;

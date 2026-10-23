@@ -107,3 +107,20 @@ def test_russian_quality_fixtures_are_covered_by_context_doc():
         assert case["risk"] in context
         for required_key in ("id", "signal", "expected_guard"):
             assert case[required_key]
+
+
+def test_locale_and_jurisdiction_are_separate_contracts():
+    """Static prompt-contract guard, not a model behaviour evaluation."""
+    context = read_text(CONTEXT_DOC)
+    for phrase in ("Казахстан", "Таджикистан", "APA/IEEE", "РПД", "СПО/колледж", "не определяет страну"):
+        assert phrase in context
+    assert "use ГОСТ when the target is a Russian journal" not in context
+    for path in (ROOT / "russian-academic-skills").glob("*/SKILL.md"):
+        assert "../../docs/russian-academic-context.md" in read_text(path)
+        assert (path.parent / "../../docs/russian-academic-context.md").resolve().is_file()
+
+
+def test_required_material_gap_blocks_russian_pipeline():
+    text = read_text(ROOT / "russian-academic-skills/akademicheskii-konveer/SKILL.md")
+    assert "HANDOFF_INCOMPLETE" in text
+    assert "Недостающий рекомендованный материал сам по себе не блокирует переход" in text

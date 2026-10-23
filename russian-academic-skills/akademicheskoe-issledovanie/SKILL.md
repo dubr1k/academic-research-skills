@@ -1,15 +1,15 @@
 ---
 name: akademicheskoe-issledovanie
 description: "Русскоязычный academic research skill для Opencode. Используйте для научного исследования, обзора литературы, systematic review, meta-analysis, fact-check, проверки источников, формулировки исследовательского вопроса и сократического прояснения темы. Адаптировано из imbad0202/academic-research-skills под русский язык, ГОСТ и Opencode task()."
-version: "3.23.0-ru.1"
-last_updated: "2026-10-07"
+version: "3.23.1-ru.1"
+last_updated: "2026-10-23"
 status: "active-russian-adapter"
 data_access_level: "external_sources_with_verification"
 task_type: "research"
 depends_on: []
-upstream_snapshot: "6ab4b03bf70a118a1b3ee7f3263ed9f19031061b"
-upstream_version: "v3.23.0"
-upstream_date: "2026-10-03"
+upstream_snapshot: "5a1a5a687602c79c31b1ab8603ebcf8de65a9579"
+upstream_version: "v3.23.1"
+upstream_date: "2026-10-16"
 ---
 
 # Академическое исследование
@@ -17,7 +17,7 @@ upstream_date: "2026-10-03"
 Русскоязычная адаптация идей `deep-research` из `imbad0202/academic-research-skills` для Opencode. Skill помогает провести исследование от неясной темы до проверенного обзора, исследовательского плана или отчета.
 
 Источник адаптации: https://github.com/imbad0202/academic-research-skills
-Upstream snapshot: `6ab4b03bf70a118a1b3ee7f3263ed9f19031061b` (`v3.23.0`, 2026-10-03).
+Upstream snapshot: `5a1a5a687602c79c31b1ab8603ebcf8de65a9579` (`v3.23.1`, 2026-10-16).
 Лицензия источника: Creative Commons Attribution-NonCommercial 4.0 International, Copyright (c) 2026 Cheng-I Wu.
 
 Локальные материалы:
@@ -28,6 +28,10 @@ Upstream snapshot: `6ab4b03bf70a118a1b3ee7f3263ed9f19031061b` (`v3.23.0`, 2026-1
 - `templates/literature-matrix-gost.md` - матрица литературы с source language/system и ГОСТ draft entry.
 - `references/media-expert-commentary.md` - workflow для короткого экспертного комментария СМИ: фактчек эффектного тезиса, баланс структуры и личной стратегии, проверка биологических объяснений, российская источниковая корзина и контроль объема.
 - `references/population-biomarker-social-claims.md` - протокол проверки перехода от временного тренда гормона/биомаркера к индивидуальному поведению и популяционному социальному объяснению, включая assay heterogeneity, обратную причинность и перенос на Россию.
+
+## Язык и требования получателя
+
+Для выбора страны, норм, оформления и уровня образовательной выборки читайте соответствующий раздел [общего руководства](../../docs/russian-academic-context.md). Русский язык не означает РФ/ГОСТ; сохраняйте заданные APA/IEEE и требования конкретного журнала или организации.
 
 ## Когда использовать
 

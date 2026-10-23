@@ -46,6 +46,7 @@ def source_files():
 
 def entrypoint(name, description, source):
     methodology = source / source_path(name) / 'SKILL.md'
+    context = (f'Для русскоязычной работы прочитайте нужный раздел [контекста](<{source / "docs/russian-academic-context.md"}>): язык не определяет страну или ГОСТ; сохраняйте заданный стиль и требования получателя.\n\n' if name.startswith('akadem') else '')
     return f'''---
 name: {name}
 description: {json.dumps(description, ensure_ascii=False)}
@@ -57,7 +58,7 @@ Use only the academic mode requested. Preserve the user's language, venue, citat
 
 Read [Codex runtime](references/codex-runtime.md) for platform translation, delegation and project instructions. Then select the relevant mode from the [canonical methodology](<{methodology}>): start with headings or targeted search, and load the mode plus all applicable integrity and routing requirements. For a full workflow read every required stage. Resolve its relative links from that source document's directory.
 
-Do not invent sources, identifiers, data or verification results. Preserve limitations and distinguish evidence from interpretation. Report missing independent review rather than simulating it. For an Office/PDF deliverable, use the available format-specific skill for rendering and visual checks.
+{context}Do not invent sources, identifiers, data or verification results. Preserve limitations and distinguish evidence from interpretation. Report missing independent review rather than simulating it. For an Office/PDF deliverable, use the available format-specific skill for rendering and visual checks.
 
 Source snapshot root: `{source}`. Scientific content and attribution remain in that snapshot, including LICENSE and NOTICE.md. Other runtimes' APIs, hooks and model names in source documents are translated by the Codex runtime reference; scientific gates remain applicable.
 '''
@@ -79,7 +80,8 @@ def build(destination, explicit_pipelines=False):
     for name in descriptions:
         if str(source_path(name) / 'SKILL.md') not in entries:
             raise ValueError('missing source skill: ' + name)
-    for required in ('LICENSE', 'NOTICE.md', 'shared/handoff_schemas.md'):
+    for required in ('LICENSE', 'NOTICE.md', 'shared/handoff_schemas.md',
+                     'docs/russian-academic-context.md'):
         if required not in entries:
             raise ValueError('missing source resource: ' + required)
     source = destination / 'source'

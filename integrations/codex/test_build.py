@@ -42,6 +42,12 @@ class BundleTests(unittest.TestCase):
             methodology = self.bundle / 'source' / builder.source_path(skill.parent.name) / 'SKILL.md'
             self.assertIn(f'(<{methodology}>)', text)
             self.assertTrue(methodology.is_file())
+            context = self.bundle / 'source/docs/russian-academic-context.md'
+            if skill.parent.name.startswith('akadem'):
+                self.assertIn(f'(<{context}>)', text)
+                self.assertTrue(context.is_file())
+            else:
+                self.assertNotIn('russian-academic-context.md', text)
         for rel, digest in self.manifest['generated_files'].items():
             self.assertEqual(builder.sha((self.bundle / rel).read_bytes()), digest)
 

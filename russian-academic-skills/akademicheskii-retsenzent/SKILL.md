@@ -1,15 +1,15 @@
 ---
 name: akademicheskii-retsenzent
 description: "Русскоязычный peer-review skill для Opencode. Используйте для независимой рецензии научной статьи, методологической проверки, pre-submission review, ВАК/журнальной оценки, re-review после правок и калибровки качества рецензирования. Адаптировано из imbad0202/academic-research-skills под русский язык и Opencode task()."
-version: "3.23.0-ru.1"
-last_updated: "2026-10-07"
+version: "3.23.1-ru.1"
+last_updated: "2026-10-23"
 status: "active-russian-adapter"
 data_access_level: "user_materials_with_optional_source_verification"
 task_type: "review"
 depends_on: []
-upstream_snapshot: "6ab4b03bf70a118a1b3ee7f3263ed9f19031061b"
-upstream_version: "v3.23.0"
-upstream_date: "2026-10-03"
+upstream_snapshot: "5a1a5a687602c79c31b1ab8603ebcf8de65a9579"
+upstream_version: "v3.23.1"
+upstream_date: "2026-10-16"
 ---
 
 # Академический рецензент
@@ -17,7 +17,7 @@ upstream_date: "2026-10-03"
 Русскоязычная адаптация идей `academic-paper-reviewer` из `imbad0202/academic-research-skills` для Opencode. Skill имитирует независимую многоракурсную рецензию научной статьи и выдает редакционное решение с roadmap правок.
 
 Источник адаптации: https://github.com/imbad0202/academic-research-skills
-Upstream snapshot: `6ab4b03bf70a118a1b3ee7f3263ed9f19031061b` (`v3.23.0`, 2026-10-03).
+Upstream snapshot: `5a1a5a687602c79c31b1ab8603ebcf8de65a9579` (`v3.23.1`, 2026-10-16).
 Лицензия источника: Creative Commons Attribution-NonCommercial 4.0 International, Copyright (c) 2026 Cheng-I Wu.
 
 Локальные материалы:
@@ -25,6 +25,10 @@ Upstream snapshot: `6ab4b03bf70a118a1b3ee7f3263ed9f19031061b` (`v3.23.0`, 2026-1
 - `agents/vak_rinc_reviewer_agent.md` - агент ВАК/РИНЦ-focused peer review.
 - `references/vak-rinc-review-criteria.md` - критерии ВАК/РИНЦ review, dissertation council review, international journal review и venue caveats.
 - `templates/review-report-traceability.md` - шаблон рецензии и re-review traceability table.
+
+## Язык и требования получателя
+
+Для выбора страны, норм, оформления и уровня образовательной выборки читайте соответствующий раздел [общего руководства](../../docs/russian-academic-context.md). Русский язык не означает РФ/ГОСТ; сохраняйте заданные APA/IEEE и требования конкретного журнала или организации.
 
 ## Когда использовать
 

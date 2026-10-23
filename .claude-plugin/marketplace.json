@@ -10,7 +10,7 @@
       "name": "academic-research-skills",
       "source": "./",
       "description": "9 skills: 5 upstream English skills (including protocol-driven sr-screener) and 4 Russian academic context adapters with /ars-* and /ars-ru-* entrypoints.",
-      "version": "3.23.0",
+      "version": "3.23.1",
       "license": "CC-BY-NC-4.0",
       "skills": [
         "./academic-paper",

@@ -1,8 +1,8 @@
 ---
 name: akademicheskii-konveer
 description: "Русскоязычный academic pipeline orchestrator skill для Opencode. Используйте для полного цикла research -> paper -> integrity check -> review -> revision -> re-review -> finalization. Координирует akademicheskoe-issledovanie, akademicheskaya-statya и akademicheskii-retsenzent. Адаптировано из imbad0202/academic-research-skills под русский язык и Opencode task()."
-version: "3.23.0-ru.1"
-last_updated: "2026-10-07"
+version: "3.23.1-ru.1"
+last_updated: "2026-10-23"
 status: "active-russian-adapter"
 data_access_level: "orchestrates_user_materials_and_verified_sources"
 task_type: "pipeline"
@@ -10,9 +10,9 @@ depends_on:
   - "akademicheskoe-issledovanie"
   - "akademicheskaya-statya"
   - "akademicheskii-retsenzent"
-upstream_snapshot: "6ab4b03bf70a118a1b3ee7f3263ed9f19031061b"
-upstream_version: "v3.23.0"
-upstream_date: "2026-10-03"
+upstream_snapshot: "5a1a5a687602c79c31b1ab8603ebcf8de65a9579"
+upstream_version: "v3.23.1"
+upstream_date: "2026-10-16"
 ---
 
 # Академический конвейер
@@ -20,7 +20,7 @@ upstream_date: "2026-10-03"
 Русскоязычная адаптация идей `academic-pipeline` из `imbad0202/academic-research-skills` для Opencode. Skill не выполняет всю содержательную работу сам: он определяет стадию, выбирает режим, загружает нужные skills, управляет checkpoint-ами, integrity gates и bilingual handoff state.
 
 Источник адаптации: https://github.com/imbad0202/academic-research-skills
-Upstream snapshot: `6ab4b03bf70a118a1b3ee7f3263ed9f19031061b` (`v3.23.0`, 2026-10-03).
+Upstream snapshot: `5a1a5a687602c79c31b1ab8603ebcf8de65a9579` (`v3.23.1`, 2026-10-16).
 Лицензия источника: Creative Commons Attribution-NonCommercial 4.0 International, Copyright (c) 2026 Cheng-I Wu.
 
 Локальные материалы:
@@ -28,6 +28,10 @@ Upstream snapshot: `6ab4b03bf70a118a1b3ee7f3263ed9f19031061b` (`v3.23.0`, 2026-1
 - `agents/russian_pipeline_state_agent.md` - агент состояния русского/bilingual pipeline и checkpoint handoffs.
 - `references/bilingual-handoff-contracts.md` - language state и handoff contracts между стадиями.
 - `templates/pipeline-dashboard.md` - dashboard полного русского/bilingual academic pipeline.
+
+## Язык и требования получателя
+
+Для выбора страны, норм, оформления и уровня образовательной выборки читайте соответствующий раздел [общего руководства](../../docs/russian-academic-context.md). Русский язык не означает РФ/ГОСТ; сохраняйте заданные APA/IEEE и требования конкретного журнала или организации.
 
 ## Когда использовать
 
@@ -442,3 +446,7 @@ Run-wide ограничения пользователя (например, «р
 Это prompt-level lifecycle, не гарантия записи: report проверяет лишь сохранённые события; hashes не аутентифицируют автора и не восстанавливают утраченные до append слова.
 
 Завершайте заказанными файлами и форматами, не запускайте незапрошенные research/screening/writing stages. Если upstream integrity исключил источник, не возвращайте его при revision; проверяйте, что аннотация не усиливает утверждения сверх основного текста. Ограничения российского venue не отменяют эти integrity contracts.
+
+## Неполная передача материалов (v3.23.1+)
+
+Если отсутствует обязательный материал следующей стадии, зафиксируйте `HANDOFF_INCOMPLETE`, назовите пробел и верните работу к подготовке этого материала. Переход заблокирован до восполнения; согласие «пропустить на свой риск» его не заменяет. Недостающий рекомендованный материал сам по себе не блокирует переход: сообщите ограничение и дайте выбор восполнить или продолжить. Проверки целостности остаются обязательными. Канонические правила: `academic-pipeline/references/pipeline_state_machine.md`, Missing Materials, и `shared/handoff_schemas.md`, Validation Rules.

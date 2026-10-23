@@ -10,7 +10,7 @@ metadata:
     related_skills: [deep-research, academic-paper, academic-paper-reviewer, academic-pipeline, akademicheskoe-issledovanie, akademicheskaya-statya, akademicheskii-retsenzent, akademicheskii-konveer, sr-screener]
   source:
     repository: https://github.com/dubr1k/academic-research-skills
-    suite_version: 3.23.0
+    suite_version: 3.23.1
     verified_main_commit: 578daef8e09d33d8561b4acb5ac946a3222cf056
 ---
 
@@ -22,7 +22,7 @@ This is a thin Hermes-native router, not a substitute for the installed academic
 
 ## When to Use
 
-Use for RU/EN research, literature synthesis, manuscript writing, peer review, source verification, an end-to-end research-to-publication pipeline, or explicitly requested screening of existing records. This router selects one installed v3.23.0 method; it does not replace it.
+Use for RU/EN research, literature synthesis, manuscript writing, peer review, source verification, an end-to-end research-to-publication pipeline, or explicitly requested screening of existing records. This router selects one installed v3.23.1 method; it does not replace it.
 
 ## Required Workflow
 

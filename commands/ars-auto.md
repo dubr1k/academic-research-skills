@@ -15,7 +15,7 @@ Apply `${CLAUDE_PLUGIN_ROOT}/docs/bilingual-routing.md` deterministically:
 1. Classify the task as `research`, `paper`, `review`, or `pipeline`.
 2. Detect request language: `en`, `ru`, or `mixed`.
 3. Detect requested output language; default to the latest user request language unless manuscript/output language is explicit.
-4. Detect venue/context: `international`, `Russian journal`, `ВАК`, `РИНЦ/eLIBRARY`, `CyberLeninka`, `dissertation council`, or `unspecified`.
+4. Detect country/institution separately from request language; do not infer Russian Federation or ГОСТ from Russian text. Detect venue/context: `international`, `Russian journal`, `ВАК`, `РИНЦ/eLIBRARY`, `CyberLeninka`, `dissertation council`, or `unspecified`.
 5. Detect citation style: `APA`, `IEEE`, `Vancouver`, `Chicago`, `MLA`, `ГОСТ`, or `unspecified`.
 6. Set `source_language` policy: `en_corpus`, `ru_corpus`, `mixed_corpus`, or `unspecified`; preserve original titles and quotations unless the user or target style requires translation/transliteration.
 7. Select exactly one existing skill:

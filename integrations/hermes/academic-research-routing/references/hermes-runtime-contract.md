@@ -13,7 +13,7 @@ This adapter changes runtime mapping, not the pinned upstream scientific method.
 ## Output-language boundary
 
 - Record interaction language, manuscript language and requested abstract languages in a separate Hermes adapter note, and carry that instruction into every relevant role.
-- Pinned v3.23.0 Phase 1 recognizes only `output_language_pair: zh-tw-en`. It does not support a Russian/English pair token. Never invent or serialize `ru-en`, repurpose Chinese fields as Russian, or claim omission changes the upstream default: omission retains Traditional Chinese/English behavior.
+- Pinned v3.23.1 Phase 1 recognizes only `output_language_pair: zh-tw-en`. It does not support a Russian/English pair token. Never invent or serialize `ru-en`, repurpose Chinese fields as Russian, or claim omission changes the upstream default: omission retains Traditional Chinese/English behavior.
 - RU/EN output follows the user's explicit language request through this adapter, not an upstream locale pack. Produce the requested RU/EN text as an explicitly labeled adapter artifact outside the unmodified pair-bound Schema-4 abstract carrier. Do not automatically invoke the default Chinese/English abstract path for that artifact.
 - If a required downstream step demands a Schema-4 pair-bound RU/EN payload, stop and report the unsupported contract; obtain an explicit supported alternative. Do not silently normalize unsupported values or weaken upstream validation.
 

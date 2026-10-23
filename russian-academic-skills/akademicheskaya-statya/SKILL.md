@@ -1,16 +1,16 @@
 ---
 name: akademicheskaya-statya
 description: "Русскоязычный academic paper writing skill для Opencode. Используйте для планирования, структуры, черновика, аннотации, литературного обзора, ревизии, ответа рецензентам, проверки цитирования, ГОСТ/APA/IEEE/Vancouver оформления и disclosure научной статьи. Адаптировано из imbad0202/academic-research-skills под русский язык и Opencode task()."
-version: "3.23.0-ru.1"
-last_updated: "2026-10-07"
+version: "3.23.1-ru.1"
+last_updated: "2026-10-23"
 status: "active-russian-adapter"
 data_access_level: "user_materials_and_verified_sources"
 task_type: "writing"
 depends_on:
   - "akademicheskoe-issledovanie"
-upstream_snapshot: "6ab4b03bf70a118a1b3ee7f3263ed9f19031061b"
-upstream_version: "v3.23.0"
-upstream_date: "2026-10-03"
+upstream_snapshot: "5a1a5a687602c79c31b1ab8603ebcf8de65a9579"
+upstream_version: "v3.23.1"
+upstream_date: "2026-10-16"
 ---
 
 # Академическая статья
@@ -18,7 +18,7 @@ upstream_date: "2026-10-03"
 Русскоязычная адаптация идей `academic-paper` из `imbad0202/academic-research-skills` для Opencode. Skill помогает спланировать, написать, переработать и оформить научную статью или главу диссертации.
 
 Источник адаптации: https://github.com/imbad0202/academic-research-skills
-Upstream snapshot: `6ab4b03bf70a118a1b3ee7f3263ed9f19031061b` (`v3.23.0`, 2026-10-03).
+Upstream snapshot: `5a1a5a687602c79c31b1ab8603ebcf8de65a9579` (`v3.23.1`, 2026-10-16).
 Лицензия источника: Creative Commons Attribution-NonCommercial 4.0 International, Copyright (c) 2026 Cheng-I Wu.
 
 Локальные материалы:
@@ -26,6 +26,10 @@ Upstream snapshot: `6ab4b03bf70a118a1b3ee7f3263ed9f19031061b` (`v3.23.0`, 2026-1
 - `agents/gost_citation_agent.md` - агент проверки ГОСТ bibliography, citation consistency и пакета ВАК-статьи.
 - `references/gost-bibliography-guide.md` - ГОСТ bibliography guide для статей и книг.
 - `templates/vak-article-package.md` - шаблон пакета ВАК-статьи: аннотация, структура, checks.
+
+## Язык и требования получателя
+
+Для выбора страны, норм, оформления и уровня образовательной выборки читайте соответствующий раздел [общего руководства](../../docs/russian-academic-context.md). Русский язык не означает РФ/ГОСТ; сохраняйте заданные APA/IEEE и требования конкретного журнала или организации.
 
 ## Когда использовать
 
